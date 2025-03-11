@@ -15,8 +15,6 @@ GLOBAL:
     - keep WZZ
     - keep ZZZ
     - keep ^Muon_.*
-    - keep ^SingleMuon_.*
-    # - keep ^DoubleMuon_.*
     - keep ^Tau_.*
     - keep ^EGamma_.*
     # - keep ^MuonEG_.*
