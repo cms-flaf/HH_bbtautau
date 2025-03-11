@@ -49,6 +49,7 @@ channelSelection:
 met_type: "PFMET"
 deepTauVersion: 2p5
 region: SR
+region_default: SR
 channels: ""
 QCDRegions:
   - OS_Iso
