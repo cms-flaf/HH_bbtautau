@@ -131,6 +131,9 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
         dfw.DefineAndAppend(f"met_{var}", f"static_cast<float>({pf_str}_{var})")
 
     if trigger_class is not None:
+        print("######################################\n")
+        print(f"Applying triggers for  lepton legs: {lepton_legs}, channel 'Htt' isData: {isData}, isSignal: {isSignal}\n")
+        print("######################################\n")
         hltBranches = dfw.Apply(trigger_class.ApplyTriggers, lepton_legs, 'Htt',isData, isSignal)
         dfw.colToSave.extend(hltBranches)
     dfw.Define(f"Tau_recoJetMatchIdx", f"FindMatching(Tau_p4, Jet_p4, 0.5)")

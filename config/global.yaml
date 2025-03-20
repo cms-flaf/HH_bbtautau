@@ -24,11 +24,11 @@ deepTauWPs:
     VSmu: Tight
     VSjet: Medium
 corrections:
-  - tauID
-  - tauES
+  # - tauID
+  # - tauES
   - JEC
   - JER
-  - trg
+  # - trg
   # - btagWP
   - btagShape
   - mu
@@ -131,7 +131,7 @@ channelDefinition:
 triggers:
   eTau: [ singleEle, etau]
   muTau: [singleMu, mutau]
-  tauTau: [ditau]#, ditaujet]
+  tauTau: [ditau , ditauJet]
   eE: [singleEle]
   eMu: [singleMu]
   muMu: [singleMu]
