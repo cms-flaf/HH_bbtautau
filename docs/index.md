@@ -10,7 +10,7 @@ Task workflow managed is done via [LAW](https://github.com/riga/law) (Luigi Anal
 
 1. Clone the repository:
   ```sh
-  git clone --recursive git@github.com:cms-flaf/Framework.git FLAF
+  git clone --recursive git@github.com:cms-flaf/HH_bbtautau.git HH_bbtautau
   ```
 
 1. Create a user customisation file `config/user_custom.yaml`. It should contain all user-specific modifications that you don't want to be committed to the central repository. Below is example of minimal content of the file (replace `USER_NAME` and `ANA_FOLDER` with your values):
@@ -24,12 +24,16 @@ Task workflow managed is done via [LAW](https://github.com/riga/law) (Luigi Anal
     fs_anaCacheTuple:
         - 'T3_CH_CERNBOX:/store/user/USER_NAME/ANA_FOLDER/'
     fs_histograms:
-    - 'T3_CH_CERNBOX:/store/user/USER_NAME/ANA_FOLDER/histograms/'
+        - 'T3_CH_CERNBOX:/store/user/USER_NAME/ANA_FOLDER/histograms/'
     fs_json:
-    - 'T3_CH_CERNBOX:/store/user/USER_NAME/ANA_FOLDER/jsonFiles/'
-    analysis_config_area: config/HH_bbtautau
+        - 'T3_CH_CERNBOX:/store/user/USER_NAME/ANA_FOLDER/jsonFiles/'
+    analysis_config_area: config
     compute_unc_variations: true
+    compute_unc_histograms: true
     store_noncentral: true
+    vars_to_plot:
+    - b1_pt
+    - { "name" : MT2, need_cache: true }
     ```
 
 ## How to load environment
