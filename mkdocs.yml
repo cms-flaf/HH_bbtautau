@@ -1,6 +1,6 @@
-site_name: FLAF
+site_name: HH->bbtautau
 repo_name: GitHub
-repo_url: https://github.com/cms-flaf/Framework
+repo_url: https://github.com/cms-flaf/HH_bbtautau
 theme:
   name: material
   font: false
@@ -19,6 +19,7 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
+  # highlightjs: true
 
 markdown_extensions:
   - attr_list
