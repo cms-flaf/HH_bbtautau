@@ -106,9 +106,8 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
                     dfw.DefineAndAppend(f"genLepton{gen_idx+1}_{var}", f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())")
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
-    # define extra jet
+
     dfw.Define(f"ExtraJet_pt", f"v_ops::pt(Jet_p4[ExtraJet_B1])")
-    # dfw.df.Display("ExtraJet_pt").Print()
     dfw.Define(f"ExtraJet_eta", f"v_ops::eta(Jet_p4[ExtraJet_B1])")
     dfw.Define(f"ExtraJet_phi", f"v_ops::phi(Jet_p4[ExtraJet_B1])")
     dfw.Define(f"ExtraJet_mass", f"v_ops::mass(Jet_p4[ExtraJet_B1])")
@@ -119,15 +118,12 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
 
 
     if global_params["storeExtraJets"]:
-        ######################################
-        #  queste variabili ora sono definite nel df quindi appendi solo in dfw.colToSave
-        ######################################
         dfw.DefineAndAppend(f"ExtraJet_pt", f"v_ops::pt(Jet_p4[ExtraJet_B1])")
         dfw.DefineAndAppend(f"ExtraJet_eta", f"v_ops::eta(Jet_p4[ExtraJet_B1])")
         dfw.DefineAndAppend(f"ExtraJet_phi", f"v_ops::phi(Jet_p4[ExtraJet_B1])")
         dfw.DefineAndAppend(f"ExtraJet_mass", f"v_ops::mass(Jet_p4[ExtraJet_B1])")
         dfw.DefineAndAppend(f"ExtraJet_ptRes", f"Jet_ptRes[ExtraJet_B1]")
-        ########################
+
         for jetVar in jet_obs:
             if(f"Jet_{jetVar}" not in dfw.df.GetColumnNames()): continue
             dfw.DefineAndAppend(f"ExtraJet_{jetVar}", f"Jet_{jetVar}[ExtraJet_B1]")
