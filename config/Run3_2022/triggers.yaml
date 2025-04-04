@@ -6,13 +6,13 @@ ditau:
     - HLT_DoubleMediumDeepTauPFTauHPS35_L2NN_eta2p1
   legs:
     - offline_obj:
-        type: Tau
-        cut: v_ops::pt(Tau_p4) > 40 && abs(v_ops::eta(Tau_p4)) < 2.1
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 40 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&2048)!=0
+      dRMatching: 0.4
       doMatching: True
 
-ditaujet:
+ditauJet:
   channels:
     - tauTau
   path:
@@ -21,13 +21,13 @@ ditaujet:
   legs:
     - offline_obj:
         type: Tau
-        cut: v_ops::pt(Tau_p4) > 35 && abs(v_ops::eta(Tau_p4)) < 2.1
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 35 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&2048)!=0 & (TrigObj_filterBits&16384)!=0
       doMatching: True
     - offline_obj:
         type: Jet
-        cut: v_ops::pt(Jet_p4) > 60
+        cut: "{obj}_legType == Leg::jet && {obj}_pt > 60"
       online_obj:
         cut: TrigObj_id==1 && (TrigObj_filterBits&131072)!=0
       doMatching: True
@@ -40,13 +40,13 @@ mutau:
   legs:
     - offline_obj:
         type: Muon
-        cut: v_ops::pt(Muon_p4) > 22 && abs(v_ops::eta(Muon_p4)) < 2.1
+        cut: "{obj}_legType == Leg::mu && {obj}_pt > 22 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==13 && (TrigObj_filterBits&64)!=0 #&& TrigObj_pt>20
       doMatching: True
     - offline_obj:
         type: Tau
-        cut: v_ops::pt(Tau_p4) > 32 && abs(v_ops::eta(Tau_p4)) < 2.1
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 32 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0  && (TrigObj_filterBits&8192)!=0
       doMatching: True
@@ -59,13 +59,13 @@ etau:
   legs:
     - offline_obj:
         type: Electron
-        cut: v_ops::pt(Electron_p4) > 26 && abs(v_ops::eta(Electron_p4)) < 2.1
+        cut: "{obj}_legType == Leg::e && {obj}_pt > 26 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==11 && (TrigObj_filterBits&128)!=0 #&& TrigObj_pt>24
       doMatching: True
     - offline_obj:
         type: Tau
-        cut: v_ops::pt(Tau_p4) > 35 && abs(v_ops::eta(Tau_p4)) < 2.1
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 35 && abs({obj}_eta) < 2.1"
       online_obj:
         cut:  TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&4096)!=0
       doMatching: True
@@ -80,7 +80,7 @@ singleMu:
   legs:
     - offline_obj:
         type: Muon
-        cut:  v_ops::pt(Muon_p4) > 26
+        cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
       doMatching: True
@@ -95,10 +95,18 @@ singleEle:
   legs:
     - offline_obj:
         type: Electron
-        cut: v_ops::pt(Electron_p4) > 32
+        cut: "{obj}_legType == Leg::e && {obj}_pt > 32"
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&2)!=0
       doMatching: True
+
+
+
+
+
+
+
+
 
 ####################################
 # MET:

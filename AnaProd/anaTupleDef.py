@@ -115,6 +115,8 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
     dfw.Define(f"ExtraJet_ptRes", f"Jet_ptRes[ExtraJet_B1]")
     dfw.Define(f"ExtraJet_idx", f"CreateIndexes(ExtraJet_pt.size())")
     dfw.Define(f"ExtraJet_p4", f"GetP4(ExtraJet_pt, ExtraJet_eta, ExtraJet_phi, ExtraJet_mass, ExtraJet_idx)")
+    dfw.Define(f"ExtraJet_legType", f"return ROOT::RVec<Leg >(ExtraJet_pt.size(), Leg::jet);")
+
 
     if global_params["storeExtraJets"]:
         ######################################
@@ -273,9 +275,7 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
         dfw.DefineAndAppend(f"b{leg_idx+1}_HHbtag", f"Hbb_isValid ?  static_cast<float>(Jet_HHBtagScore.at(HbbCandidate->leg_index[{leg_idx}])) : 0.f")
 
     if trigger_class is not None:
-        # hltBranches = dfw.Apply(trigger_class.ApplyTriggers, lepton_legs, 'Htt',isData, isSignal)
-        # hltBranches = dfw.Apply(trigger_class.ApplyTriggers_newVersion, offline_legs, isData, isSignal)
-        hltBranches = dfw.Apply(trigger_class.ApplyTriggers_newVersion, ["ExtraJet"], isData, isSignal)
+        hltBranches = dfw.Apply(trigger_class.ApplyTriggers, offline_legs, isData, isSignal)
         dfw.colToSave.extend(hltBranches)
     for leg_name in lepton_legs:
         dfw.Redefine(f"{leg_name}_legType", f"static_cast<int>({leg_name}_legType)")
