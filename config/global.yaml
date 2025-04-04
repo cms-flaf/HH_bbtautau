@@ -26,8 +26,8 @@ deepTauWPs:
 corrections:
   # - tauID
   # - tauES
-  - JEC
-  - JER
+  # - JEC
+  # - JER
   # - trg
   # - btagWP
   - btagShape
