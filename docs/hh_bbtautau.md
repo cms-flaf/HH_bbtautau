@@ -71,6 +71,12 @@ The tasks to run are the following:
     Tip: It's very fast so it can be convenient to run this task in local.
     The final histogram will be named as: `all_histograms_Hadded.root`
 
+1. Plotting script: This step can be performed after `MergeTask`. Make sure to change the appropriate lines in this script to fit your work (e.g. directory path, variable names)
+    ```sh
+    cd Analysis
+    python3 make_stackplots.py
+    ```
+
 ## How to run HHbtag training skim ntuple production
 ```sh
 python Studies/HHBTag/CreateTrainingSkim.py --inFile $CENTRAL_STORAGE/prod_v1/nanoAOD/2018/GluGluToBulkGravitonToHHTo2B2Tau_M-350.root --outFile output/skim.root --mass 350 --sample GluGluToBulkGraviton --year 2018 >& EventInfo.txt
