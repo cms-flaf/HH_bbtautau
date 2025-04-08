@@ -80,7 +80,7 @@ singleMu:
   legs:
     - offline_obj:
         type: Muon
-        cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"
+        cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"# {obj}_pt > 26 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
       doMatching: True
@@ -95,7 +95,7 @@ singleEle:
   legs:
     - offline_obj:
         type: Electron
-        cut: "{obj}_legType == Leg::e && {obj}_pt > 32"
+        cut: "{obj}_legType == Leg::e && {obj}_pt > 32"# {obj}_pt > 32 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&2)!=0
       doMatching: True
