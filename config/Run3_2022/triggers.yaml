@@ -17,16 +17,13 @@ ditauJet:
     - tauTau
   path:
     - HLT_DoubleMediumDeepTauPFTauHPS30_L2NN_eta2p1_PFJet60
-    # - HLT_DoubleMediumDeepTauPFTauHPS30_L2NN_eta2p1_PFJet75 #this is the backup path of the previous one JIRA: https://its.cern.ch/jira/browse/CMSHLT-2620
   legs:
     - offline_obj:
-        type: Tau
         cut: "{obj}_legType == Leg::tau && {obj}_pt > 35 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&2048)!=0 & (TrigObj_filterBits&16384)!=0
       doMatching: True
     - offline_obj:
-        type: Jet
         cut: "{obj}_legType == Leg::jet && {obj}_pt > 60"
       online_obj:
         cut: TrigObj_id==1 && (TrigObj_filterBits&131072)!=0
@@ -39,13 +36,11 @@ mutau:
     - HLT_IsoMu20_eta2p1_LooseDeepTauPFTauHPS27_eta2p1_CrossL1
   legs:
     - offline_obj:
-        type: Muon
         cut: "{obj}_legType == Leg::mu && {obj}_pt > 22 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==13 && (TrigObj_filterBits&64)!=0 #&& TrigObj_pt>20
       doMatching: True
     - offline_obj:
-        type: Tau
         cut: "{obj}_legType == Leg::tau && {obj}_pt > 32 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0  && (TrigObj_filterBits&8192)!=0
@@ -58,13 +53,11 @@ etau:
     - HLT_Ele24_eta2p1_WPTight_Gsf_LooseDeepTauPFTauHPS30_eta2p1_CrossL1
   legs:
     - offline_obj:
-        type: Electron
         cut: "{obj}_legType == Leg::e && {obj}_pt > 26 && abs({obj}_eta) < 2.1"
       online_obj:
         cut: TrigObj_id==11 && (TrigObj_filterBits&128)!=0 #&& TrigObj_pt>24
       doMatching: True
     - offline_obj:
-        type: Tau
         cut: "{obj}_legType == Leg::tau && {obj}_pt > 35 && abs({obj}_eta) < 2.1"
       online_obj:
         cut:  TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&4096)!=0
@@ -79,7 +72,6 @@ singleMu:
     - HLT_IsoMu24
   legs:
     - offline_obj:
-        type: Muon
         cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"# {obj}_pt > 26 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
@@ -94,19 +86,10 @@ singleEle:
     - HLT_Ele30_WPTight_Gsf
   legs:
     - offline_obj:
-        type: Electron
         cut: "{obj}_legType == Leg::e && {obj}_pt > 32"# {obj}_pt > 32 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&2)!=0
       doMatching: True
-
-
-
-
-
-
-
-
 
 ####################################
 # MET:
