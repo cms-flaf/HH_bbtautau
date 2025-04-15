@@ -5,7 +5,7 @@ from Corrections.Corrections import Corrections
 loadTF = True
 loadHHBtag = True
 lepton_legs = [ "tau1", "tau2" ]
-offline_legs = [ "tau1", "tau2", "b1", "b2" ]
+offline_legs = [ "tau1", "tau2", "b1", "b2", "ExtraJet" ]
 
 deepTauScores= ["rawDeepTau2017v2p1VSe","rawDeepTau2017v2p1VSmu",
             "rawDeepTau2017v2p1VSjet", "rawDeepTau2018v2p5VSe", "rawDeepTau2018v2p5VSmu",
@@ -147,7 +147,6 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
     dfw.Define(f"Muon_recoJetMatchIdx", f"FindMatching(Muon_p4, Jet_p4, 0.5)")
     dfw.Define( f"Electron_recoJetMatchIdx", f"FindMatching(Electron_p4, Jet_p4, 0.5)")
     dfw.DefineAndAppend("channelId","static_cast<int>(HttCandidate.channel())")
-    print(channels)
     channel_to_select = " || ".join(f"HttCandidate.channel()==Channel::{ch}" for ch in channels)#global_params["channelSelection"])
     dfw.Filter(channel_to_select, "select channels")
     fatjet_obs = []
