@@ -5,7 +5,7 @@ from Corrections.Corrections import Corrections
 loadTF = True
 loadHHBtag = True
 lepton_legs = [ "tau1", "tau2" ]
-offline_legs = [ "tau1", "tau2", "b1", "b2", "ExtraJet" ]
+offline_legs = [ "tau1", "tau2", "b1", "b2"]
 
 deepTauScores= ["rawDeepTau2017v2p1VSe","rawDeepTau2017v2p1VSmu",
             "rawDeepTau2017v2p1VSjet", "rawDeepTau2018v2p5VSe", "rawDeepTau2018v2p5VSmu",
