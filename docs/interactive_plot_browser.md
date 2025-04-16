@@ -8,7 +8,7 @@ It is important that you share the EOS user space directory with `wwweos` accoun
 After you have your interactive plot browser ready, you can run a simple script to post your plots as follows:
 
 ```sh
-python3 /eos/user/u/username/php-plots/bin/pb_deploy_plots.py /path-to-where-you-currently-have-your-plots-saved/ /eos/user/t/toakhter/php-plots/directory-where-you-want-your-plots-posted/ --recursive --pdf-to-png
+python3 /eos/user/u/username/php-plots/bin/pb_deploy_plots.py /path-to-where-you-currently-have-your-plots-saved/ /eos/user/u/username/php-plots/directory-where-you-want-your-plots-posted/ --recursive --pdf-to-png
 ```
 
 Note:
