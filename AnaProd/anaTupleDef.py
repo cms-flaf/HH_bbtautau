@@ -81,7 +81,7 @@ def getDefaultColumnsToSave(isData):
         colToSave.extend(['Pileup_nTrueInt'])
     return colToSave
 
-def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal, global_params, channels):
+def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal, applyTriggerFilter, global_params, channels):
     dfw.Apply(AnaBaseline.RecoHttCandidateSelection, global_params)
     dfw.Apply(AnaBaseline.RecoJetSelection, global_params["era"])
     dfw.Apply(AnaBaseline.ThirdLeptonVeto)
@@ -270,7 +270,7 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
         dfw.DefineAndAppend(f"b{leg_idx+1}_HHbtag", f"Hbb_isValid ?  static_cast<float>(Jet_HHBtagScore.at(HbbCandidate->leg_index[{leg_idx}])) : 0.f")
 
     if trigger_class is not None:
-        hltBranches = dfw.Apply(trigger_class.ApplyTriggers, offline_legs, isData, isSignal)
+        hltBranches = dfw.Apply(trigger_class.ApplyTriggers, offline_legs, isData, applyTriggerFilter)
         dfw.colToSave.extend(hltBranches)
     for leg_name in lepton_legs:
         dfw.Redefine(f"{leg_name}_legType", f"static_cast<int>({leg_name}_legType)")
