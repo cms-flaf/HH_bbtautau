@@ -35,6 +35,7 @@ Task workflow managed is done via [LAW](https://github.com/riga/law) (Luigi Anal
     - b1_pt
     - { "name" : MT2, need_cache: true }
     ```
+    Please note that the `need_cache` argument is needed if you need a variable from the `AnaCacheTupleTask` step (e.g. LegacyVariables)
 
 ## How to load environment
 1. Following command activates the framework environment:

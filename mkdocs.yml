@@ -19,7 +19,7 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
-  # highlightjs: true
+  highlightjs: true
 
 markdown_extensions:
   - attr_list
@@ -74,6 +74,7 @@ nav:
   - Home: index.md
   - AnaTuple Production: anatuple_prod.md
   - Analysis: analysis.md
+  - Interactive Plot Browser: interactive_plot_browser.md
   - Statistical inference: stat_inference.md
 
 #theme: readthedocs
