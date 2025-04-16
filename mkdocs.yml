@@ -4,6 +4,27 @@ repo_url: https://github.com/cms-flaf/HH_bbtautau
 theme:
   name: material
   font: false
+  palette: 
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to system mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: lime
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode (it's night time!)
+  logo: https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/RetrieveFile?docid=3045&filename=CMSlogo_white_nolabel_1024_May2014.png&version=3
+
   features:
     - content.action.edit
     - content.action.view
@@ -19,7 +40,9 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
+
   highlightjs: true
+  hljs_style: github
 
 markdown_extensions:
   - attr_list
