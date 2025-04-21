@@ -18,12 +18,12 @@ theme:
         name: Switch to system preference
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: teal
-      accent: lime
+      primary: green
+      accent: amber
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode (it's night time!)
-  logo: https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/RetrieveFile?docid=3045&filename=CMSlogo_white_nolabel_1024_May2014.png&version=3
+  logo: https://cms.cern/sites/default/files/logo/cms_logo_neg03_2.png
 
   features:
     - content.action.edit
