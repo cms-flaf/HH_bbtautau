@@ -29,7 +29,7 @@ corrections:
   - JEC
   - JER
   - trg
-  # - btagWP
+  - btagWP
   - btagShape
   - mu
   - ele
@@ -131,7 +131,7 @@ channelDefinition:
 triggers:
   eTau: [ singleEle, etau]
   muTau: [singleMu, mutau]
-  tauTau: [ditau]#, ditaujet]
+  tauTau: [ditau , ditauJet]
   eE: [singleEle]
   eMu: [singleMu]
   muMu: [singleMu]
