@@ -24,13 +24,13 @@ deepTauWPs:
     VSmu: Tight
     VSjet: Medium
 corrections:
-  - tauID
-  - tauES
-  - JEC
-  - JER
+  # - tauID
+  # - tauES
+  # - JEC
+  # - JER
   - trg
-  - btagWP
-  - btagShape
+  # - btagWP
+  # - btagShape
   - mu
   - ele
   - pu
