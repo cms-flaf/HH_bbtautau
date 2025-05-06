@@ -12,7 +12,7 @@ ditau:
       dRMatching: 0.4
       doMatching: True
 
-ditauJet:
+ditaujet:
   channels:
     - tauTau
   path:
