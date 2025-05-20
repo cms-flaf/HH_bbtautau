@@ -1,4 +1,23 @@
 #https://twiki.cern.ch/twiki/bin/viewauth/CMS/TauTrigger#Updates_for_2022_data_taking
+# to add VBF trigger
+#  HLT_VBF_DoubleMediumDeepTauPFTauHPS20_eta2p1
+vbf:
+  channels:
+    - tauTau
+  path:
+    - HLT_VBF_DoubleMediumDeepTauPFTauHPS20_eta2p1
+  legs:
+    - offline_obj:
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 25 && abs({obj}_eta) < 2.5"
+      online_obj:
+        cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&1024)!=0
+      dRMatching: 0.4
+      doMatching: True
+      jsonTRGcorrection_key: {'2022_Summer22': '', 
+                            '2022_Summer22EE': '',
+                            }
+      jsonTRGcorrection_elepath: "placeholder"
+
 ditau:
   channels:
     - tauTau
