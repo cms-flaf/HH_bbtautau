@@ -1,5 +1,5 @@
 #https://twiki.cern.ch/twiki/bin/viewauth/CMS/TauTrigger#Updates_for_2022_data_taking
-vbf:
+vbf: # to check kinematic cuts for offline objs and trigger bits for online objs
   channels:
     - tauTau
   path:
@@ -14,6 +14,15 @@ vbf:
       jsonTRGcorrection_key: {'2022_Summer22': '', 
                             '2022_Summer22EE': '',
                             }
+      jsonTRGcorrection_elepath: "placeholder"
+    - offline_obj: 
+        cut: "{obj}_legType == Leg::jet && {obj}_pt > 60"
+      online_obj:
+        cut: TrigObj_id==1 && (TrigObj_filterBits&262144)!=0
+      doMatching: True
+      jsonTRGcorrection_key: {'2022_Summer22': 'jetlegSFs', 
+                              '2022_Summer22EE': 'jetlegSFs',
+                             }
       jsonTRGcorrection_elepath: "placeholder"
 
 ditau:
