@@ -274,5 +274,5 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
     if trigger_class is not None:
         hltBranches = dfw.Apply(trigger_class.ApplyTriggers, offline_legs, isData, applyTriggerFilter)
         dfw.colToSave.extend(hltBranches)
-    for leg_name in offline_legs:
-        dfw.Redefine(f"{leg_name}_legType", f"static_cast<int>({leg_name}_legType)")
+    # for leg_name in offline_legs:
+    #     dfw.Redefine(f"{leg_name}_legType", f"static_cast<int>({leg_name}_legType)")
