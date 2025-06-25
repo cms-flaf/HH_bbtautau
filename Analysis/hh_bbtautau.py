@@ -321,11 +321,11 @@ def PrepareDfForHistograms(dfForHistograms):
     dfForHistograms.defineChannels()
     dfForHistograms.defineLeptonPreselection()
     dfForHistograms.defineApplicationRegions()
-    # if not dfForHistograms.isData:
-    #     dfForHistograms.definePNetSFs()
-    #     defineTriggerWeights(dfForHistograms)
-    #     if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
-    #         defineTriggerWeightsErrors(dfForHistograms)
+    if not dfForHistograms.isData:
+        dfForHistograms.definePNetSFs()
+        defineTriggersCentralWeights(dfForHistograms)
+        # if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
+        #     defineTriggerWeightsErrors(dfForHistograms)
     dfForHistograms.defineCRs()
     dfForHistograms.defineCategories()
     dfForHistograms.defineQCDRegions()
