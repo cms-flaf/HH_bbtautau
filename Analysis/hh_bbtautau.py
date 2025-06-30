@@ -324,8 +324,8 @@ def PrepareDfForHistograms(dfForHistograms):
     if not dfForHistograms.isData:
         dfForHistograms.definePNetSFs()
         defineTriggersCentralWeights(dfForHistograms)
-        # if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
-        #     defineTriggerWeightsErrors(dfForHistograms)
+        if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
+            defineTriggersWeightsErrors(dfForHistograms)
     dfForHistograms.defineCRs()
     dfForHistograms.defineCategories()
     dfForHistograms.defineQCDRegions()
