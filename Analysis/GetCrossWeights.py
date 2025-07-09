@@ -131,6 +131,20 @@ ROOT.gInterpreter.Declare(
         if (mceff != 0.f && dataeff != 0.f) {weight = dataeff/ mceff;}
         return weight;
     }
+
+    float singleTrgSFerr (float sf_central, float eff_data, float eff_mc, float eff_data_err, float eff_mc_err) {
+        float sferr = 0.f;
+        float sferr_sq = 0.f;
+        float ratiodata_sq = 0.f;
+        float ratiomc_sq = 0.f;
+        if (eff_data_err != 0.f && eff_mc_err != 0.f) {
+            ratiodata_sq = pow(eff_data_err/eff_data ,2);
+            ratiomc_sq = pow(eff_mc_err/eff_mc ,2);
+            sferr_sq = pow(sf_central , 2) * (ratiodata_sq + ratiomc_sq);
+            sferr = pow(sferr_sq, 0.5); 
+        }
+        return sferr;
+    }
     """
 )
 
@@ -302,6 +316,7 @@ def defineTriggerWeightsErrors(dfBuilder):
 def defineTriggersCentralWeights(dfBuilder):
 
     if 'eTau' in dfBuilder.config['channels_to_consider']:
+        # FIX THE REQUEST FOR TRIGGER WEIGHT, see MuTau ch
         dfBuilder.df = dfBuilder.df.Define("eff_mc_singleEle",
             "(tau1_HasMatching_singleEle && tau2_HasMatching_singleEle) ? "
             "(tau1_pt > tau2_pt ? eff_mc_tau1_singleEle_triggerleg_e_Central : eff_mc_tau2_singleEle_triggerleg_e_Central) : "
@@ -362,11 +377,11 @@ def defineTriggersCentralWeights(dfBuilder):
     if 'tauTau' in dfBuilder.config['channels_to_consider']:
         dfBuilder.df = dfBuilder.df.Define("eff_mc_ditau", "(tau1_HasMatching_ditau && tau2_HasMatching_ditau) ? eff_mc_tau1_ditau_triggerleg_tau_Central * eff_mc_tau2_ditau_triggerleg_tau_Central : 1.f")
         dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditau", "(tau1_HasMatching_ditau && tau2_HasMatching_ditau) ? eff_data_tau1_ditau_triggerleg_tau_Central * eff_data_tau2_ditau_triggerleg_tau_Central : 1.f")
-        dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_tauLeg", "(tau1_HasMatching_ditaujet && tau1_HasMatching_ditaujet) ? eff_data_tau1_ditaujet_triggerleg_tau_Central * eff_data_tau2_ditaujet_triggerleg_tau_Central : 1.f")
-        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_tauLeg", "(tau1_HasMatching_ditaujet && tau1_HasMatching_ditaujet) ? eff_mc_tau1_ditaujet_triggerleg_tau_Central * eff_mc_tau2_ditaujet_triggerleg_tau_Central : 1.f")
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_ditauLeg", "(tau1_HasMatching_ditaujet && tau1_HasMatching_ditaujet) ? eff_data_tau1_ditaujet_triggerleg_tau_Central * eff_data_tau2_ditaujet_triggerleg_tau_Central : 1.f")
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_ditauLeg", "(tau1_HasMatching_ditaujet && tau1_HasMatching_ditaujet) ? eff_mc_tau1_ditaujet_triggerleg_tau_Central * eff_mc_tau2_ditaujet_triggerleg_tau_Central : 1.f")
         dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_jetLeg", "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Central : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_data_b2_ditaujet_triggerleg_jet_Central : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Central : 1.f")
         dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_jetLeg", "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Central : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_mc_b2_ditaujet_triggerleg_jet_Central : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Central : 1.f")
-        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_Central", "crossTrig_trgSF(HLT_ditau, HLT_ditaujet, eff_mc_ditau, eff_mc_ditaujet_tauLeg, eff_mc_ditaujet_jetLeg, eff_data_ditau, eff_data_ditaujet_tauLeg, eff_data_ditaujet_jetLeg)")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_Central", "crossTrig_trgSF(HLT_ditau, HLT_ditaujet, eff_mc_ditau, eff_mc_ditaujet_ditauLeg, eff_mc_ditaujet_jetLeg, eff_data_ditau, eff_data_ditaujet_ditauLeg, eff_data_ditaujet_jetLeg)")
 
         # print(dfBuilder.df.Display(["HLT_ditau", "tau1_HasMatching_ditau", "tau2_HasMatching_ditau", "eff_data_tau1_ditau_triggerleg_tau_Central", "eff_data_tau2_ditau_triggerleg_tau_Central", "eff_data_ditau"], 1163).AsString())
         # print(dfBuilder.df.Display(["HLT_ditaujet", "tau1_HasMatching_ditaujet", "tau2_HasMatching_ditaujet", "b1_HasMatching_ditaujet", "b2_HasMatching_ditaujet", "eff_data_tau1_ditaujet_triggerleg_tau_Central", "eff_data_tau2_ditaujet_triggerleg_tau_Central", "eff_data_b1_ditaujet_triggerleg_jet_Central", "eff_data_b2_ditaujet_triggerleg_jet_Central", "eff_data_ditaujet_tauLeg", "eff_data_ditaujet_jetLeg"], 1163).AsString())
@@ -430,7 +445,9 @@ def defineTriggersWeightsErrors(dfBuilder):
         for scale1 in ['Up', 'Down']:
             for scale2 in ['Up', 'Down']:
                 
-                dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muMueMu_err{scale1}{scale2}", f"pow(pow(eff_data_muMueMu_singleMu_err{scale1}/eff_mc_muMueMu_singleMu, 2) + pow(eff_mc_muMueMu_singleMu_err{scale2}*eff_data_muMueMu_singleMu/pow(eff_mc_muMueMu_singleMu,2), 2), 0.5)")
+                dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muMueMu_err{scale1}{scale2}", 
+                f"singleTrgSFerr(weight_trgSF_muMueMu_Central, eff_data_muMueMu_singleMu, eff_mc_muMueMu_singleMu, eff_data_muMueMu_singleMu_err{scale1}, eff_mc_muMueMu_singleMu_err{scale2})"
+                )
         dfBuilder.df = dfBuilder.df.Define("weight_trgSF_muMueMu_errMax", "ROOT::VecOps::Max(ROOT::RVecD{{weight_trgSF_muMueMu_errUpUp, weight_trgSF_muMueMu_errUpDown, weight_trgSF_muMueMu_errDownUp, weight_trgSF_muMueMu_errDownDown}})")
 
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muMueMu_Up", f"weight_trgSF_muMueMu_Central + weight_trgSF_muMueMu_errMax")
@@ -453,9 +470,8 @@ def defineTriggersWeightsErrors(dfBuilder):
 
         for scale1 in ['Up', 'Down']:
             for scale2 in ['Up', 'Down']:
-                dfBuilder.df = dfBuilder.df.Define(
-                    f"weight_trgSF_eE_err{scale1}{scale2}",
-                    f"pow(pow(eff_data_eE_singleEle_err{scale1}/eff_mc_eE_singleEle, 2) + pow(eff_mc_eE_singleEle_err{scale2}*eff_data_eE_singleEle/pow(eff_mc_eE_singleEle,2), 2), 0.5)"
+                dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eE_err{scale1}{scale2}",
+                    f"singleTrgSFerr(weight_trgSF_eE_Central, eff_data_eE_singleEle, eff_mc_eE_singleEle, eff_data_eE_singleEle_err{scale1}, eff_mc_eE_singleEle_err{scale2})"
                 )
         dfBuilder.df = dfBuilder.df.Define(
             "weight_trgSF_eE_errMax",
@@ -495,15 +511,110 @@ def defineTriggersWeightsErrors(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(f"Eff_data_muTau_errUp", f"pow(dEff_data_deffll_data_muTau,2) * pow(eff_data_singleMu - eff_data_singleMu_Up,2) + pow(dEff_data_deffl_data_muTau,2) * pow(eff_data_mutau_muLeg - eff_data_mutau_muLeg_Up,2)")
         dfBuilder.df = dfBuilder.df.Define(f"Eff_mc_muTau_errUp", f"pow(dEff_mc_deffL_mc_muTau,2) * pow(eff_mc_singleMu - eff_mc_singleMu_Up,2) + pow(dEff_mc_deffl_mc_muTau,2) * pow(eff_mc_mutau_muLeg - eff_mc_mutau_muLeg_Up,2)")
         dfBuilder.df = dfBuilder.df.Define(f"SF_muTau_errUp", f"weight_trgSF_muTau_Central * sqrt(pow(Eff_data_muTau_errUp/weight_trgSF_muTau_Central,2) + pow(Eff_mc_muTau_errUp/weight_trgSF_muTau_Central,2))")
-        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_Up", f"weight_trgSF_muTau_Central + SF_muTau_errUp")
-        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_Down", f"weight_trgSF_muTau_Central - SF_muTau_errUp")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_muleg_Up", f"weight_trgSF_muTau_Central + SF_muTau_errUp")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_muleg_Down", f"weight_trgSF_muTau_Central - SF_muTau_errUp")
+        # maybe we can implement the same approach used for singleTriggers
         
-        dfBuilder.df = dfBuilder.df.Define(f"mutau_tau_decayMode", f"tau1_HasMatching_mutau ? (tau1_legType == 3 ? tau1_decayMode : (tau2_HasMatching_mutau ? (tau2_legType == 3 ? tau2_decayMode : -1.f) : -1.f)) : -1.f")
+        dfBuilder.df = dfBuilder.df.Define(f"mutau_tau_decayMode", f"tau1_isMatched_mutau_tauLeg ? tau1_decayMode : (tau1_isMatched_mutau_tauLeg ? tau2_decayMode: -1.f)")
         for dm in [0, 1, 10, 11]:
-            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_dm{dm}_Up", f"(mutau_tau_decayMode == {dm} && tau1_HasMatching_mutau && tau2_HasMatching_mutau) ? weight_trgSF_muTau_Up : weight_trgSF_muTau_Central")
-            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_dm{dm}_Down", f"(mutau_tau_decayMode == {dm} && tau1_HasMatching_mutau && tau2_HasMatching_mutau) ? weight_trgSF_muTau_Down : weight_trgSF_muTau_Central")
-        # print(dfBuilder.df.Display(["HLT_singleMu", "HLT_mutau", "weight_trgSF_muTau_Central", "weight_trgSF_muTau_Up", "weight_trgSF_muTau_Down"], 100).AsString())
+            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_tauleg_dm{dm}_Up", f"(mutau_tau_decayMode == {dm} && tau1_HasMatching_mutau && tau2_HasMatching_mutau) ?"
+                "weight_trgSF_muTau_Central + singleTrgSFerr(weight_trgSF_muTau_Central, eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg, eff_data_mutau_tauLeg_Up-eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg_Up-eff_data_mutau_tauLeg)"  
+                ": weight_trgSF_muTau_Central")
+            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_tauleg_dm{dm}_Down", f"(mutau_tau_decayMode == {dm} && tau1_HasMatching_mutau && tau2_HasMatching_mutau) ? "
+                "weight_trgSF_muTau_Central - singleTrgSFerr(weight_trgSF_muTau_Central, eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg, eff_data_mutau_tauLeg_Up-eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg_Up-eff_data_mutau_tauLeg)"
+                ": weight_trgSF_muTau_Central")
          
+    if 'eTau' in dfBuilder.config['channels_to_consider']:
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_singleEle_Up", 
+            f"(tau1_HasMatching_singleEle && tau2_HasMatching_singleEle) ? "
+            f"(tau1_pt > tau2_pt ? eff_mc_tau1_singleEle_triggerleg_e_Up : eff_mc_tau2_singleEle_triggerleg_e_Up) : "
+            f"(tau1_HasMatching_singleEle ? eff_mc_tau1_singleEle_triggerleg_e_Up : (tau2_HasMatching_singleEle ? eff_mc_tau2_singleEle_triggerleg_e_Up : 1.f))"
+        )
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_singleEle_Up", 
+            f"(tau1_HasMatching_singleEle && tau2_HasMatching_singleEle) ? "
+            f"(tau1_pt > tau2_pt ? eff_data_tau1_singleEle_triggerleg_e_Up : eff_data_tau2_singleEle_triggerleg_e_Up) : "
+            f"(tau1_HasMatching_singleEle ? eff_data_tau1_singleEle_triggerleg_e_Up : (tau2_HasMatching_singleEle ? eff_data_tau2_singleEle_triggerleg_e_Up : 1.f))"
+        )
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_etau_eleLeg_Up", "tau1_legType == 1 ? eff_data_tau1_etau_triggerleg_e_Up : (tau2_legType == 1 ? eff_data_tau2_etau_triggerleg_e_Up : 1.f)")
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_etau_eleLeg_Up", "tau1_legType == 1 ? eff_mc_tau1_etau_triggerleg_e_Up : (tau2_legType == 1 ? eff_mc_tau2_etau_triggerleg_e_Up : 1.f)")
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_etau_tauLeg_Up", "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_data_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_data_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f")
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_etau_tauLeg_Up", "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_mc_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_mc_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f")
+
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_data_deffll_data_eTau","HLT_singleEle - HLT_etau * HLT_singleEle * (eff_data_singleEle >= eff_data_etau_eleLeg) * eff_data_etau_tauLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_data_deffl_data_eTau","-HLT_etau * HLT_singleEle * (eff_data_etau_eleLeg >= eff_data_singleEle) * eff_data_etau_tauLeg + HLT_etau * eff_data_etau_tauLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_mc_deffL_mc_eTau","HLT_singleEle - HLT_etau * HLT_singleEle * (eff_mc_singleEle >= eff_mc_etau_eleLeg) * eff_mc_etau_tauLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_mc_deffl_mc_eTau","-HLT_etau * HLT_singleEle * (eff_mc_etau_eleLeg >= eff_mc_singleEle) * eff_mc_etau_tauLeg + HLT_etau * eff_mc_etau_tauLeg")
+
+        dfBuilder.df = dfBuilder.df.Define(f"Eff_data_eTau_errUp", f"pow(dEff_data_deffll_data_eTau,2) * pow(eff_data_singleEle - eff_data_singleEle_Up,2) + pow(dEff_data_deffl_data_eTau,2) * pow(eff_data_etau_eleLeg - eff_data_etau_eleLeg_Up,2)")
+        dfBuilder.df = dfBuilder.df.Define(f"Eff_mc_eTau_errUp", f"pow(dEff_mc_deffL_mc_eTau,2) * pow(eff_mc_singleEle - eff_mc_singleEle_Up,2) + pow(dEff_mc_deffl_mc_eTau,2) * pow(eff_mc_etau_eleLeg - eff_mc_etau_eleLeg_Up,2)")
+        dfBuilder.df = dfBuilder.df.Define(f"SF_eTau_errUp", f"weight_trgSF_eTau_Central * sqrt(pow(Eff_data_eTau_errUp/weight_trgSF_eTau_Central,2) + pow(Eff_mc_eTau_errUp/weight_trgSF_eTau_Central,2))")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_eleg_Up", f"weight_trgSF_eTau_Central + SF_eTau_errUp")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_eleg_Down", f"weight_trgSF_eTau_Central - SF_eTau_errUp")
+
+        dfBuilder.df = dfBuilder.df.Define(f"etau_tau_decayMode", f"tau1_HasMatching_etau && tau1_legType == 3 ? tau1_decayMode : (tau2_HasMatching_etau && tau2_legType == 3 ? tau2_decayMode: -1.f)")
+        # dfBuilder.df = dfBuilder.df.Define(f"sftauerr", f"singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)")
+        for dm in [0, 1, 10, 11]:
+            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_tauleg_dm{dm}_Up", f"(etau_tau_decayMode == {dm} && tau1_HasMatching_etau && tau2_HasMatching_etau) ?"
+                "weight_trgSF_eTau_Central + singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)"  
+                ": weight_trgSF_eTau_Central")
+            dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_tauleg_dm{dm}_Down", f"(etau_tau_decayMode == {dm} && tau1_HasMatching_etau && tau2_HasMatching_etau) ? "
+                "weight_trgSF_eTau_Central - singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)"
+                ": weight_trgSF_eTau_Central")
+
+    if 'tauTau' in dfBuilder.config['channels_to_consider']:
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditau_Up", 
+            f"(tau1_HasMatching_ditau && tau2_HasMatching_ditau) ? "
+            f"pow(pow(eff_mc_tau2_ditau_triggerleg_tau_Central * (eff_mc_tau1_ditau_triggerleg_tau_Up - eff_mc_tau1_ditau_triggerleg_tau_Central),2) + pow(eff_mc_tau2_ditau_triggerleg_tau_Central * (eff_mc_tau2_ditau_triggerleg_tau_Up - eff_mc_tau2_ditau_triggerleg_tau_Central),2),0.5) "
+            f" : 1.f"
+        )
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditau_Up", 
+            f"(tau1_HasMatching_ditau && tau2_HasMatching_ditau) ? "
+            f"pow(pow(eff_data_tau2_ditau_triggerleg_tau_Central * (eff_data_tau1_ditau_triggerleg_tau_Up - eff_data_tau1_ditau_triggerleg_tau_Central),2) + pow(eff_data_tau1_ditau_triggerleg_tau_Central * (eff_data_tau2_ditau_triggerleg_tau_Up - eff_data_tau2_ditau_triggerleg_tau_Central),2),0.5) "
+            f" : 1.f"
+        )
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_ditauLeg_Up", "(tau1_HasMatching_ditaujet && tau2_HasMatching_ditaujet) ?" 
+            "pow(pow(eff_data_tau2_ditaujet_triggerleg_tau_Central * (eff_data_tau1_ditaujet_triggerleg_tau_Up - eff_data_tau1_ditaujet_triggerleg_tau_Central),2) + pow(eff_data_tau1_ditaujet_triggerleg_tau_Central * (eff_data_tau2_ditaujet_triggerleg_tau_Up - eff_data_tau2_ditaujet_triggerleg_tau_Central),2),0.5)"
+            ": 1.f"
+        )
+
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_ditauLeg_Up", "(tau1_HasMatching_ditaujet && tau2_HasMatching_ditaujet) ?" 
+            "pow(pow(eff_mc_tau2_ditaujet_triggerleg_tau_Central * (eff_mc_tau1_ditaujet_triggerleg_tau_Up - eff_mc_tau1_ditaujet_triggerleg_tau_Central),2) + pow(eff_mc_tau1_ditaujet_triggerleg_tau_Central * (eff_mc_tau2_ditaujet_triggerleg_tau_Up - eff_mc_tau2_ditaujet_triggerleg_tau_Central),2),0.5)"
+            ": 1.f"
+        )
+
+        dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_jetLeg_Up", 
+            "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Up : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_data_b2_ditaujet_triggerleg_jet_Up : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Up"
+            ": 1.f"
+        )
+        dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_jetLeg_Up",  
+            "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Up : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_mc_b2_ditaujet_triggerleg_jet_Up : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Up"
+            ": 1.f"
+        )
+
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_data_deffll_data_tauTau","HLT_ditau - HLT_ditaujet * HLT_ditau * (eff_data_ditau >= eff_data_ditaujet_ditauLeg) * eff_data_ditaujet_jetLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_data_deffl_data_tauTau","-HLT_ditaujet * HLT_ditau * (eff_data_ditaujet_ditauLeg >= eff_data_ditau) * eff_data_ditaujet_jetLeg + HLT_ditaujet * eff_data_ditaujet_jetLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_mc_deffL_mc_tauTau","HLT_ditau - HLT_ditaujet * HLT_ditau * (eff_mc_ditau >= eff_mc_ditaujet_ditauLeg) * eff_mc_ditaujet_jetLeg")
+        dfBuilder.df = dfBuilder.df.Define(f"dEff_mc_deffl_mc_tauTau","-HLT_ditaujet * HLT_ditau * (eff_mc_ditaujet_ditauLeg >= eff_mc_ditau) * eff_mc_ditaujet_jetLeg + HLT_ditaujet * eff_mc_ditaujet_jetLeg")
+
+        dfBuilder.df = dfBuilder.df.Define(f"Eff_data_tauTau_errUp", f"pow(dEff_data_deffll_data_tauTau,2) * pow(eff_data_ditau - eff_data_ditau_Up,2) + pow(dEff_data_deffl_data_tauTau,2) * pow(eff_data_ditaujet_ditauLeg - eff_data_ditaujet_ditauLeg_Up,2)")
+        dfBuilder.df = dfBuilder.df.Define(f"Eff_mc_tauTau_errUp", f"pow(dEff_mc_deffL_mc_tauTau,2) * pow(eff_mc_ditau - eff_mc_ditau_Up,2) + pow(dEff_mc_deffl_mc_tauTau,2) * pow(eff_mc_ditaujet_ditauLeg - eff_mc_ditaujet_ditauLeg_Up,2)")
+        dfBuilder.df = dfBuilder.df.Define(f"SF_tauTau_errUp", f"weight_trgSF_tauTau_Central * sqrt(pow(Eff_data_tauTau_errUp/weight_trgSF_tauTau_Central,2) + pow(Eff_mc_tauTau_errUp/weight_trgSF_tauTau_Central,2))")
+        dfBuilder.df = dfBuilder.df.Define(f"ditaujet_tau1_decayMode", f"tau1_HasMatching_ditaujet && tau1_legType == 3 ? tau1_decayMode : -1.f")
+        dfBuilder.df = dfBuilder.df.Define(f"ditaujet_tau2_decayMode", f"tau2_HasMatching_ditaujet && tau2_legType == 3 ? tau2_decayMode :  -1.f")
+        for dm1 in [0, 1, 10, 11]:
+            for dm2 in [0, 1, 10, 11]:
+                dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_Up", f"(ditaujet_tau1_decayMode == {dm1} && ditaujet_tau2_decayMode == {dm2}) ?"
+                    "weight_trgSF_tauTau_Central + SF_tauTau_errUp"  
+                    ": weight_trgSF_tauTau_Central")
+                dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_Down", f"(ditaujet_tau1_decayMode == {dm1} && ditaujet_tau2_decayMode == {dm2}) ?"
+                    "weight_trgSF_tauTau_Central - SF_tauTau_errUp"  
+                    ": weight_trgSF_tauTau_Central")
+        
+        dfBuilder.df = dfBuilder.df.Define(f"sfjeterr", f"singleTrgSFerr(weight_trgSF_tauTau_Central, eff_data_ditaujet_jetLeg, eff_mc_ditaujet_jetLeg, eff_data_ditaujet_jetLeg_Up-eff_data_ditaujet_jetLeg, eff_mc_ditaujet_jetLeg_Up-eff_data_ditaujet_jetLeg)")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_jetleg_Up", f"weight_trgSF_tauTau_Central + sfjeterr")
+        dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_jetleg_Down", f"weight_trgSF_tauTau_Central - sfjeterr")
+
+        # print(dfBuilder.df.Display(["ditaujet_tau1_decayMode", "tau1_HasMatching_ditaujet", "tau1_legType", "weight_trgSF_tauTau_Central", "weight_trgSF_tauTau_jetleg_Up", "weight_trgSF_tauTau_jetleg_Down", "weight_trgSF_tauTau_tauleg_dm0_dm0_Up", "weight_trgSF_tauTau_tauleg_dm1_dm10_Up"],50).AsString())
 
 def defineTriggerWeights(dfBuilder): # needs application region def
 
