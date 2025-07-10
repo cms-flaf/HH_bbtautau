@@ -36,7 +36,6 @@ ditau:
       doMatching: True
       jsonTRGcorrection_key: { '2022_Summer22': 'tau_trigger', '2022_Summer22EE': 'tau_trigger' }
       jsonTRGcorrection_elepath: "placeholder"
-
 ditaujet:
   channels:
     - tauTau

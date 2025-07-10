@@ -7,8 +7,6 @@ signal_types:
   # - GluGluToBulkGraviton
   # - VBFToRadion
   # - VBFToBulkGraviton
-  # - VBFToRadion
-  # - VBFToBulkGraviton
 genuineTau_SFtype:
   eTau: dm
   muTau: dm
