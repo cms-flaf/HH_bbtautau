@@ -93,7 +93,8 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
     dfw.Apply(Corrections.getGlobal().btag.getWPid)
     jet_obs = []
     jet_obs.extend(JetObservables)
-    dfw.Apply(AnaBaseline.ApplyJetSelection)
+    if global_params["requireHbbJets"]:
+        dfw.Apply(AnaBaseline.ApplyJetSelection)
     if not isData:
         #dfw.Define(f"Jet_genJet_idx", " FindMatching(Jet_p4,GenJet_p4,0.3)")
         jet_obs.extend(JetObservablesMC)
@@ -210,6 +211,8 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
                                                           ? FindMatching(HttCandidate.leg_p4[{leg_idx}], Jet_p4, 0.3)
                                                           : -1""")
         LegVar('iso', f"HttCandidate.leg_rawIso.at({leg_idx})")
+        # dfw.DefineAndAppend(f"tau{leg_idx+1}_PNetTauVjet", f"HttCandidate.leg_type[{leg_idx}] == Leg::tau ? Jet_btagPNetTauVJet.at(Tau_jetIdx.at(HttCandidate.leg_index[{leg_idx}])):-1.f")
+        
         for deepTauScore in deepTauScores:
             LegVar(deepTauScore, f"Tau_{deepTauScore}.at(HttCandidate.leg_index[{leg_idx}])",
                    var_cond=f"HttCandidate.leg_type[{leg_idx}] == Leg::tau", default='-1.f')

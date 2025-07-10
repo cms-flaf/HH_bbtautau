@@ -24,10 +24,10 @@ deepTauWPs:
     VSmu: Tight
     VSjet: Medium
 corrections:
-  - tauID
-  - tauES
-  - JEC
-  - JER
+  # - tauID
+  # - tauES
+  # - JEC
+  # - JER
   - trgEff
   # - btagWP
   - btagShape
@@ -94,7 +94,7 @@ categories:
   # - res1b_cat3_masswindow
   # - res0b_cat3_masswindow
 
-
+requireHbbJets: True
 storeExtraJets: False
 deepTauYears:
   v2p1: 2017
