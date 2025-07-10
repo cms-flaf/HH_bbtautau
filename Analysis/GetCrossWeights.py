@@ -59,61 +59,6 @@ ROOT.gInterpreter.Declare(
     throw std::invalid_argument("ERROR: no suitable single lepton candidate");
 
     }
-    float Calculator_eTauTRGSF(const int tau1_legType, const int tau2_legType, const bool HLT_etau, const bool HLT_singleEle, const float eff_data_tau1_etau_triggerleg_tau_Central, const float eff_data_tau2_etau_triggerleg_tau_Central, const float eff_mc_tau1_etau_triggerleg_tau_Central, const float eff_mc_tau2_etau_triggerleg_tau_Central,  const float eff_data_tau1_etau_triggerleg_e_Central, const float eff_data_tau2_etau_triggerleg_e_Central, const float eff_mc_tau1_etau_triggerleg_e_Central, const float eff_mc_tau2_etau_triggerleg_e_Central, const float eff_data_tau1_singleEle_triggerleg_e_Central, const float eff_data_tau2_singleEle_triggerleg_e_Central, const float eff_mc_tau1_singleEle_triggerleg_e_Central, const float eff_mc_tau2_singleEle_triggerleg_e_Central, const bool tau1_HasMatching_singleEle, const bool tau2_HasMatching_singleEle, const bool tau1_HasMatching_etau, const bool tau2_HasMatching_etau) {
-        float weight = 1.f;
-        float single_ele_effMc = 0.f;
-        float ele_leg_effMc = 0.f;
-        float tau_leg_effMc = 0.f;
-        float single_ele_effData = 0.f;
-        float ele_leg_effData = 0.f;
-        float tau_leg_effData = 0.f;
-
-        // Determine which tau is matched to singleEle trigger
-        if (tau1_HasMatching_singleEle) {
-            single_ele_effMc = eff_mc_tau1_singleEle_triggerleg_e_Central;
-            single_ele_effData = eff_data_tau1_singleEle_triggerleg_e_Central;
-        } else if (tau2_HasMatching_singleEle) {
-            single_ele_effMc = eff_mc_tau2_singleEle_triggerleg_e_Central;
-            single_ele_effData = eff_data_tau2_singleEle_triggerleg_e_Central;
-        }
-
-        // Determine which tau is matched to etau trigger, and which leg
-        if (tau1_HasMatching_etau) {
-            if (tau1_legType == 1) { // electron leg
-                ele_leg_effMc = eff_mc_tau1_etau_triggerleg_e_Central;
-                ele_leg_effData = eff_data_tau1_etau_triggerleg_e_Central;
-            } else if (tau1_legType == 3) { // tau leg
-                tau_leg_effMc = eff_mc_tau1_etau_triggerleg_tau_Central;
-                tau_leg_effData = eff_data_tau1_etau_triggerleg_tau_Central;
-            }
-        }
-        if (tau2_HasMatching_etau) {
-            if (tau2_legType == 1) { // electron leg
-                ele_leg_effMc = eff_mc_tau2_etau_triggerleg_e_Central;
-                ele_leg_effData = eff_data_tau2_etau_triggerleg_e_Central;
-            } else if (tau2_legType == 3) { // tau leg
-                tau_leg_effMc = eff_mc_tau2_etau_triggerleg_tau_Central;
-                tau_leg_effData = eff_data_tau2_etau_triggerleg_tau_Central;
-            }
-        }
-
-        // Calculate the formula
-        float mceff = 0.f;
-        float dataeff = 0.f;
-
-        mceff = HLT_singleEle * single_ele_effMc
-                 - HLT_etau * HLT_singleEle * std::min(single_ele_effMc, ele_leg_effMc) * tau_leg_effMc
-                 + HLT_etau * ele_leg_effMc * tau_leg_effMc;
-        
-        dataeff = HLT_singleEle * single_ele_effData
-                 - HLT_etau * HLT_singleEle * std::min(single_ele_effData, ele_leg_effData) * tau_leg_effData
-                 + HLT_etau * ele_leg_effData * tau_leg_effData;
-        if (mceff != 0.f && dataeff != 0.f) {
-            weight = dataeff/ mceff;
-        }
-
-        return weight;
-    }
 
     float crossTrig_trgSF (const bool HLT_singleEle, const bool HLT_etau, float single_ele_effMc, float ele_leg_effMc, float tau_leg_effMc, float single_ele_effData, float ele_leg_effData, float tau_leg_effData) {
         float weight = 1.f;
@@ -316,7 +261,6 @@ def defineTriggerWeightsErrors(dfBuilder):
 def defineTriggersCentralWeights(dfBuilder):
 
     if 'eTau' in dfBuilder.config['channels_to_consider']:
-        # FIX THE REQUEST FOR TRIGGER WEIGHT, see MuTau ch
         dfBuilder.df = dfBuilder.df.Define("eff_mc_singleEle",
             "(tau1_HasMatching_singleEle && tau2_HasMatching_singleEle) ? "
             "(tau1_pt > tau2_pt ? eff_mc_tau1_singleEle_triggerleg_e_Central : eff_mc_tau2_singleEle_triggerleg_e_Central) : "
@@ -329,7 +273,7 @@ def defineTriggersCentralWeights(dfBuilder):
         )
         # dfBuilder.df = dfBuilder.df.Define(f"eff_data_etau_eleLeg", "tau1_HasMatching_etau ? (tau1_legType == 1 ? eff_data_tau1_etau_triggerleg_e_Central : (tau2_HasMatching_etau ? (tau2_legType == 1 ? eff_data_tau2_etau_triggerleg_e_Central : 1.f) : 1.f)) : 1.f")
         # dfBuilder.df = dfBuilder.df.Define(f"eff_mc_etau_eleLeg", "tau1_HasMatching_etau ? (tau1_legType == 1 ? eff_mc_tau1_etau_triggerleg_e_Central : (tau2_HasMatching_etau ? (tau2_legType == 1 ? eff_mc_tau2_etau_triggerleg_e_Central : 1.f) : 1.f)) : 1.f")
-        # only for etau ele leg is not recommended to match the electron, the bug will be solved in NanoAODv15 --> with the new version you can remove the 2 lines below and uncomment the 2 above
+        #### only for etau ele leg is not recommended to match the electron, the bug will be solved in NanoAODv15 --> with the new version you can remove the 2 lines below and uncomment the 2 above
         dfBuilder.df = dfBuilder.df.Define(f"eff_data_etau_eleLeg", "tau1_legType == 1 ? eff_data_tau1_etau_triggerleg_e_Central : (tau2_legType == 1 ? eff_data_tau2_etau_triggerleg_e_Central : 1.f)")
         dfBuilder.df = dfBuilder.df.Define(f"eff_mc_etau_eleLeg", "tau1_legType == 1 ? eff_mc_tau1_etau_triggerleg_e_Central : (tau2_legType == 1 ? eff_mc_tau2_etau_triggerleg_e_Central : 1.f)")
         dfBuilder.df = dfBuilder.df.Define(f"eff_data_etau_tauLeg", "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_data_tau1_etau_triggerleg_tau_Central : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_data_tau2_etau_triggerleg_tau_Central : 1.f) : 1.f)) : 1.f")
@@ -372,7 +316,6 @@ def defineTriggersCentralWeights(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_muTau_Central", 
             "(HLT_mutau && tau1_isMatched_mutau_muLeg &&  tau2_isMatched_mutau_tauLeg) || (HLT_mutau && tau2_isMatched_mutau_muLeg &&  tau1_isMatched_mutau_tauLeg) || (HLT_singleMu && (tau1_HasMatching_singleMu || tau2_HasMatching_singleMu))?" 
             "crossTrig_trgSF(HLT_singleMu, HLT_mutau, eff_mc_singleMu, eff_mc_mutau_muLeg, eff_mc_mutau_tauLeg, eff_data_singleMu, eff_data_mutau_muLeg, eff_data_mutau_tauLeg) : 1.f")
-        # print(dfBuilder.df.Display(["HLT_singleMu", "HLT_mutau", "tau1_HasMatching_mutau", "tau2_HasMatching_mutau", "eff_mc_singleMu", "eff_mc_mutau_muLeg", "eff_mc_mutau_tauLeg", "eff_data_singleMu", "eff_data_mutau_muLeg", "eff_data_mutau_tauLeg", "weight_trgSF_muTau_Central"], 100).AsString())
 
     if 'tauTau' in dfBuilder.config['channels_to_consider']:
         dfBuilder.df = dfBuilder.df.Define("eff_mc_ditau", "(tau1_HasMatching_ditau && tau2_HasMatching_ditau) ? eff_mc_tau1_ditau_triggerleg_tau_Central * eff_mc_tau2_ditau_triggerleg_tau_Central : 1.f")
@@ -382,10 +325,6 @@ def defineTriggersCentralWeights(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(f"eff_data_ditaujet_jetLeg", "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Central : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_data_b2_ditaujet_triggerleg_jet_Central : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_data_b1_ditaujet_triggerleg_jet_Central : 1.f")
         dfBuilder.df = dfBuilder.df.Define(f"eff_mc_ditaujet_jetLeg", "(b1_HasMatching_ditaujet && !b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Central : (b2_HasMatching_ditaujet && !b1_HasMatching_ditaujet) ? eff_mc_b2_ditaujet_triggerleg_jet_Central : (b1_HasMatching_ditaujet && b2_HasMatching_ditaujet) ? eff_mc_b1_ditaujet_triggerleg_jet_Central : 1.f")
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_Central", "crossTrig_trgSF(HLT_ditau, HLT_ditaujet, eff_mc_ditau, eff_mc_ditaujet_ditauLeg, eff_mc_ditaujet_jetLeg, eff_data_ditau, eff_data_ditaujet_ditauLeg, eff_data_ditaujet_jetLeg)")
-
-        # print(dfBuilder.df.Display(["HLT_ditau", "tau1_HasMatching_ditau", "tau2_HasMatching_ditau", "eff_data_tau1_ditau_triggerleg_tau_Central", "eff_data_tau2_ditau_triggerleg_tau_Central", "eff_data_ditau"], 1163).AsString())
-        # print(dfBuilder.df.Display(["HLT_ditaujet", "tau1_HasMatching_ditaujet", "tau2_HasMatching_ditaujet", "b1_HasMatching_ditaujet", "b2_HasMatching_ditaujet", "eff_data_tau1_ditaujet_triggerleg_tau_Central", "eff_data_tau2_ditaujet_triggerleg_tau_Central", "eff_data_b1_ditaujet_triggerleg_jet_Central", "eff_data_b2_ditaujet_triggerleg_jet_Central", "eff_data_ditaujet_tauLeg", "eff_data_ditaujet_jetLeg"], 1163).AsString())
-        # print(dfBuilder.df.Display(["HLT_ditau", "HLT_ditaujet", "eff_mc_ditau", "eff_mc_ditaujet_tauLeg", "eff_mc_ditaujet_jetLeg", "eff_data_ditau", "eff_data_ditaujet_tauLeg", "eff_data_ditaujet_jetLeg", "weight_trgSF_tauTau_Central"], 1163).AsString())
 
     if 'muMu' or 'eMu' in dfBuilder.config['channels_to_consider']:
         dfBuilder.df = dfBuilder.df.Define("eff_mc_muMueMu_singleMu",
@@ -427,7 +366,6 @@ def defineTriggersWeightsErrors(dfBuilder):
         # SF_up = SF + SF_err_up
 
     if 'muMu' or 'eMu' in dfBuilder.config['channels_to_consider']:
-        # TESTARE QUESTO CODICE e se ok usalo pure per single electron
         for scale in ['Up', 'Down']:
             dfBuilder.df = dfBuilder.df.Define(f"eff_mc_muMueMu_singleMu_{scale}",
                 f"(tau1_HasMatching_singleMu && tau2_HasMatching_singleMu) ? "
@@ -552,7 +490,6 @@ def defineTriggersWeightsErrors(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_eleg_Down", f"weight_trgSF_eTau_Central - SF_eTau_errUp")
 
         dfBuilder.df = dfBuilder.df.Define(f"etau_tau_decayMode", f"tau1_HasMatching_etau && tau1_legType == 3 ? tau1_decayMode : (tau2_HasMatching_etau && tau2_legType == 3 ? tau2_decayMode: -1.f)")
-        # dfBuilder.df = dfBuilder.df.Define(f"sftauerr", f"singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)")
         for dm in [0, 1, 10, 11]:
             dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_eTau_tauleg_dm{dm}_Up", f"(etau_tau_decayMode == {dm} && tau1_HasMatching_etau && tau2_HasMatching_etau) ?"
                 "weight_trgSF_eTau_Central + singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)"  
@@ -614,7 +551,6 @@ def defineTriggersWeightsErrors(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_jetleg_Up", f"weight_trgSF_tauTau_Central + sfjeterr")
         dfBuilder.df = dfBuilder.df.Define(f"weight_trgSF_tauTau_jetleg_Down", f"weight_trgSF_tauTau_Central - sfjeterr")
 
-        # print(dfBuilder.df.Display(["ditaujet_tau1_decayMode", "tau1_HasMatching_ditaujet", "tau1_legType", "weight_trgSF_tauTau_Central", "weight_trgSF_tauTau_jetleg_Up", "weight_trgSF_tauTau_jetleg_Down", "weight_trgSF_tauTau_tauleg_dm0_dm0_Up", "weight_trgSF_tauTau_tauleg_dm1_dm10_Up"],50).AsString())
 
 def defineTriggerWeights(dfBuilder): # needs application region def
 
