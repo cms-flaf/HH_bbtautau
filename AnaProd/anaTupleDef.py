@@ -211,7 +211,11 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
                                                           ? FindMatching(HttCandidate.leg_p4[{leg_idx}], Jet_p4, 0.3)
                                                           : -1""")
         LegVar('iso', f"HttCandidate.leg_rawIso.at({leg_idx})")
-        # dfw.DefineAndAppend(f"tau{leg_idx+1}_PNetTauVjet", f"HttCandidate.leg_type[{leg_idx}] == Leg::tau ? Jet_btagPNetTauVJet.at(Tau_jetIdx.at(HttCandidate.leg_index[{leg_idx}])):-1.f")
+        dfw.DefineAndAppend(f"tau{leg_idx+1}_btagPNetB", f"HttCandidate.leg_type[{leg_idx}] != Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f")
+        dfw.DefineAndAppend(f"tau{leg_idx+1}_btagPNetCvB", f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f")
+        dfw.DefineAndAppend(f"tau{leg_idx+1}_btagPNetCvL", f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvL.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f")
+        dfw.DefineAndAppend(f"tau{leg_idx+1}_btagPNetCvNotB", f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvNotB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f")
+        dfw.DefineAndAppend(f"tau{leg_idx+1}_btagPNetQvG", f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetQvG.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f")
         
         for deepTauScore in deepTauScores:
             LegVar(deepTauScore, f"Tau_{deepTauScore}.at(HttCandidate.leg_index[{leg_idx}])",
