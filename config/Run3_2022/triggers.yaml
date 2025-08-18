@@ -1,6 +1,6 @@
-#https://twiki.cern.ch/twiki/bin/viewauth/CMS/TauTrigger#Updates_for_2022_data_taking
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/TauTrigger#Updates_for_2022_data_taking
 
-vbf: # to check kinematic cuts for offline objs and trigger bits for online objs
+vbf:  # to check kinematic cuts for offline objs and trigger bits for online objs
   channels:
     - tauTau
   path:
@@ -77,7 +77,7 @@ mutau:
     - offline_obj:
         cut: "{obj}_legType == Leg::mu && {obj}_pt > 22 && abs({obj}_eta) < 2.1"
       online_obj:
-        cut: TrigObj_id==13 && (TrigObj_filterBits&64)!=0 #&& TrigObj_pt>20
+        cut: TrigObj_id==13 && (TrigObj_filterBits&64)!=0  # && TrigObj_pt>20
       doMatching: True
       jsonTRGcorrection_key: {"2022_Summer22":"NUM_IsoMu20_DEN_CutBasedIdTight_and_PFIsoTight_{}eff", 
                               "2022_Summer22EE":"NUM_IsoMu20_DEN_CutBasedIdTight_and_PFIsoTight_{}eff",
@@ -102,7 +102,7 @@ etau:
     - offline_obj:
         cut: "{obj}_legType == Leg::e && {obj}_pt > 26 && abs({obj}_eta) < 2.1"
       online_obj:
-        cut: TrigObj_id==11 && (TrigObj_filterBits&128)!=0 #&& TrigObj_pt>24
+        cut: TrigObj_id==11 && (TrigObj_filterBits&128)!=0  # && TrigObj_pt>24
       doMatching: True
       jsonTRGcorrection_key: {"2022_Summer22":"Electron-HLT-{}Eff", 
                               "2022_Summer22EE":"Electron-HLT-{}Eff",
@@ -127,7 +127,7 @@ singleMu:
     - HLT_IsoMu24
   legs:
     - offline_obj:
-        cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"# {obj}_pt > 26 && abs({obj}_eta) < 2.4
+        cut:  "{obj}_legType == Leg::mu && {obj}_pt > 26"  # {obj}_pt > 26 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
       doMatching: True
@@ -145,7 +145,7 @@ singleEle:
     - HLT_Ele30_WPTight_Gsf
   legs:
     - offline_obj:
-        cut: "{obj}_legType == Leg::e && {obj}_pt > 32"# {obj}_pt > 32 && abs({obj}_eta) < 2.4
+        cut: "{obj}_legType == Leg::e && {obj}_pt > 32"  # {obj}_pt > 32 && abs({obj}_eta) < 2.4
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&2)!=0
       doMatching: True
@@ -154,7 +154,7 @@ singleEle:
                             }
       jsonTRGcorrection_elepath: "HLT_SF_Ele30_TightID"
 
-####################################
+#
 # MET:
 #     channels:
 #       - tauTau
