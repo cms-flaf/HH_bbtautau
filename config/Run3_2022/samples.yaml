@@ -4,8 +4,7 @@ GLOBAL:
     - keep ^TTto.*
     - keep ^ttH.*
     - keep ^ST.*
-    - keep DYto2L_M_10to50_amcatnloFXFX
-    - keep DYto2L_M_50_amcatnloFXFX
+    - keep ^DY.*amcatnloFXFX.*
     - keep WtoLNu_amcatnloFXFX
     - keep WW
     - keep WZ

@@ -39,19 +39,19 @@ tagger_name: particleNet
 bjet_preselection_branch: "Jet_bCand"
 
 channelSelection:
-    - eTau
-    - muTau
-    - tauTau
-    - eE
-    - eMu
-    - muMu
+  - eTau
+  - muTau
+  - tauTau
+  - eE
+  - eMu
+  - muMu
 
 met_type: "PuppiMET"
 deepTauVersion: 2p5
 region: SR
 region_default: SR
 channels: ""
-SignRegions: # QCDRegions:
+SignRegions:  # QCDRegions:
   - OS_Iso
   - SS_Iso
   - OS_AntiIso
@@ -128,12 +128,12 @@ channelDefinition:
   muMu: 22
 
 triggers:
-  eTau: [singleEle, etau]
-  muTau: [singleMu, mutau]
-  tauTau: [ditau, ditaujet]
-  eE: [singleEle]
-  eMu: [singleMu]
-  muMu: [singleMu]
+  eTau: [ singleEle, etau ]
+  muTau: [ singleMu, mutau ]
+  tauTau: [ ditau, ditaujet ]
+  eE: [ singleEle ]
+  eMu: [ singleMu ]
+  muMu: [ singleMu ]
 
 hist_triggers:
   eTau:
@@ -263,8 +263,8 @@ mass_cut_limits:
       - 40
       - 270
   tautau_m_vis:
-      - 15
-      - 130
+    - 15
+    - 130
 
 scales:
   - Up
@@ -507,3 +507,4 @@ unc_to_not_consider_boosted:
   - bTagShapeSF_hfstats2
   - bTagShapeSF_cferr1
   - bTagShapeSF_cferr2
+  
