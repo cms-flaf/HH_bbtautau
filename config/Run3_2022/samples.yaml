@@ -371,24 +371,6 @@ VBFHHto2B2Tau_CV_1_C2V_1_C3_1_fixedTauDecays:
   mass: 125
   spin: 0
   crossSection: 1pb
-VBFHHto2B2Tau_CV_1_C2V_1_C3_1_v2:
-  sampleType: HHnonRes
-  generator: madgraph
-  mass: 125
-  spin: 0
-  crossSection: 1pb
-VBFHHto2B2Tau_CV_1_C2V_1_C3_2:
-  sampleType: HHnonRes
-  generator: madgraph
-  mass: 125
-  spin: 0
-  crossSection: 1pb
-VBFHHto2B2Tau_CV_1_C2V_2_C3_1:
-  sampleType: HHnonRes
-  generator: madgraph
-  mass: 125
-  spin: 0
-  crossSection: 1pb
 VBFHHto2B2Tau_CV_1p74_C2V_1p37_C3_14p4_fixedTauDecays:
   sampleType: HHnonRes
   generator: madgraph
@@ -432,12 +414,6 @@ VBFHHto2B2Tau_CV_m1p60_C2V_2p72_C3_m1p36_fixedTauDecays:
   spin: 0
   crossSection: 1pb
 VBFHHto2B2Tau_CV_m1p83_C2V_3p57_C3_m3p39_fixedTauDecays:
-  sampleType: HHnonRes
-  generator: madgraph
-  mass: 125
-  spin: 0
-  crossSection: 1pb
-VBFHHto2B2Tau_CV_m2p12_C2V_3p87_C3_m5p96:
   sampleType: HHnonRes
   generator: madgraph
   mass: 125
