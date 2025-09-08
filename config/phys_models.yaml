@@ -1,0 +1,8 @@
+BaseModel:
+  name: "Base Model"
+  backgrounds:
+    - TT
+  signals:
+    - GluGlutoHHto2B2Tau
+  data:
+    - Data_Full
