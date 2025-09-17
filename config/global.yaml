@@ -40,12 +40,12 @@ tagger_name: particleNet
 bjet_preselection_branch: "Jet_bCand"
 
 channelSelection:
-    - eTau
-    - muTau
-    - tauTau
-    - eE
-    - eMu
-    - muMu
+  - eTau
+  - muTau
+  - tauTau
+  - eE
+  - eMu
+  - muMu
 
 met_type: "PuppiMET"
 deepTauVersion: 2p5
