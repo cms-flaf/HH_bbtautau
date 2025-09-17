@@ -5,8 +5,8 @@ signal_types:
   - HHnonRes
   # - GluGluToRadion
   # - GluGluToBulkGraviton
-  #- VBFToRadion
-  #- VBFToBulkGraviton
+  # - VBFToRadion
+  # - VBFToBulkGraviton
 genuineTau_SFtype:
   eTau: dm
   muTau: dm
@@ -37,7 +37,7 @@ corrections:
   - pu
 
 tagger_name: particleNet
-bjet_preselection_branch : "Jet_bCand"
+bjet_preselection_branch: "Jet_bCand"
 
 channelSelection:
     - eTau
@@ -52,7 +52,7 @@ deepTauVersion: 2p5
 region: SR
 region_default: SR
 channels: ""
-SignRegions: #QCDRegions:
+SignRegions:  # QCDRegions:
   - OS_Iso
   - SS_Iso
   - OS_AntiIso
@@ -69,8 +69,8 @@ categories:
   - baseline
   - boosted_baseline
   - boosted_baseline_cat3
-  #- boosted_baseline_masswindow
-  #- boosted_baseline_cat3_masswindow
+  # - boosted_baseline_masswindow
+  # - boosted_baseline_cat3_masswindow
   - res0b_inclusive
   - res1b_inclusive
   - res2b_inclusive
@@ -131,27 +131,27 @@ channelDefinition:
 
 
 triggers:
-  eTau: [ singleEle, etau]
-  muTau: [singleMu, mutau]
-  tauTau: [ditau , ditaujet]
-  eE: [singleEle]
-  eMu: [singleMu]
-  muMu: [singleMu]
+  eTau: [ singleEle, etau ]
+  muTau: [ singleMu, mutau ]
+  tauTau: [ ditau , ditaujet ]
+  eE: [ singleEle ]
+  eMu: [ singleMu ]
+  muMu: [ singleMu ]
 
 hist_triggers:
   eTau:
-    default: ( HLT_singleEle && Legacy_region ) #( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+    default: ( HLT_singleEle && Legacy_region )  # ( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
     Run2_2016 :  ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))
     Run2_2016_HIPM :  ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))
   muTau:
-    default: (HLT_singleMu && Legacy_region) #(( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+    default: (HLT_singleMu && Legacy_region)  # (( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
   tauTau:
     # default: ( ( (HLT_ditau || HLT_ditaujet) && Legacy_Region ) ) # || (HLT_MET && !(Legacy_Region) ) )
-    default: (HLT_ditau && Legacy_region) #((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ) )
+    default: (HLT_ditau && Legacy_region)  # ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ) )
   eE:
     default: (HLT_singleEle && SingleEle_region)
   eMu:
-    default: (HLT_singleMu && SingleMu_region) #((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
+    default: (HLT_singleMu && SingleMu_region)  # ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
   muMu:
     default: (HLT_singleMu && SingleMu_region)
 
@@ -167,9 +167,9 @@ application_regions:
   SingleEle_region: ((tau1_pt > {ele_th}  && abs(tau1_eta) < 2.5) || (tau2_pt > {ele_th}  && abs(tau2_eta) < 2.5))
   CrossEleTau_region: (tau1_pt > 25 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1)
   diTau_region: (tau1_pt > 40 && abs(tau1_eta) < 2.1 && tau2_pt > 40 && abs(tau2_eta) < 2.1)
-  diTauJet_region: (tau1_pt > 35 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1 ) #&& Jet_pt>60)
+  diTauJet_region: (tau1_pt > 35 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1 )  # && Jet_pt>60)
   SingleTau_region: (((tau1_pt > {tau_th} && abs(tau1_eta) < 2.1) || (tau2_pt > {tau_th} && abs(tau2_eta) < 2.1)) )
-  #MET_region: (!(Legacy_region) && !(SingleTau_region))
+  # MET_region: (!(Legacy_region) && !(SingleTau_region))
 
 category_definition:
   # w/o mass window
@@ -188,7 +188,7 @@ category_definition:
   boosted_cat2: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0 "
   res2b_cat3:  "nSelBtag == 2"
   boosted_baseline_cat3:  "!(res2b_cat3) && (boosted_baseline)"
-  boosted_cat3:  "!(res2b_cat3) && boosted" #(SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
+  boosted_cat3:  "!(res2b_cat3) && boosted"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
   res1b_cat3:  "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 1"
   res0b_cat3:  "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 0"
 
@@ -212,7 +212,7 @@ category_definition:
 
   res2b_cat3_masswindow:  "nSelBtag == 2 && {region}"
   boosted_baseline_cat3_masswindow:  "!(res2b_cat3_masswindow) && (boosted_baseline)"
-  boosted_cat3_masswindow:  "!(res2b_cat3_masswindow) && boosted_masswindow" #(SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
+  boosted_cat3_masswindow:  "!(res2b_cat3_masswindow) && boosted_masswindow"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
   res1b_cat3_masswindow:  "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 1 && {region}"
   res0b_cat3_masswindow:  "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 0 && {region}"
 
