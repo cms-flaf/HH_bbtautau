@@ -180,7 +180,7 @@ def addAllVariables(
     dfw.Apply(AnaBaseline.DefineHbbCand, global_params["met_type"])
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
-    dfw.Apply(AnaBaseline.VBFJetSelection) # --- IGNORE ---
+    dfw.Apply(AnaBaseline.VBFJetSelection)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid)
     jet_obs = []
@@ -257,29 +257,6 @@ def addAllVariables(
         if "Jet_HHBtagScore" in dfw.df.GetColumnNames():
             dfw.DefineAndAppend("VBFJet_HHbtag", "Jet_HHBtagScore[VBFJet_B1]")
 
-        # if not isData:
-        #     # Define the genJet matching indices for VBF jets
-        #     dfw.Define(f"VBFJet_genJet_idx", f"Take(Jet_genJetIdx, VBFJet_B1, static_cast<short>(-1))")
-
-        #     for var in ["pt", "eta", "phi", "mass"]:
-        #         dfw.DefineAndAppend(f"VBFJet_genJet_{var}",f"Take(v_ops::{var}(GenJet_p4), VBFJet_genJet_idx, -1.f)")
-            
-            # # Define genJet variables for VBF jets
-            # for var in ["pt", "eta", "phi", "mass"]:
-            #     dfw.DefineAndAppend(
-            #         f"VBFJet_genJet_{var}",
-            #         f"""RVecF vbf_genjet_var(VBFJet_genJet_idx.size(), -1.f);
-            #             for(size_t vbf_idx = 0; vbf_idx < VBFJet_genJet_idx.size(); vbf_idx++) {{
-            #                 auto genjet_idx = VBFJet_genJet_idx.at(vbf_idx);
-            #                 if(genjet_idx >= 0 && genjet_idx < GenJet_p4.size()) {{
-            #                     vbf_genjet_var[vbf_idx] = GenJet_p4.at(genjet_idx).{var}();
-            #                 }}
-            #             }}
-            #             return vbf_genjet_var;"""
-            #     )
-            
-            # if isSignal:
-            #     dfw.DefineAndAppend(f"VBFJet_fromGenHbb", f"Take(GenJet_Hbb, VBFJet_genJet_idx, false)")
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
 
