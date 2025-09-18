@@ -250,7 +250,7 @@ def addAllVariables(
         dfw.DefineAndAppend(f"VBFJet_mass", f"v_ops::mass(Jet_p4[VBFJet_B1])")
 
         for jetVar in jet_obs:
-            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames(): 
+            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames():
                 continue
             dfw.DefineAndAppend(f"VBFJet_{jetVar}", f"Jet_{jetVar}[VBFJet_B1]")
 
