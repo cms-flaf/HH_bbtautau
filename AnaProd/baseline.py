@@ -1,4 +1,5 @@
 from FLAF.Common.Utilities import *
+from FLAF.Common.BaselineSelection import *
 
 channels = [ 'muMu', 'eMu', 'eE', 'muTau', 'eTau', 'tauTau' ] # in order of importance during the channel selection
 leg_names = [ "Electron", "Muon", "Tau" ]
@@ -150,4 +151,12 @@ def GenRecoJetMatching(df):
 def DefineHbbCand(df, met_type):
     df = df.Define("Jet_HHBtagScore", f"if(HttCandidate.channel()==Channel::eTau || HttCandidate.channel()==Channel::muTau || HttCandidate.channel()==Channel::tauTau) return GetHHBtagScore(Jet_bCand, Jet_idx, Jet_p4,Jet_btagDeepFlavB, {met_type}_pt,  {met_type}_phi, HttCandidate, period, event); return Jet_btagDeepFlavB;")
     df = df.Define("HbbCandidate", "GetHbbCandidate(Jet_HHBtagScore, Jet_bCand, Jet_p4, Jet_idx)")
+    return df
+
+def VBFJetSelection(df):
+    df = df.Define("VBFJet_B0_base", "v_ops::pt(Jet_p4) > 20 && abs(v_ops::eta(Jet_p4)) < 5 && (Jet_jetId & 2)")
+    df = df.Define("VBFJet_B0", "VBFJet_B0_base && !(v_ops::pt(Jet_p4) < 50)") # && abs(v_ops::eta(Jet_p4)) > 2.5 && abs(v_ops::eta(Jet_p4)) < 3.0)")
+    df = df.Define("VBFObjectsToRemoveOverlap", "Hbb_isValid ? std::vector<RVecLV>{{HttCandidate.leg_p4[0], HttCandidate.leg_p4[1], HbbCandidate->leg_p4[0], HbbCandidate->leg_p4[1]}} : std::vector<RVecLV>{{HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}}")
+    df = df.Define("VBFJet_B1", "RemoveOverlaps(Jet_p4, VBFJet_B0, VBFObjectsToRemoveOverlap, 2, 0.5)")
+    print("VBFJet_B1 Got Preselected")  # Debug message
     return df
