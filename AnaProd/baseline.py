@@ -269,9 +269,7 @@ def VBFJetSelection(df):
         "VBFJet_B0_base",
         "v_ops::pt(Jet_p4) > 20 && abs(v_ops::eta(Jet_p4)) < 5 && (Jet_jetId & 2)",
     )
-    df = df.Define(
-        "VBFJet_B0", "VBFJet_B0_base && !(v_ops::pt(Jet_p4) < 50)"
-    )
+    df = df.Define("VBFJet_B0", "VBFJet_B0_base && !(v_ops::pt(Jet_p4) < 50)")
     df = df.Define(
         "VBFObjectsToRemoveOverlap",
         "Hbb_isValid ? std::vector<RVecLV>{{HttCandidate.leg_p4[0], HttCandidate.leg_p4[1], HbbCandidate->leg_p4[0], HbbCandidate->leg_p4[1]}} : std::vector<RVecLV>{{HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}}",
