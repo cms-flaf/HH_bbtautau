@@ -1,5 +1,4 @@
 from FLAF.Common.Utilities import *
-from FLAF.Common.BaselineSelection import *
 
 channels = [
     "muMu",
