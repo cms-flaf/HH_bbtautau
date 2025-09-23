@@ -263,7 +263,6 @@ def DefineHbbCand(df, met_type):
     )
     return df
 
-
 def VBFJetSelection(df):
     df = df.Define(
         "VBFJet_B0_base",
