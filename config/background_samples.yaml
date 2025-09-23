@@ -6,7 +6,7 @@ WtoLNu_amcatnloFXFX:
 ############## TT ##############
 # TT:
 #   sampleType: TT
-TTto2L2Nu:            #previous version was TTTo2L2Nu (this cost 3 hours for bbww and then now 3 hours of my life)
+TTto2L2Nu:            # previous version was TTTo2L2Nu (this cost 3 hours for bbww and then now 3 hours of my life)
   sampleType: TT
 TTto4Q:
   sampleType: TT
@@ -108,6 +108,6 @@ ST_tW_top_LNu2Q:
 
 ############## ttH ##############
 ttHToNonbb_M125:
- sampleType: ttH
+  sampleType: ttH
 ttHTobb_M125:
   sampleType: ttH
