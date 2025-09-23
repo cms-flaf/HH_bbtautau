@@ -14,4 +14,4 @@ norm:
   HLT_singleEle:
     expression: weight_tau1_TrgSF_singleEle_singleEle{scale}_rel * final_weight
     name: HLT_singleEle
-shape: []
+shape: [ ]
