@@ -271,6 +271,24 @@ def addAllVariables(
         dfw.colToSave.append("LHEPart_spin")
         dfw.colToSave.append("LHEPart_incomingpz")
 
+        dfw.colToSave.append("GenJet_eta")
+        dfw.colToSave.append("GenJet_hadronFlavour")
+        dfw.colToSave.append("GenJet_mass")
+        # dfw.colToSave.append("GenJet_nBHadrons")
+        # dfw.colToSave.append("GenJet_nCHadrons")
+        dfw.colToSave.append("GenJet_partonFlavour")
+        dfw.colToSave.append("GenJet_phi")
+        dfw.colToSave.append("GenJet_pt")
+
+        # dfw.colToSave.append("GenJetAK8_eta")
+        # dfw.colToSave.append("GenJetAK8_hadronFlavour")
+        # dfw.colToSave.append("GenJetAK8_mass")
+        # dfw.colToSave.append("GenJetAK8_nBHadrons")
+        # dfw.colToSave.append("GenJetAK8_nCHadrons")
+        # dfw.colToSave.append("GenJetAK8_partonFlavour")
+        # dfw.colToSave.append("GenJetAK8_phi")
+        # dfw.colToSave.append("GenJetAK8_pt")
+
     pf_str = global_params["met_type"]
     dfw.DefineAndAppend(f"met_pt_nano", f"static_cast<float>({pf_str}_p4_nano.pt())")
     dfw.DefineAndAppend(f"met_phi_nano", f"static_cast<float>({pf_str}_p4_nano.phi())")
