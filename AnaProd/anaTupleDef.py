@@ -399,6 +399,10 @@ def addAllVariables(
             f"tau{leg_idx+1}_btagPNetQvG",
             f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetQvG.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
         )
+        dfw.DefineAndAppend(
+            f"tau{leg_idx+1}_btagPNetTauVJet",
+            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetTauVJet.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
+        )
 
         for deepTauScore in deepTauScores:
             LegVar(
