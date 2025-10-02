@@ -340,7 +340,6 @@ def addAllVariables(
     n_legs = 2
 
     for leg_idx in range(n_legs):
-
         def LegVar(
             var_name,
             var_expr,
