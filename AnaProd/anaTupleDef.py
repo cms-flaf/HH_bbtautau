@@ -180,6 +180,8 @@ def addAllVariables(
     dfw.Apply(AnaBaseline.DefineHbbCand, global_params["met_type"])
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
+    dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
+    dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid)
     jet_obs = []
