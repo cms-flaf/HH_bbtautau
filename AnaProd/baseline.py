@@ -234,11 +234,11 @@ def ExtraRecoJetSelection(df, era):
     return df
 
 
-# def ApplyJetSelection(df):
-#     return df.Filter(
-#         "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1",
-#         "Reco bjet candidates",
-#     )
+def ApplyJetSelection(df):
+    return df.Filter(
+        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1",
+        "Reco bjet candidates",
+    )
 
 
 def GenRecoJetMatching(df):
