@@ -23,7 +23,7 @@ GLOBAL:
     - keep ^GluGlutoHHto2B2Tau_.*
     - keep ^VBFHHto2B2Tau_.*
   use_stitching: false
-  triggerFile: config/Run3_2022EE/triggers.yaml
+  triggerFile: config/Run3_2023BPix/triggers.yaml
 GluGlutoBulkGravitontoHHto2B2Tau_M_250:
   sampleType: GluGluToBulkGraviton
   mass: 250
