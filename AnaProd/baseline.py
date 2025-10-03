@@ -113,11 +113,7 @@ def RecoHttCandidateSelection(df, config):
             && (Tau_idDeepTau{deepTauVersions[config["deepTauVersion"]]}v{config["deepTauVersion"]}VSmu >= {getattr(WorkingPointsTauVSmu, config["deepTauWPs"][ch]["VSmu"]).value})"""
         df = df.Define(f"Tau_B2_{ch}_2", cut_str)
         if ch == "tauTau":
-            cut_str_tt = (
-                cut_str
-                + f' && (Tau_idDeepTau{deepTauVersions[config["deepTauVersion"]]}v{config["deepTauVersion"]}VSjet >= {getattr(WorkingPointsTauVSjet, config["deepTauWPs"]["tauTau"]["VSjet"]).value})'
-            )
-            df = df.Define(f"Tau_B2_{ch}_1", cut_str_tt)
+            df = df.Define(f"Tau_B2_{ch}_1", cut_str)
 
     df = df.Define(
         "Muon_B2_muMu_1",
@@ -236,7 +232,7 @@ def ExtraRecoJetSelection(df, era):
 
 def ApplyJetSelection(df):
     return df.Filter(
-        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1",
+        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1 || HttCandidate.channel() == Channel::tauTau",
         "Reco bjet candidates",
     )
 
