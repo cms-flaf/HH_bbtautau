@@ -99,6 +99,7 @@ categories:
 
 requireHbbJets: True
 storeExtraJets: False
+storeVBFJets: True
 deepTauYears:
   v2p1: 2017
   v2p5: 2018

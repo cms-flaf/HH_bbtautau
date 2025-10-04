@@ -180,6 +180,7 @@ def addAllVariables(
     dfw.Apply(AnaBaseline.DefineHbbCand, global_params["met_type"])
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
+    dfw.Apply(AnaBaseline.VBFJetSelection)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid)
     jet_obs = []
@@ -239,6 +240,54 @@ def addAllVariables(
         dfw.DefineAndAppend(f"ExtraJet_HHbtag", f"Jet_HHBtagScore[ExtraJet_B1]")
     else:
         dfw.DefineAndAppend(f"nExtraJets", f"Jet_p4[ExtraJet_B1].size()")
+
+    if global_params["storeVBFJets"]:
+        dfw.DefineAndAppend(f"VBFJet_ptRes", f"Jet_ptRes[VBFJet_B1]")
+        dfw.DefineAndAppend(f"VBFJet_pt", f"v_ops::pt(Jet_p4[VBFJet_B1])")
+        dfw.DefineAndAppend(f"VBFJet_pt_raw", f"Jet_pt[VBFJet_B1]")
+        dfw.DefineAndAppend(f"VBFJet_eta", f"v_ops::eta(Jet_p4[VBFJet_B1])")
+        dfw.DefineAndAppend(f"VBFJet_phi", f"v_ops::phi(Jet_p4[VBFJet_B1])")
+        dfw.DefineAndAppend(f"VBFJet_mass", f"v_ops::mass(Jet_p4[VBFJet_B1])")
+
+        for jetVar in jet_obs:
+            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames():
+                continue
+            dfw.DefineAndAppend(f"VBFJet_{jetVar}", f"Jet_{jetVar}[VBFJet_B1]")
+
+        if "Jet_HHBtagScore" in dfw.df.GetColumnNames():
+            dfw.DefineAndAppend("VBFJet_HHbtag", "Jet_HHBtagScore[VBFJet_B1]")
+
+    else:
+        dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
+
+    if not isData and isSignal and "nLHEPart" in dfw.df.GetColumnNames():
+        dfw.colToSave.append("nLHEPart")
+        dfw.colToSave.append("LHEPart_pdgId")
+        dfw.colToSave.append("LHEPart_pt")
+        dfw.colToSave.append("LHEPart_eta")
+        dfw.colToSave.append("LHEPart_phi")
+        dfw.colToSave.append("LHEPart_mass")
+        dfw.colToSave.append("LHEPart_status")
+        dfw.colToSave.append("LHEPart_spin")
+        dfw.colToSave.append("LHEPart_incomingpz")
+
+        dfw.colToSave.append("GenJet_eta")
+        dfw.colToSave.append("GenJet_hadronFlavour")
+        dfw.colToSave.append("GenJet_mass")
+        # dfw.colToSave.append("GenJet_nBHadrons")
+        # dfw.colToSave.append("GenJet_nCHadrons")
+        dfw.colToSave.append("GenJet_partonFlavour")
+        dfw.colToSave.append("GenJet_phi")
+        dfw.colToSave.append("GenJet_pt")
+
+        # dfw.colToSave.append("GenJetAK8_eta")
+        # dfw.colToSave.append("GenJetAK8_hadronFlavour")
+        # dfw.colToSave.append("GenJetAK8_mass")
+        # dfw.colToSave.append("GenJetAK8_nBHadrons")
+        # dfw.colToSave.append("GenJetAK8_nCHadrons")
+        # dfw.colToSave.append("GenJetAK8_partonFlavour")
+        # dfw.colToSave.append("GenJetAK8_phi")
+        # dfw.colToSave.append("GenJetAK8_pt")
 
     pf_str = global_params["met_type"]
     dfw.DefineAndAppend(f"met_pt_nano", f"static_cast<float>({pf_str}_p4_nano.pt())")
