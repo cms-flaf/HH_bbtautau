@@ -3,7 +3,11 @@ import ROOT
 if __name__ == "__main__":
     sys.path.append(os.environ["ANALYSIS_PATH"])
 
-from FLAF.Analysis.HistHelper import *
+if __name__ == "__main__":
+    sys.path.append(os.environ["ANALYSIS_PATH"])
+    sys.path.append(os.environ["ANALYSIS_PATH"])
+
+from FLAF.Common.HistHelper import *
 from Analysis.GetCrossWeights import *
 
 # from Analysis.GetTauTauWeights import *
@@ -23,32 +27,86 @@ WorkingPointsDeepFlav = {
 }
 
 
-def createKeyFilterDict(global_cfg_dict, year):
-    reg_dict = {}
+def createKeyFilterDict(global_params, period):
+    filter_dict = {}
     filter_str = ""
-    channels_to_consider = global_cfg_dict["channels_to_consider"]
-    qcd_regions_to_consider = global_cfg_dict["SignRegions"]
-    categories_to_consider = (
-        global_cfg_dict["categories"] + global_cfg_dict["boosted_categories"]
-    )
-    boosted_categories = global_cfg_dict["boosted_categories"]
-    triggers_dict = global_cfg_dict["hist_triggers"]
-    mass_cut_limits = global_cfg_dict["mass_cut_limits"]
+    channels_to_consider = global_params["channels_to_consider"]
+
+    categories = global_params["categories"]
+    boosted_categories = global_params["boosted_categories"]
+    ### add custom categories eventually:
+    # custom_categories = []
+    # custom_categories_name = global_params.get(
+    #     "custom_categories", None
+    # )  # can be extended to list of names
+    # if custom_categories_name:
+    #     custom_categories = list(global_params.get(custom_categories_name, []))
+    #     if not custom_categories:
+    #         print("No custom categories found")
+
+    ### regions
+    custom_regions = []
+    custom_regions_name = global_params.get(
+        "custom_regions", None
+    )  # can be extended to list of names, if for example adding QCD regions + other control regions
+    if custom_regions_name:
+        custom_regions = list(global_params.get(custom_regions_name, []))
+        if not custom_regions:
+            print("No custom regions found")
+
+    all_categories = categories + boosted_categories  # + custom_categories
+    custom_subcategories = list(global_params.get("custom_subcategories", []))
+    triggers_dict = global_params["hist_triggers"]
     for ch in channels_to_consider:
         triggers = triggers_dict[ch]["default"]
-        if year in triggers_dict[ch].keys():
-            triggers = triggers_dict[ch][year]
-        for reg in qcd_regions_to_consider:
-            for cat in categories_to_consider:
-                filter_base = f" ({ch} && {triggers} && {reg} && {cat})"
-                filter_str = f"(" + filter_base
+        if period in triggers_dict[ch].keys():
+            triggers = triggers_dict[ch][period]
+        for reg in custom_regions:
+            for cat in all_categories:
+                filter_base = f" ( {ch} && {triggers} && {reg} && {cat} ) "
                 if cat not in boosted_categories and not (cat.startswith("baseline")):
                     filter_str += "&& (b1_pt>0 && b2_pt>0)"
-                filter_str += ")"
-                key = (ch, reg, cat)
-                reg_dict[key] = filter_str
+                if custom_subcategories:
+                    for subcat in custom_subcategories:
+                        # filter_base += f"&& {custom_subcat}"
+                        filter_str = f"(" + filter_base + f" && {subcat}"
+                        filter_str += ")"
+                        key = (ch, reg, cat, subcat)
+                        filter_dict[key] = filter_str
+                else:
+                    filter_str = f"(" + filter_base
+                    filter_str += ")"
+                    key = (ch, reg, cat)
+                    filter_dict[key] = filter_str
+    return filter_dict
 
-    return reg_dict
+
+# def createKeyFilterDict(global_cfg_dict, year):
+#     reg_dict = {}
+#     filter_str = ""
+#     channels_to_consider = global_cfg_dict["channels_to_consider"]
+#     qcd_regions_to_consider = global_cfg_dict["SignRegions"]
+#     categories_to_consider = (
+#         global_cfg_dict["categories"] + global_cfg_dict["boosted_categories"]
+#     )
+#     boosted_categories = global_cfg_dict["boosted_categories"]
+#     triggers_dict = global_cfg_dict["hist_triggers"]
+#     mass_cut_limits = global_cfg_dict["mass_cut_limits"]
+#     for ch in channels_to_consider:
+#         triggers = triggers_dict[ch]["default"]
+#         if year in triggers_dict[ch].keys():
+#             triggers = triggers_dict[ch][year]
+#         for reg in qcd_regions_to_consider:
+#             for cat in categories_to_consider:
+#                 filter_base = f" ({ch} && {triggers} && {reg} && {cat})"
+#                 filter_str = f"(" + filter_base
+#                 if cat not in boosted_categories and not (cat.startswith("baseline")):
+#                     filter_str += "&& (b1_pt>0 && b2_pt>0)"
+#                 filter_str += ")"
+#                 key = (ch, reg, cat)
+#                 reg_dict[key] = filter_str
+
+#     return reg_dict
 
 
 def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
@@ -65,7 +123,8 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channel, cat, boosted_categories):
+def GetWeight(channels):
+    weights_dict = {}
     weights_to_apply = [
         "weight_MC_Lumi_pu"
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
@@ -121,16 +180,28 @@ def GetWeight(channel, cat, boosted_categories):
             "weight_tau2_EleSF_wp80noiso_EleIDCentral",
         ],
     }
+    weights_full_string = ""
+    for channel in channels:
+        weights_list = ["weight_MC_Lumi_pu"]
+        # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
+        weights_list.extend(ID_weights_dict[channel])
 
-    weights_to_apply.extend(ID_weights_dict[channel])
+        # if categories dependent weights are present do a sub loop here extending the dict
+        weights_full_string += (
+            f"""if ({channel}) {{return """ + "*".join(weights_list) + """; } """
+        )
+    weights_full_string += "return 1.f;"
+    print(weights_full_string)
+    ## as it used to be before
     # weights_to_apply.extend(trg_weights_dict[channel])
 
     # if cat not in boosted_categories:
     #      weights_to_apply.extend(["weight_Jet_PUJetID_Central_b1_2", "weight_Jet_PUJetID_Central_b2_2"])
     # else:
     #     weights_to_apply.extend(["weight_pNet_Central"])
-    total_weight = "*".join(weights_to_apply)
-    return total_weight
+
+    # total_weight = "*".join(weights_to_apply)
+    return weights_full_string
 
 
 class DataFrameBuilderForHistograms(DataFrameBuilderBase):
@@ -160,7 +231,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.df = self.df.Define(
             "SelectedFatJet_size_boosted", "SelectedFatJet_p4[fatJet_sel].size()"
         )
-        self.df = self.df.Define("boosted_baseline", "SelectedFatJet_size_boosted >= 1")
+        self.DefineAndAppend("boosted_baseline", "SelectedFatJet_size_boosted >= 1")
 
         # def the correct discriminator
         self.df = self.df.Define(
@@ -197,6 +268,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         for ch in self.config["channelSelection"]:
             for trg in self.config["triggers"][ch]:
                 trg_name = "HLT_" + trg
+                self.colToSave.append(trg_name)
                 if trg_name not in self.df.GetColumnNames():
                     print(f"{trg_name} not present in colNames")
                     self.df = self.df.Define(trg_name, "1")
@@ -241,7 +313,13 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                     mu_th=singleMu_th_dict[self.period],
                 ),
             )
+            self.colToSave.append(reg_name)
         self.df = self.df.Define("Legacy_region", legacy_region_definition)
+        self.colToSave.append("Legacy_region")
+
+    def DefineAndAppend(self, varToDefine, var_expression):
+        self.df = self.df.Define(varToDefine, var_expression)
+        self.colToSave.append(varToDefine)
 
     def defineCRs(self):  # needs inv mass def
         SR_mass_limits_bb_boosted = self.config["mass_cut_limits"]["bb_m_vis"][
@@ -249,33 +327,33 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         ]
         SR_mass_limits_bb = self.config["mass_cut_limits"]["bb_m_vis"]["other"]
         SR_mass_limits_tt = self.config["mass_cut_limits"]["tautau_m_vis"]
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "SR_tt",
             f"return (tautau_m_vis > {SR_mass_limits_tt[0]} && tautau_m_vis  < {SR_mass_limits_tt[1]});",
         )
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "SR_bb",
             f"(bb_m_vis > {SR_mass_limits_bb[0]} && bb_m_vis < {SR_mass_limits_bb[1]});",
         )
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "SR_bb_boosted",
             f"(bb_m_vis_softdrop > {SR_mass_limits_bb_boosted[0]} && bb_m_vis_softdrop < {SR_mass_limits_bb_boosted[1]});",
         )
-        self.df = self.df.Define("SR", f" SR_tt &&  SR_bb")
-        self.df = self.df.Define("SR_boosted", f" SR_tt &&  SR_bb_boosted")
+        self.DefineAndAppend("SR", f" SR_tt &&  SR_bb")
+        self.DefineAndAppend("SR_boosted", f" SR_tt &&  SR_bb_boosted")
 
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "DYCR",
             "if(muMu || eE) {return (tautau_m_vis < 100 && tautau_m_vis > 80);} return true;",
         )
-        self.df = self.df.Define("DYCR_boosted", "DYCR")
+        self.DefineAndAppend("DYCR_boosted", "DYCR")
 
         TTCR_mass_limits_eTau = self.config["TTCR_mass_limits"]["eTau"]
         TTCR_mass_limits_muTau = self.config["TTCR_mass_limits"]["muTau"]
         TTCR_mass_limits_tauTau = self.config["TTCR_mass_limits"]["tauTau"]
         TTCR_mass_limits_muMu = self.config["TTCR_mass_limits"]["muMu"]
         TTCR_mass_limits_eE = self.config["TTCR_mass_limits"]["eE"]
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "TTCR",
             f"""
                                 if(eTau) {{return (tautau_m_vis < {TTCR_mass_limits_eTau[0]} || tautau_m_vis > {TTCR_mass_limits_eTau[1]});
@@ -290,7 +368,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                                  }};
                                  return true;""",
         )
-        self.df = self.df.Define("TTCR_boosted", "TTCR")
+        self.DefineAndAppend("TTCR_boosted", "TTCR")
 
     def redefinePUJetIDWeights(self):
         for weight in [
@@ -318,7 +396,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         )
         for category_to_def in self.config["category_definition"].keys():
             category_name = category_to_def
-            self.df = self.df.Define(
+            self.DefineAndAppend(
                 category_to_def,
                 self.config["category_definition"][category_to_def].format(
                     pNetWP=self.pNetWP, region=self.region
@@ -328,7 +406,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
     def defineChannels(self):
         for channel in self.config["all_channels"]:
             ch_value = self.config["channelDefinition"][channel]
-            self.df = self.df.Define(f"{channel}", f"channelId=={ch_value}")
+            self.DefineAndAppend(f"{channel}", f"channelId=={ch_value}")
 
     def defineL1PrefiringRelativeWeights(self):
         if "weight_L1PreFiringDown_rel" not in self.df.GetColumnNames():
@@ -404,23 +482,23 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         )
 
     def defineQCDRegions(self):
-        self.df = self.df.Define("OS", "tau1_charge*tau2_charge < 0")
-        self.df = self.df.Define("SS", "!OS")
+        self.DefineAndAppend("OS", "tau1_charge*tau2_charge < 0")
+        self.DefineAndAppend("SS", "!OS")
 
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "Iso",
             f"(((tauTau || eTau || muTau) && (tau2_idDeepTau{self.deepTauYear()}v{self.deepTauVersion}VSjet >= {Utilities.WorkingPointsTauVSjet.Medium.value} )) || ((muMu||eMu) && (tau2_Muon_pfRelIso04_all < 0.15)) || (eE && tau2_Electron_pfRelIso03_all < 0.15 && tau2_Electron_mvaNoIso_WP80))",
         )
 
-        self.df = self.df.Define(
+        self.DefineAndAppend(
             "AntiIso",
             f"(((tauTau || eTau || muTau) && (tau2_idDeepTau{self.deepTauYear()}v{self.deepTauVersion}VSjet >= {Utilities.WorkingPointsTauVSjet.VVVLoose.value} && tau2_idDeepTau{self.deepTauYear()}v{self.deepTauVersion}VSjet < {Utilities.WorkingPointsTauVSjet.Medium.value})) || ((muMu||eMu) && (tau2_Muon_pfRelIso04_all >= 0.15 && tau2_Muon_pfRelIso04_all < 0.3) ) || (eE && (tau2_Electron_pfRelIso03_all < 0.3 && tau2_Electron_pfRelIso03_all >= 0.15 && tau2_Electron_mvaNoIso_WP80 )))",
         )
 
-        self.df = self.df.Define("OS_Iso", f"lepton_preselection && OS && Iso")
-        self.df = self.df.Define("SS_Iso", f"lepton_preselection && SS && Iso")
-        self.df = self.df.Define("OS_AntiIso", f"lepton_preselection && OS && AntiIso")
-        self.df = self.df.Define("SS_AntiIso", f"lepton_preselection && SS && AntiIso")
+        self.DefineAndAppend("OS_Iso", f"lepton_preselection && OS && Iso")
+        self.DefineAndAppend("SS_Iso", f"lepton_preselection && SS && Iso")
+        self.DefineAndAppend("OS_AntiIso", f"lepton_preselection && OS && AntiIso")
+        self.DefineAndAppend("SS_AntiIso", f"lepton_preselection && SS && AntiIso")
 
     def deepTauYear(self):
         return self.config["deepTauYears"][f"v{self.deepTauVersion}"]
@@ -465,6 +543,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         wantTriggerSFErrors=False,
         whichType=3,
         wantScales=True,
+        colToSave=[],
     ):
         super(DataFrameBuilderForHistograms, self).__init__(df)
         self.deepTauVersion = config["deepTauVersion"]
@@ -480,6 +559,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.isCentral = isCentral
         self.wantTriggerSFErrors = wantTriggerSFErrors
         self.wantScales = isCentral and wantScales
+        self.colToSave = colToSave
 
 
 def PrepareDfForDNN(dfForHistograms):
