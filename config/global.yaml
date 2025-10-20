@@ -346,6 +346,8 @@ sample_types_to_merge:
 uncs_to_exclude:
   Run3_2022: [ ]
   Run3_2022EE: [ ]
+  Run3_2023: [ ]
+  Run3_2023BPix: [ ]
   Run2_2018:
     - JES_BBEC1_2017
     - JES_Absolute_2017
