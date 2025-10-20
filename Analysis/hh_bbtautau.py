@@ -21,7 +21,7 @@ WorkingPointsParticleNet = {
     },
     "Run3_2022EE": {"Loose": 0.0499, "Medium": 0.2605, "Tight": 0.6915},
     "Run3_2023": {"Loose": 0.0358, "Medium": 0.1917, "Tight": 0.6172},
-    "Run3_2023BPix": {"Loose": 0.0359, "Medium": 0.1919, "Tight": 0.6133}
+    "Run3_2023BPix": {"Loose": 0.0359, "Medium": 0.1919, "Tight": 0.6133},
 }
 WorkingPointsDeepFlav = {
     "Run3_2022": {"Loose": 0.0583, "Medium": 0.3086, "Tight": 0.7183},
