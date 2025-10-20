@@ -15,15 +15,19 @@ from FLAF.Common.Utilities import *
 
 WorkingPointsParticleNet = {
     "Run3_2022": {
-        "Loose": 0.047,  # /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/2022_Summer22/btagging.json.gz
+        "Loose": 0.047,  # /cvmfs/cms-griddata.cern.ch/cat/metadata/BTV/Run3-22CDSep23-Summer22-NanoAODv12/2025-08-20/btagging.json.g
         "Medium": 0.245,
         "Tight": 0.6734,
     },
     "Run3_2022EE": {"Loose": 0.0499, "Medium": 0.2605, "Tight": 0.6915},
+    "Run3_2023": {"Loose": 0.0358, "Medium": 0.1917, "Tight": 0.6172},
+    "Run3_2023BPix": {"Loose": 0.0359, "Medium": 0.1919, "Tight": 0.6133}
 }
 WorkingPointsDeepFlav = {
     "Run3_2022": {"Loose": 0.0583, "Medium": 0.3086, "Tight": 0.7183},
     "Run3_2022EE": {"Loose": 0.0614, "Medium": 0.3196, "Tight": 0.73},
+    "Run3_2023": {"Loose": 0.0479, "Medium": 0.2431, "Tight": 0.6553},
+    "Run3_2023BPix": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
 }
 
 
