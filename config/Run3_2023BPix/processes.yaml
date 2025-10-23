@@ -191,13 +191,15 @@ VBFHHto2B2Tau:
 Data:
   name: "Data"
   datasets:
-    - EGamma_Run2022C
-    - EGamma_Run2022D
-    - Muon_Run2022C
-    - Muon_Run2022D
-    - SingleMuon_Run2022C
-    - DoubleMuon_Run2022C
-    - MuonEG_Run2022C
-    - MuonEG_Run2022D
-    - Tau_Run2022C
-    - Tau_Run2022D
+    - EGamma0_Run2023D_v1
+    - EGamma0_Run2023D_v2
+    - EGamma1_Run2023D_v1
+    - EGamma1_Run2023D_v2
+    - Muon0_Run2023D_v1
+    - Muon0_Run2023D_v2
+    - Muon1_Run2023D_v1
+    - Muon1_Run2023D_v2
+    - MuonEG_Run2023D_v1
+    - MuonEG_Run2023D_v2
+    - Tau_Run2023D_v1
+    - Tau_Run2023D_v2

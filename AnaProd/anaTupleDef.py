@@ -181,6 +181,8 @@ def addAllVariables(
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
     dfw.Apply(AnaBaseline.VBFJetSelection)
+    dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
+    dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid)
     jet_obs = []
@@ -445,6 +447,10 @@ def addAllVariables(
         dfw.DefineAndAppend(
             f"tau{leg_idx+1}_btagPNetQvG",
             f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetQvG.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
+        )
+        dfw.DefineAndAppend(
+            f"tau{leg_idx+1}_btagPNetTauVJet",
+            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetTauVJet.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
         )
 
         for deepTauScore in deepTauScores:
