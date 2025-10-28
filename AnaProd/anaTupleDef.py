@@ -33,104 +33,143 @@ Electron_observables = [
     "Electron_mvaIso_WP80",
     "Electron_pfRelIso03_all",
 ]
+
 JetObservables = [
-    "particleNetAK4_B",
-    "particleNetAK4_CvsB",
-    "particleNetAK4_CvsL",
-    "particleNetAK4_QvsG",
-    "particleNetAK4_puIdDisc",
+    "PNetRegPtRawCorr",
+    "PNetRegPtRawCorrNeutrino",
+    "PNetRegPtRawRes",
+    "UParTAK4RegPtRawCorr",
+    "UParTAK4RegPtRawCorrNeutrino",
+    "UParTAK4RegPtRawRes",
+    "area",
     "btagDeepFlavB",
     "btagDeepFlavCvB",
     "btagDeepFlavCvL",
-    "bRegCorr",
-    "bRegRes",
-    "idbtagDeepFlavB",
-    "btagDeepFlavQG" "btagPNetB",
-    "btagPNetCvL",
+    "btagDeepFlavQG",
+    "btagPNetB",
     "btagPNetCvB",
+    "btagPNetCvL",
+    "btagPNetCvNotB",
     "btagPNetQvG",
     "btagPNetTauVJet",
-    "PNetRegPtRawCorr",
-    "PNetRegPtRawCorrNeutrino",
-    "PNetRegPtRawRes",  # 2016]
+    "btagUParTAK4B",
+    "btagUParTAK4CvB",
+    "btagUParTAK4CvL",
+    "btagUParTAK4CvNotB",
+    "btagUParTAK4QvG",
+    "btagUParTAK4TauVJet",
+    "chEmEF",
+    "chHEF",
+    "chMultiplicity",
+    "hfEmEF",
+    "hfHEF",
+    "hfadjacentEtaStripsSize",
+    "hfcentralEtaStripSize",
+    "hfsigmaEtaEta",
+    "hfsigmaPhiPhi",
+    "jetId",
+    "muEF",
+    "muonSubtrFactor",
+    "nConstituents",
+    "nElectrons",
+    "nMuons",
+    "nSVs",
+    "neEmEF",
+    "neHEF",
+    "neMultiplicity",
+    "puIdDisc",
+    "puId_beta",
+    "puId_dR2Mean",
+    "puId_frac01",
+    "puId_frac02",
+    "puId_frac03",
+    "puId_frac04",
+    "puId_jetR",
+    "puId_jetRchg",
+    "puId_majW",
+    "puId_minW",
+    "puId_nCharged",
+    "puId_ptD",
+    "puId_pull",
     "rawFactor",
-    "btagPNetCvNotB",
+    "ptRes",
     "idbtagPNetB",
+    "HHbtag",
 ]
 JetObservablesMC = ["hadronFlavour", "partonFlavour"]
 FatJetObservables = [
     "area",
-    "btagCSVV2",
-    "btagDDBvLV2",
-    "btagDeepB",
-    "btagHbb",
-    "deepTagMD_HbbvsQCD",
-    "deepTagMD_ZHbbvsQCD",
-    "deepTagMD_ZbbvsQCD",
-    "deepTagMD_bbvsLight",
-    "deepTag_H",
+    "chEmEF",
+    "chHEF",
+    "chMultiplicity",
+    "globalParT2_QCD0HF",
+    "globalParT2_QCD1HF",
+    "globalParT2_QCD2HF",
+    "globalParT2_TopW",
+    "globalParT2_TopbW",
+    "globalParT2_TopbWev",
+    "globalParT2_TopbWmv",
+    "globalParT2_TopbWq",
+    "globalParT2_TopbWqq",
+    "globalParT2_TopbWtauhv",
+    "globalParT2_Xbb",
+    "globalParT2_XbbVsQCD",
+    "globalParT2_Xcc",
+    "globalParT2_Xcs",
+    "globalParT2_Xgg",
+    "globalParT2_Xqq",
+    "globalParT2_Xtauhtaue",
+    "globalParT2_Xtauhtauh",
+    "globalParT2_Xtauhtaum",
+    "globalParT_massRes",
+    "globalParT_massVis",
     "jetId",
+    "lsf3",
     "msoftdrop",
-    "nBHadrons",
-    "nCHadrons",
+    "muEF",
+    "n2b1",
+    "n3b1",
     "nConstituents",
-    "rawFactor",
-    "particleNetMD_QCD",
-    "particleNetMD_Xbb",
-    "particleNet_HbbvsQCD",
-    "particleNet_mass",  # 2018
-    "particleNet_QCD",
-    "particleNet_XbbVsQCD",  # 2016
+    "neEmEF",
+    "neHEF",
+    "neMultiplicity",
     "particleNetLegacy_QCD",
+    "particleNetLegacy_QCDb",
+    "particleNetLegacy_QCDbb",
+    "particleNetLegacy_QCDc",
+    "particleNetLegacy_QCDcc",
+    "particleNetLegacy_QCDothers",
     "particleNetLegacy_Xbb",
-    "particleNetLegacy_mass",  # 2016
-    "particleNetWithMass_QCD",
+    "particleNetLegacy_Xcc",
+    "particleNetLegacy_Xqq",
+    "particleNetLegacy_mass",
+    "particleNetWithMass_H4qvsQCD",
     "particleNetWithMass_HbbvsQCD",
-    "particleNet_massCorr",  # 2016
-    "ptRes",
-    "idbtagPNetB",
+    "particleNetWithMass_HccvsQCD",
+    "particleNetWithMass_QCD",
+    "particleNetWithMass_TvsQCD",
+    "particleNetWithMass_WvsQCD",
+    "particleNetWithMass_ZvsQCD",
+    "particleNet_QCD",
+    "particleNet_QCD0HF",
+    "particleNet_QCD1HF",
+    "particleNet_QCD2HF",
+    "particleNet_Xbb",
+    "particleNet_XbbVsQCD",
+    "particleNet_XccVsQCD",
+    "particleNet_XggVsQCD",
+    "particleNet_XqqVsQCD",
+    "particleNet_XteVsQCD",
+    "particleNet_XtmVsQCD",
+    "particleNet_XttVsQCD",
+    "particleNet_massCorr",
+    "rawFactor",
+    "tau1",
+    "tau2",
+    "tau3",
+    "tau4",
 ]
-
-# in this PR https://github.com/cms-sw/cmssw/commit/17457a557bd75ab479dfb78013edf9e551ecd6b7, particleNet MD have been removed therefore we will switch to take
-
-
-# # New ParticleNet trainings are not available in MiniAOD until Run3 13X
-"""
-particleNetWithMass_QCD YES
-particleNetWithMass_TvsQCD NO
-particleNetWithMass_WvsQCD NO
-particleNetWithMass_ZvsQCD NO
-particleNetWithMass_H4qvsQCD NO
-particleNetWithMass_HbbvsQCD YES
-particleNetWithMass_HccvsQCD NO
-particleNet_QCD YES
-particleNet_QCD2HF NO
-particleNet_QCD1HF NO
-particleNet_QCD0HF NO
-particleNet_massCorr YES
-particleNet_XbbVsQCD YES
-particleNet_XccVsQCD NO
-particleNet_XqqVsQCD NO
-particleNet_XggVsQCD NO
-particleNet_XttVsQCD NO
-particleNet_XtmVsQCD NO
-particleNet_XteVsQCD NO
-"""
-# Restore taggers that were decommisionned for Run-3
-"""
-particleNetLegacy_mass YES
-particleNetLegacy_Xbb YES
-particleNetLegacy_Xcc NO
-particleNetLegacy_Xqq NO
-particleNetLegacy_QCD YES
-"""
-
-# ParticleNet legacy jet tagger is already in 106Xv2 MINIAOD,
-# add PartlceNet legacy mass regression and new combined tagger + mass regression
-
-# for more info: ---> https://github.com/cms-sw/cmssw/blob/master/PhysicsTools/NanoAOD/python/jetsAK8_cff.py
-
-FatJetObservablesMC = ["hadronFlavour", "partonFlavour"]
+FatJetObservablesMC = ["hadronFlavour"]
 
 SubJetObservables = ["btagDeepB", "eta", "mass", "phi", "pt", "rawFactor"]
 SubJetObservablesMC = ["hadronFlavour", "partonFlavour"]
@@ -211,40 +250,7 @@ def addAllVariables(
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
 
-    dfw.Define(f"ExtraJet_pt", f"v_ops::pt(Jet_p4[ExtraJet_B1])")
-    dfw.Define(f"ExtraJet_eta", f"v_ops::eta(Jet_p4[ExtraJet_B1])")
-    dfw.Define(f"ExtraJet_phi", f"v_ops::phi(Jet_p4[ExtraJet_B1])")
-    dfw.Define(f"ExtraJet_mass", f"v_ops::mass(Jet_p4[ExtraJet_B1])")
-    dfw.Define(f"ExtraJet_ptRes", f"Jet_ptRes[ExtraJet_B1]")
-    dfw.Define(f"ExtraJet_idx", f"CreateIndexes(ExtraJet_pt.size())")
-    dfw.Define(
-        f"ExtraJet_p4",
-        f"GetP4(ExtraJet_pt, ExtraJet_eta, ExtraJet_phi, ExtraJet_mass, ExtraJet_idx)",
-    )
-    dfw.Define(
-        f"ExtraJet_legType", f"return ROOT::RVec<Leg>(ExtraJet_pt.size(), Leg::jet);"
-    )
-    dfw.Define(
-        f"ExtraJet_decayMode", f"return ROOT::RVec<int>(ExtraJet_pt.size(), -2);"
-    )  # dummy values
-
-    if global_params["storeExtraJets"]:
-        dfw.DefineAndAppend(f"ExtraJet_pt", f"v_ops::pt(Jet_p4[ExtraJet_B1])")
-        dfw.DefineAndAppend(f"ExtraJet_eta", f"v_ops::eta(Jet_p4[ExtraJet_B1])")
-        dfw.DefineAndAppend(f"ExtraJet_phi", f"v_ops::phi(Jet_p4[ExtraJet_B1])")
-        dfw.DefineAndAppend(f"ExtraJet_mass", f"v_ops::mass(Jet_p4[ExtraJet_B1])")
-        dfw.DefineAndAppend(f"ExtraJet_ptRes", f"Jet_ptRes[ExtraJet_B1]")
-
-        for jetVar in jet_obs:
-            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames():
-                continue
-            dfw.DefineAndAppend(f"ExtraJet_{jetVar}", f"Jet_{jetVar}[ExtraJet_B1]")
-        dfw.DefineAndAppend(f"ExtraJet_HHbtag", f"Jet_HHBtagScore[ExtraJet_B1]")
-    else:
-        dfw.DefineAndAppend(f"nExtraJets", f"Jet_p4[ExtraJet_B1].size()")
-
     if global_params["storeVBFJets"]:
-        dfw.DefineAndAppend(f"VBFJet_ptRes", f"Jet_ptRes[VBFJet_B1]")
         dfw.DefineAndAppend(f"VBFJet_pt", f"v_ops::pt(Jet_p4[VBFJet_B1])")
         dfw.DefineAndAppend(f"VBFJet_pt_raw", f"Jet_pt[VBFJet_B1]")
         dfw.DefineAndAppend(f"VBFJet_eta", f"v_ops::eta(Jet_p4[VBFJet_B1])")
@@ -252,17 +258,11 @@ def addAllVariables(
         dfw.DefineAndAppend(f"VBFJet_mass", f"v_ops::mass(Jet_p4[VBFJet_B1])")
 
         for jetVar in jet_obs:
-            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames():
-                continue
             dfw.DefineAndAppend(f"VBFJet_{jetVar}", f"Jet_{jetVar}[VBFJet_B1]")
-
-        if "Jet_HHBtagScore" in dfw.df.GetColumnNames():
-            dfw.DefineAndAppend("VBFJet_HHbtag", "Jet_HHBtagScore[VBFJet_B1]")
-
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
 
-    if not isData and isSignal and "nLHEPart" in dfw.df.GetColumnNames():
+    if not isData and isSignal:
         dfw.colToSave.append("nLHEPart")
         dfw.colToSave.append("LHEPart_pdgId")
         dfw.colToSave.append("LHEPart_pt")
@@ -329,7 +329,7 @@ def addAllVariables(
             f"FatJet_genJet_idx",
             f" FindMatching(FatJet_p4[FatJet_bbCand],GenJetAK8_p4,0.3)",
         )
-        fatjet_obs.extend(JetObservablesMC)
+        fatjet_obs.extend(FatJetObservablesMC)
         if isSignal:
             dfw.DefineAndAppend(
                 "genchannelId", "static_cast<int>(genHttCandidate->channel())"
@@ -342,8 +342,6 @@ def addAllVariables(
     )
 
     for fatjetVar in fatjet_obs:
-        if f"FatJet_{fatjetVar}" not in dfw.df.GetColumnNames():
-            continue
         dfw.DefineAndAppend(
             f"SelectedFatJet_{fatjetVar}", f"FatJet_{fatjetVar}[FatJet_bbCand]"
         )
@@ -558,10 +556,6 @@ def addAllVariables(
             f"Hbb_isValid ? HbbCandidate->leg_index[{leg_idx}] : -1",
         )
         dfw.DefineAndAppend(
-            f"b{leg_idx+1}_ptRes",
-            f"Hbb_isValid ? static_cast<float>(Jet_ptRes.at(HbbCandidate->leg_index[{leg_idx}])) : 0.f",
-        )
-        dfw.DefineAndAppend(
             f"b{leg_idx+1}_pt",
             f"Hbb_isValid ? static_cast<float>(HbbCandidate->leg_p4[{leg_idx}].Pt()) : 0.f",
         )
@@ -605,16 +599,10 @@ def addAllVariables(
                     f"b{leg_idx+1}_genJet_idx>=0 ? GenJet_Hbb.at(b{leg_idx+1}_genJet_idx) : false",
                 )
         for jetVar in jet_obs:
-            if f"Jet_{jetVar}" not in dfw.df.GetColumnNames():
-                continue
             dfw.DefineAndAppend(
                 f"b{leg_idx+1}_{jetVar}",
                 f"Hbb_isValid ? Jet_{jetVar}.at(HbbCandidate->leg_index[{leg_idx}]) : 0",
             )
-        dfw.DefineAndAppend(
-            f"b{leg_idx+1}_HHbtag",
-            f"Hbb_isValid ?  static_cast<float>(Jet_HHBtagScore.at(HbbCandidate->leg_index[{leg_idx}])) : 0.f",
-        )
 
     if trigger_class is not None:
         hltBranches = dfw.Apply(

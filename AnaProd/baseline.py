@@ -251,11 +251,11 @@ def GenRecoJetMatching(df):
 
 def DefineHbbCand(df, met_type):
     df = df.Define(
-        "Jet_HHBtagScore",
+        "Jet_HHbtag",
         f"if(HttCandidate.channel()==Channel::eTau || HttCandidate.channel()==Channel::muTau || HttCandidate.channel()==Channel::tauTau) return GetHHBtagScore(Jet_bCand, Jet_idx, Jet_p4,Jet_btagDeepFlavB, {met_type}_pt,  {met_type}_phi, HttCandidate, period, event); return Jet_btagDeepFlavB;",
     )
     df = df.Define(
-        "HbbCandidate", "GetHbbCandidate(Jet_HHBtagScore, Jet_bCand, Jet_p4, Jet_idx)"
+        "HbbCandidate", "GetHbbCandidate(Jet_HHbtag, Jet_bCand, Jet_p4, Jet_idx)"
     )
     return df
 
