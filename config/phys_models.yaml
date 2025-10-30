@@ -14,5 +14,6 @@ BaseModel:
 
   signals:
     - GluGlutoHHto2B2Tau
+    - VBFHHto2B2Tau
   data:
     - Data
