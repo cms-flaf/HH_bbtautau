@@ -92,7 +92,7 @@ ch_text:
 
 customreg_text:
   pos_ref: datasim_text
-  pos: [ 0.24, -0.08 ]
+  pos: [ 0.01, -0.16 ]
   text_size: 0.020
   font: 62
 
