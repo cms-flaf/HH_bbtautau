@@ -13,3 +13,10 @@ channel_text:
   'muMu': 'bb#tau_{#mu}#tau_{#mu}'
   'eMu': 'bb#tau_{e}#tau_{#mu}'
   'eE': 'bb#tau_{e}#tau_{e}'
+
+qcdregion_text:
+  'OS_Iso': 'OS, Isolated',
+  'SS_Iso': 'SS, Isolated',
+  'OS_AntiIso': 'OS, Non-Isolated',
+  'SS_AntiIso': 'SS, Non-Isolated'
+

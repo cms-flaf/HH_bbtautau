@@ -1,5 +1,5 @@
 lumi_text:
-  text: "7.9804 fb^{-1} (13.6 TeV)"
+  text: "9.693 fb^{-1} (13.6 TeV)"
   pos_ref: inner_right_top
   pos: [ 0., -0.035 ]
   text_size: 0.035
@@ -19,4 +19,3 @@ qcdregion_text:
   'SS_Iso': 'SS, Isolated',
   'OS_AntiIso': 'OS, Non-Isolated',
   'SS_AntiIso': 'SS, Non-Isolated'
-
