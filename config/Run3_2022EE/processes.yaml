@@ -150,7 +150,7 @@ GluGlutoHHto2B2Tau:
     process_name: GluGluToHHto2B2Tau_${kl}_${kt}_${c2}
     name_pattern: GluGluToHHto2B2Tau kl ${kl} kt ${kt} c2 ${c2}
     to_plot:
-      - ['0p00', '1p00', '0p00' ]
+      - [ '0p00', '1p00', '0p00' ]
     plot_color: [ "kBlack" ]
     channels: [ "tauTau" ]
   datasets:
