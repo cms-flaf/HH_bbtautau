@@ -179,6 +179,7 @@ VBFHHto2B2Tau:
     to_plot:
       - [ '1', '0', '1' ]
     plot_color: [ "kBlack" ]
+    channels: [ "tauTau" ]
   datasets:
     - VBFHHto2B2Tau_CV_1_C2V_0_C3_1_fixedTauDecays
     - VBFHHto2B2Tau_CV_1_C2V_1_C3_1_fixedTauDecays
