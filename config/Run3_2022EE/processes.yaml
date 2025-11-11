@@ -149,8 +149,10 @@ GluGlutoHHto2B2Tau:
     parameters: [ kl, kt, c2 ]
     process_name: GluGluToHHto2B2Tau_${kl}_${kt}_${c2}
     name_pattern: GluGluToHHto2B2Tau kl ${kl} kt ${kt} c2 ${c2}
-    to_plot: [ ('0p00', '1p00', '0p00', ) ]
-    plot_color: [ "kBlack" ]
+    to_plot:
+      - [ '0p00', '1p00', '0p00' ]
+      - [ '1p00', '1p00', '0p00' ]  # This is the sample the robot tests
+    plot_color: [ "kBlack", "kRed" ]
   datasets:
     - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_0p00
     # - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_1p00
@@ -173,7 +175,8 @@ VBFHHto2B2Tau:
     parameters: [ CV, C2V, C3 ]
     process_name: VBFHHto2B2Tau_${CV}_${C2V}_${C3}
     name_pattern: VBFHHto2B2Tau CV ${CV} C2V ${C2V} C3 ${C3}
-    to_plot: [ (1, 0, 1) ]
+    to_plot:
+      - [ '1', '0', '1' ]
     plot_color: [ "kBlack" ]
   datasets:
     - VBFHHto2B2Tau_CV_1_C2V_0_C3_1_fixedTauDecays
