@@ -262,14 +262,14 @@ def addAllVariables(
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
 
-    if not isData and isSignal:
+    if not isData:
         dfw.colToSave.append("nLHEPart")
-        dfw.colToSave.append("nLHEPdfWeight")
-        dfw.colToSave.append("nLHEScaleWeight")
-        dfw.colToSave.append("LHEPdfWeight")
-        dfw.colToSave.append("LHEReweightingWeight")
-        dfw.colToSave.append("LHEScaleWeight")
-        dfw.colToSave.append("LHEWeight_originalXWGTUP")
+        # dfw.colToSave.append("nLHEPdfWeight")
+        # # dfw.colToSave.append("nLHEScaleWeight")
+        # dfw.colToSave.append("LHEPdfWeight")
+        # dfw.colToSave.append("LHEReweightingWeight")
+        # dfw.colToSave.append("LHEScaleWeight")
+        # # dfw.colToSave.append("LHEWeight_originalXWGTUP")
         dfw.colToSave.append("LHEPart_pdgId")
         dfw.colToSave.append("LHEPart_pt")
         dfw.colToSave.append("LHEPart_eta")
