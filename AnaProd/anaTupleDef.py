@@ -445,30 +445,21 @@ def addAllVariables(
             """,
         )
         LegVar("iso", f"HttCandidate.leg_rawIso.at({leg_idx})")
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetB",
-            f"HttCandidate.leg_type[{leg_idx}] != Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetB.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvB",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetCvB.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvL",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetCvL.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvNotB",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetCvNotB.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetQvG",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetQvG.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetTauVJet",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_jetIdx!=-1 ? Jet_btagPNetTauVJet.at(tau{leg_idx+1}_jetIdx):-1.f",
-        )
+        for pnetVar in [
+            "btagPNetB",
+            "btagPNetCvB",
+            "btagPNetCvL",
+            "btagPNetCvNotB",
+            "btagPNetQvG",
+            "btagPNetTauVJet",
+        ]:
+            LegVar(
+                f"_seedingJet_{pnetVar}",
+                f"Jet_{pnetVar}.at(tau{leg_idx+1}_jetIdx)",
+                var_type="float",
+                var_cond=f"tau{leg_idx+1}_jetIdx>=0",
+                default="-1.f",
+            )
 
         for deepTauScore in deepTauScores:
             LegVar(
