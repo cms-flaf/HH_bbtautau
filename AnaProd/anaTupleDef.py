@@ -454,7 +454,7 @@ def addAllVariables(
             "btagPNetTauVJet",
         ]:
             LegVar(
-                f"_seedingJet_{pnetVar}",
+                f"seedingJet_{pnetVar}",
                 f"Jet_{pnetVar}.at(tau{leg_idx+1}_jetIdx)",
                 var_type="float",
                 var_cond=f"tau{leg_idx+1}_jetIdx>=0",
