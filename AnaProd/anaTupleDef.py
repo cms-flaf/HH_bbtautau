@@ -261,8 +261,14 @@ def addAllVariables(
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
 
-    if not isData and isSignal:
+    if not isData:
         dfw.colToSave.append("nLHEPart")
+        # dfw.colToSave.append("nLHEPdfWeight")
+        # # dfw.colToSave.append("nLHEScaleWeight")
+        # dfw.colToSave.append("LHEPdfWeight")
+        # dfw.colToSave.append("LHEReweightingWeight")
+        # dfw.colToSave.append("LHEScaleWeight")
+        # # dfw.colToSave.append("LHEWeight_originalXWGTUP")
         dfw.colToSave.append("LHEPart_pdgId")
         dfw.colToSave.append("LHEPart_pt")
         dfw.colToSave.append("LHEPart_eta")
@@ -271,6 +277,17 @@ def addAllVariables(
         dfw.colToSave.append("LHEPart_status")
         dfw.colToSave.append("LHEPart_spin")
         dfw.colToSave.append("LHEPart_incomingpz")
+        dfw.colToSave.append("LHE_AlphaS")
+        dfw.colToSave.append("LHE_HT")
+        dfw.colToSave.append("LHE_HTIncoming")
+        dfw.colToSave.append("LHE_Nb")
+        dfw.colToSave.append("LHE_Nc")
+        dfw.colToSave.append("LHE_Nglu")
+        dfw.colToSave.append("LHE_Njets")
+        dfw.colToSave.append("LHE_NpLO")
+        dfw.colToSave.append("LHE_NpNLO")
+        dfw.colToSave.append("LHE_Nuds")
+        dfw.colToSave.append("LHE_Vpt")
 
         dfw.colToSave.append("GenJet_eta")
         dfw.colToSave.append("GenJet_hadronFlavour")
