@@ -14,7 +14,7 @@ vbf:  # to check kinematic cuts for offline objs and trigger bits for online obj
       doMatching: True
       jsonTRGcorrection_key: { '2022_Summer22': '', '2022_Summer22EE': '' }
       jsonTRGcorrection_elepath: "placeholder"
-    - offline_obj: 
+    - offline_obj:
         cut: "{obj}_legType == Leg::jet && {obj}_pt > 40"
       online_obj:
         cut: TrigObj_id==1 && (TrigObj_filterBits&262144)!=0
