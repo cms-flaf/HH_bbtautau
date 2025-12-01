@@ -304,7 +304,6 @@ def defineTriggerWeightsErrors(dfBuilder):
     #     dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_etau_tau_Up", "if ((HLT_singleEle || HLT_etau) && Legacy_region && Eff_MC_etau!=0) {return weight_HLT_eTau + trigSF_err_dm_etau;} return 1.f; ")
     #     dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_etau_tau_Down", "if ((HLT_singleEle || HLT_etau) && Legacy_region && Eff_MC_etau!=0) {return weight_HLT_eTau - trigSF_err_dm_etau;} return 1.f; ")
 
-<<<<<<< HEAD
 def defineTriggersCentralWeights(dfBuilder):
 
     if 'eTau' in dfBuilder.config['channels_to_consider']:
@@ -600,10 +599,6 @@ def defineTriggersWeightsErrors(dfBuilder):
 
 
 def defineTriggerWeights(dfBuilder): # needs application region def
-=======
-
-def defineTriggerWeights(dfBuilder):  # needs application region def
->>>>>>> origin/main
 
     # *********************** tauTau ***********************
     if "tauTau" in dfBuilder.config["channels_to_consider"]:
