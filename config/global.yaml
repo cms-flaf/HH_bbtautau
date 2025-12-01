@@ -340,16 +340,6 @@ unc_2016postVFP:
   - JES_HF_2016postVFP
   - JES_RelativeSample_2016postVFP
 
-sample_types_to_merge:
-  - DY
-  - TT
-  - W
-  - ST
-  - VVV
-  - VV
-  - ttH
-  - TTVV
-
 uncs_to_exclude:
   Run3_2022: [ ]
   Run3_2022EE: [ ]

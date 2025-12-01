@@ -179,7 +179,6 @@ defaultColToSave = [
     "luminosityBlock",
     "run",
     "event",
-    "sample_type",
     "period",
     "X_mass",
     "X_spin",
@@ -262,8 +261,14 @@ def addAllVariables(
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
 
-    if not isData and isSignal:
+    if not isData:
         dfw.colToSave.append("nLHEPart")
+        # dfw.colToSave.append("nLHEPdfWeight")
+        # # dfw.colToSave.append("nLHEScaleWeight")
+        # dfw.colToSave.append("LHEPdfWeight")
+        # dfw.colToSave.append("LHEReweightingWeight")
+        # dfw.colToSave.append("LHEScaleWeight")
+        # # dfw.colToSave.append("LHEWeight_originalXWGTUP")
         dfw.colToSave.append("LHEPart_pdgId")
         dfw.colToSave.append("LHEPart_pt")
         dfw.colToSave.append("LHEPart_eta")
@@ -272,6 +277,17 @@ def addAllVariables(
         dfw.colToSave.append("LHEPart_status")
         dfw.colToSave.append("LHEPart_spin")
         dfw.colToSave.append("LHEPart_incomingpz")
+        dfw.colToSave.append("LHE_AlphaS")
+        dfw.colToSave.append("LHE_HT")
+        dfw.colToSave.append("LHE_HTIncoming")
+        dfw.colToSave.append("LHE_Nb")
+        dfw.colToSave.append("LHE_Nc")
+        dfw.colToSave.append("LHE_Nglu")
+        dfw.colToSave.append("LHE_Njets")
+        dfw.colToSave.append("LHE_NpLO")
+        dfw.colToSave.append("LHE_NpNLO")
+        dfw.colToSave.append("LHE_Nuds")
+        dfw.colToSave.append("LHE_Vpt")
 
         dfw.colToSave.append("GenJet_eta")
         dfw.colToSave.append("GenJet_hadronFlavour")
@@ -314,9 +330,6 @@ def addAllVariables(
     for var in ["covXX", "covXY", "covYY"]:
         dfw.DefineAndAppend(f"met_{var}", f"static_cast<float>({pf_str}_{var})")
 
-    dfw.Define(f"Tau_recoJetMatchIdx", f"FindMatching(Tau_p4, Jet_p4, 0.5)")
-    dfw.Define(f"Muon_recoJetMatchIdx", f"FindMatching(Muon_p4, Jet_p4, 0.5)")
-    dfw.Define(f"Electron_recoJetMatchIdx", f"FindMatching(Electron_p4, Jet_p4, 0.5)")
     dfw.DefineAndAppend("channelId", "static_cast<int>(HttCandidate.channel())")
     channel_to_select = " || ".join(
         f"HttCandidate.channel()==Channel::{ch}" for ch in channels
@@ -420,36 +433,33 @@ def addAllVariables(
         LegVar("charge", f"HttCandidate.leg_charge[{leg_idx}]", var_type="int")
 
         dfw.Define(
-            f"tau{leg_idx+1}_recoJetMatchIdx",
-            f"""HttCandidate.leg_type[{leg_idx}] != Leg::none
-                                                          ? FindMatching(HttCandidate.leg_p4[{leg_idx}], Jet_p4, 0.3)
-                                                          : -1""",
+            f"tau{leg_idx+1}_jetIdx",
+            f"""
+                if(HttCandidate.leg_type[{leg_idx}] == Leg::e)
+                    return Electron_jetIdx.at(HttCandidate.leg_index[{leg_idx}]);
+                if(HttCandidate.leg_type[{leg_idx}] == Leg::mu)
+                    return Muon_jetIdx.at(HttCandidate.leg_index[{leg_idx}]);
+                if(HttCandidate.leg_type[{leg_idx}] == Leg::tau)
+                    return Tau_jetIdx.at(HttCandidate.leg_index[{leg_idx}]);
+                return short(-1);
+            """,
         )
         LegVar("iso", f"HttCandidate.leg_rawIso.at({leg_idx})")
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetB",
-            f"HttCandidate.leg_type[{leg_idx}] != Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvB",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvL",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvL.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetCvNotB",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetCvNotB.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetQvG",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetQvG.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
-        dfw.DefineAndAppend(
-            f"tau{leg_idx+1}_btagPNetTauVJet",
-            f"HttCandidate.leg_type[{leg_idx}] == Leg::none && tau{leg_idx+1}_recoJetMatchIdx!=-1 ? Jet_btagPNetTauVJet.at(tau{leg_idx+1}_recoJetMatchIdx):-1.f",
-        )
+        for pnetVar in [
+            "btagPNetB",
+            "btagPNetCvB",
+            "btagPNetCvL",
+            "btagPNetCvNotB",
+            "btagPNetQvG",
+            "btagPNetTauVJet",
+        ]:
+            LegVar(
+                f"seedingJet_{pnetVar}",
+                f"Jet_{pnetVar}.at(tau{leg_idx+1}_jetIdx)",
+                var_type="float",
+                var_cond=f"tau{leg_idx+1}_jetIdx>=0",
+                default="-1.f",
+            )
 
         for deepTauScore in deepTauScores:
             LegVar(
@@ -515,25 +525,25 @@ def addAllVariables(
             )
             LegVar(
                 "seedingJet_partonFlavour",
-                f"Jet_partonFlavour.at(tau{leg_idx+1}_recoJetMatchIdx)",
+                f"Jet_partonFlavour.at(tau{leg_idx+1}_jetIdx)",
                 var_type="int",
-                var_cond=f"tau{leg_idx+1}_recoJetMatchIdx>=0",
+                var_cond=f"tau{leg_idx+1}_jetIdx>=0",
                 default="-10",
             )
             LegVar(
                 "seedingJet_hadronFlavour",
-                f"Jet_hadronFlavour.at(tau{leg_idx+1}_recoJetMatchIdx)",
+                f"Jet_hadronFlavour.at(tau{leg_idx+1}_jetIdx)",
                 var_type="int",
-                var_cond=f"tau{leg_idx+1}_recoJetMatchIdx>=0",
+                var_cond=f"tau{leg_idx+1}_jetIdx>=0",
                 default="-10",
             )
 
         for var in ["pt", "eta", "phi", "mass"]:
             LegVar(
                 f"seedingJet_{var}",
-                f"Jet_p4.at(tau{leg_idx+1}_recoJetMatchIdx).{var}()",
+                f"Jet_p4.at(tau{leg_idx+1}_jetIdx).{var}()",
                 var_type="float",
-                var_cond=f"tau{leg_idx+1}_recoJetMatchIdx>=0",
+                var_cond=f"tau{leg_idx+1}_jetIdx>=0",
                 default="-1.f",
             )
 
