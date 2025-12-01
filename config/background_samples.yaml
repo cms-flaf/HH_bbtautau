@@ -1,3 +1,5 @@
+QCD:
+  sampleType: QCD
 ############## WJetsToLNu ##############
 WtoLNu_amcatnloFXFX:
   sampleType: W

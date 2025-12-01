@@ -55,6 +55,7 @@ variables:
   - tautau_m_vis
   - bb_m_vis
 
+plot_wantQCD: true
 
 channelSelection:
   - eTau

@@ -22,6 +22,7 @@ GLOBAL:
     # - keep ^MET_.*
     - keep ^GluGlutoHHto2B2Tau_.*
     - keep ^VBFHHto2B2Tau_.*
+    - keep ^QCD_.*
   use_stitching: false
   triggerFile: config/Run3_2023BPix/triggers.yaml
 GluGlutoBulkGravitontoHHto2B2Tau_M_250:
