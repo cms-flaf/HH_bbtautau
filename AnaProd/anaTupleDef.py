@@ -27,6 +27,7 @@ Muon_observables = [
     "Muon_pfRelIso04_all",
     "Muon_highPtId",
     "Muon_tightId",
+    "Muon_mediumId",
 ]
 Electron_observables = [
     "Electron_mvaNoIso_WP80",
@@ -222,7 +223,7 @@ def addAllVariables(
     dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
     dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
-    dfw.Apply(Corrections.getGlobal().btag.getWPid)
+    dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
     jet_obs = []
     jet_obs.extend(JetObservables)
     if global_params["requireHbbJets"]:
@@ -248,6 +249,12 @@ def addAllVariables(
                     )
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
+
+    centralJet_vars = ["p4", "btagPNetB"]
+    if not isData:
+        centralJet_vars.extend(["hadronFlavour"])
+    for jetVar in centralJet_vars:
+        dfw.Define(f"centralJet_{jetVar}", f"Jet_{jetVar}[Jet_bCand]")
 
     if global_params["storeVBFJets"]:
         dfw.DefineAndAppend(f"VBFJet_pt", f"v_ops::pt(Jet_p4[VBFJet_B1])")
