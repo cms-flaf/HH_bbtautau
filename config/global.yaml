@@ -25,17 +25,6 @@ deepTauWPs:
     VSe: VVLoose
     VSmu: Tight
     VSjet: Medium
-corrections:
-  - tauID
-  - tauES
-  - JEC
-  - JER
-  - trgEff
-  # - btagWP
-  - btagShape
-  - mu
-  - ele
-  - pu
 
 corrections:
   tauID: { stage: HistTuple }
