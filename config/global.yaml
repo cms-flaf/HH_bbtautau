@@ -25,20 +25,37 @@ deepTauWPs:
     VSe: VVLoose
     VSmu: Tight
     VSjet: Medium
-corrections:
-  - tauID
-  - tauES
-  - JEC
-  - JER
-  - trgEff
-  # - btagWP
-  - btagShape
-  - mu
-  - ele
-  - pu
 
-tagger_name: particleNet
-bjet_preselection_branch: "Jet_bCand"
+corrections:
+  tauID: { stage: HistTuple }
+  tauES: { stage: AnaTuple }
+  mu:
+    stage: HistTuple
+    columns:
+      pfRelIso04_all: Muon_pfRelIso04_all
+      tightId: Muon_tightId
+      tkRelIso: Muon_tkRelIso
+      highPtId: Muon_highPtId
+      mediumId: Muon_mediumId
+  trigger:
+    stage: HistTuple
+    mode: efficiency
+  ele: { stage: HistTuple }
+  muScaRe: { stage: HistTuple }
+  eleES: { stage: AnaTuple }
+  MC_Lumi_pu: { stage: AnaTuple }
+  pu: { stages: [ AnaCache, AnaTuple ] }
+  JEC: { stage: AnaTuple }
+  JER:
+    stage: AnaTuple
+    apply_jet_horns_fix: true
+  btag:
+    stages: [ AnaTuple ]
+    modes:
+      AnaTuple: shape
+    tagger: particleNet
+    jetCollection: centralJet
+
 treeName: "Events"
 
 region: SR
