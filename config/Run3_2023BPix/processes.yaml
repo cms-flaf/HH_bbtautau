@@ -72,12 +72,6 @@ TT_Inclusive:
   datasets:
     - TT
 
-QCD:
-  name: "QCD"
-  color: "kGray+1"
-  datasets:
-    - QCD
-
 ST:
   name: "Single Top"
   color: "kGreen-5"

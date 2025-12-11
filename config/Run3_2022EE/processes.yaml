@@ -94,12 +94,6 @@ ST:
     - TWminustoLNu2Q
     # - TWminustoLNu2Q_ext1
 
-QCD:
-  name: "QCD"
-  color: "kGray+1"
-  datasets:
-    - QCD
-
 ttH:
   name: "ttH"
   color: "kGreen-7"
