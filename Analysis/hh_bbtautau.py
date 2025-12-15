@@ -579,6 +579,15 @@ def PrepareDfForDNN(dfForHistograms):
 
 
 def PrepareDfForHistograms(dfForHistograms):
+    for leg_idx in [1, 2]:
+        tau_legType = f"tau{leg_idx}_legType"
+        dfForHistograms.df = dfForHistograms.df.Redefine(
+            tau_legType, f"static_cast<Leg>({tau_legType})"
+        )
+        dfForHistograms.df = dfForHistograms.df.Define(
+            f"b{leg_idx}_legType", f"b{leg_idx}_pt > 0 ? Leg::jet : Leg::none"
+        )
+        dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
     dfForHistograms.df = defineAllP4(dfForHistograms.df)
     dfForHistograms.defineTriggers()
     dfForHistograms.defineBoostedVariables()

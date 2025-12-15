@@ -25,20 +25,37 @@ deepTauWPs:
     VSe: VVLoose
     VSmu: Tight
     VSjet: Medium
-corrections:
-  - tauID
-  - tauES
-  - JEC
-  - JER
-  - trgEff
-  # - btagWP
-  - btagShape
-  - mu
-  - ele
-  - pu
 
-tagger_name: particleNet
-bjet_preselection_branch: "Jet_bCand"
+corrections:
+  tauID: { stage: HistTuple }
+  tauES: { stage: AnaTuple }
+  mu:
+    stage: HistTuple
+    columns:
+      pfRelIso04_all: Muon_pfRelIso04_all
+      tightId: Muon_tightId
+      tkRelIso: Muon_tkRelIso
+      highPtId: Muon_highPtId
+      mediumId: Muon_mediumId
+  trigger:
+    stage: HistTuple
+    mode: efficiency
+  ele: { stage: HistTuple }
+  muScaRe: { stage: HistTuple }
+  eleES: { stage: AnaTuple }
+  MC_Lumi_pu: { stage: AnaTuple }
+  pu: { stages: [ AnaCache, AnaTuple ] }
+  JEC: { stage: AnaTuple }
+  JER:
+    stage: AnaTuple
+    apply_jet_horns_fix: true
+  btag:
+    stages: [ AnaTuple ]
+    modes:
+      AnaTuple: shape
+    tagger: particleNet
+    jetCollection: centralJet
+
 treeName: "Events"
 
 region: SR
@@ -47,8 +64,7 @@ custom_regions: QCDRegions
 custom_categories: ""
 custom_subcategories: [ ]
 
-vars_to_plot:
-  - tau1_pt
+plot_wantQCD: true
 
 channelSelection:
   - eTau
@@ -77,20 +93,20 @@ categories:
   - btag_shape
   - baseline
   - boosted_baseline
-  - boosted_baseline_cat3
+  # - boosted_baseline_cat3
   # - boosted_baseline_masswindow
   # - boosted_baseline_cat3_masswindow
   - res0b_inclusive
   - res1b_inclusive
   - res2b_inclusive
   - boosted
-  - boosted_cat3
+  # - boosted_cat3
   # - res0b_cat2
   # - res1b_cat2
   # - res2b_cat2
-  - res2b_cat3
-  - res1b_cat3
-  - res0b_cat3
+  # - res2b_cat3
+  # - res1b_cat3
+  # - res0b_cat3
   # - inclusive_masswindow
   # - btag_shape_masswindow
   # - baseline_masswindow
