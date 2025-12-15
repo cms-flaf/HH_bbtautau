@@ -672,7 +672,7 @@ nBJets:
   x_title: n_bJets
   y_title: Events
   use_log_y: False
-  max_y_sf: 1600
+  max_y_sf: 1.2
   divide_by_bin_width: False
 
 
@@ -920,6 +920,14 @@ kinFit_m:
 MT2:
   x_bins: "50|0:500"
   x_title: M_{T2}
+  y_title: Events
+  use_log_y: False
+  max_y_sf: 1.2
+  divide_by_bin_width: False
+
+nJet:
+  x_bins: "13|-0.5:12.5"
+  x_title: nJets
   y_title: Events
   use_log_y: False
   max_y_sf: 1.2
