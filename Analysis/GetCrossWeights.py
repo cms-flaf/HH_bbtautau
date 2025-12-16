@@ -325,19 +325,19 @@ def defineTriggersCentralWeights(dfBuilder):
         #### only for etau ele leg is not recommended to match the electron, the bug will be solved in NanoAODv15 --> with the new version you can remove the 2 lines below and uncomment the 2 above
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_etau_eleLeg",
-            "tau1_legType == 1 ? eff_data_tau1_etau_triggerleg_e_Central : (tau2_legType == 1 ? eff_data_tau2_etau_triggerleg_e_Central : 1.f)",
+            "tau1_legType == Leg::e ? eff_data_tau1_etau_triggerleg_e_Central : (tau2_legType == Leg::e ? eff_data_tau2_etau_triggerleg_e_Central : 1.f)",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_etau_eleLeg",
-            "tau1_legType == 1 ? eff_mc_tau1_etau_triggerleg_e_Central : (tau2_legType == 1 ? eff_mc_tau2_etau_triggerleg_e_Central : 1.f)",
+            "tau1_legType == Leg::e ? eff_mc_tau1_etau_triggerleg_e_Central : (tau2_legType == Leg::e ? eff_mc_tau2_etau_triggerleg_e_Central : 1.f)",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_etau_tauLeg",
-            "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_data_tau1_etau_triggerleg_tau_Central : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_data_tau2_etau_triggerleg_tau_Central : 1.f) : 1.f)) : 1.f",
+            "tau1_HasMatching_etau ? (tau1_legType == Leg::tau ? eff_data_tau1_etau_triggerleg_tau_Central : (tau2_HasMatching_etau ? (tau2_legType == Leg::tau ? eff_data_tau2_etau_triggerleg_tau_Central : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_etau_tauLeg",
-            "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_mc_tau1_etau_triggerleg_tau_Central : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_mc_tau2_etau_triggerleg_tau_Central : 1.f) : 1.f)) : 1.f",
+            "tau1_HasMatching_etau ? (tau1_legType == Leg::tau ? eff_mc_tau1_etau_triggerleg_tau_Central : (tau2_HasMatching_etau ? (tau2_legType == Leg::tau ? eff_mc_tau2_etau_triggerleg_tau_Central : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"weight_trgSF_eTau_Central",
@@ -347,16 +347,16 @@ def defineTriggersCentralWeights(dfBuilder):
     if "muTau" in dfBuilder.config["channels_to_consider"]:
 
         dfBuilder.df = dfBuilder.df.Define(
-            "tau1_isMatched_mutau_muLeg", "tau1_HasMatching_mutau && tau1_legType == 2"
+            "tau1_isMatched_mutau_muLeg", "tau1_HasMatching_mutau && tau1_legType == Leg::mu"
         )
         dfBuilder.df = dfBuilder.df.Define(
-            "tau2_isMatched_mutau_muLeg", "tau2_HasMatching_mutau && tau2_legType == 2"
+            "tau2_isMatched_mutau_muLeg", "tau2_HasMatching_mutau && tau2_legType == Leg::mu"
         )
         dfBuilder.df = dfBuilder.df.Define(
-            "tau1_isMatched_mutau_tauLeg", "tau1_HasMatching_mutau && tau1_legType == 3"
+            "tau1_isMatched_mutau_tauLeg", "tau1_HasMatching_mutau && tau1_legType == Leg::tau"
         )
         dfBuilder.df = dfBuilder.df.Define(
-            "tau2_isMatched_mutau_tauLeg", "tau2_HasMatching_mutau && tau2_legType == 3"
+            "tau2_isMatched_mutau_tauLeg", "tau2_HasMatching_mutau && tau2_legType == Leg::tau"
         )
 
         dfBuilder.df = dfBuilder.df.Define(
@@ -569,19 +569,19 @@ def defineTriggersWeightsErrors(dfBuilder):
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_mutau_muLeg_Up",
-            f"tau1_HasMatching_mutau ? (tau1_legType == 2 ? eff_data_tau1_mutau_triggerleg_mu_Up : (tau2_HasMatching_mutau ? (tau2_legType == 2 ? eff_data_tau2_mutau_triggerleg_mu_Up : 1.f) : 1.f)) : 1.f",
+            f"tau1_HasMatching_mutau ? (tau1_legType == Leg::mu ? eff_data_tau1_mutau_triggerleg_mu_Up : (tau2_HasMatching_mutau ? (tau2_legType == Leg::mu ? eff_data_tau2_mutau_triggerleg_mu_Up : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_mutau_muLeg_Up",
-            f"tau1_HasMatching_mutau ? (tau1_legType == 2 ? eff_mc_tau1_mutau_triggerleg_mu_Up : (tau2_HasMatching_mutau ? (tau2_legType == 2 ? eff_mc_tau2_mutau_triggerleg_mu_Up : 1.f) : 1.f)) : 1.f",
+            f"tau1_HasMatching_mutau ? (tau1_legType == Leg::mu ? eff_mc_tau1_mutau_triggerleg_mu_Up : (tau2_HasMatching_mutau ? (tau2_legType == Leg::mu ? eff_mc_tau2_mutau_triggerleg_mu_Up : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_mutau_tauLeg_Up",
-            f"tau1_HasMatching_mutau ? (tau1_legType == 3 ? eff_data_tau1_mutau_triggerleg_tau_Up : (tau2_HasMatching_mutau ? (tau2_legType == 3 ? eff_data_tau2_mutau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
+            f"tau1_HasMatching_mutau ? (tau1_legType == Leg::tau ? eff_data_tau1_mutau_triggerleg_tau_Up : (tau2_HasMatching_mutau ? (tau2_legType == Leg::tau ? eff_data_tau2_mutau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_mutau_tauLeg_Up",
-            f"tau1_HasMatching_mutau ? (tau1_legType == 3 ? eff_mc_tau1_mutau_triggerleg_tau_Up : (tau2_HasMatching_mutau ? (tau2_legType == 3 ? eff_mc_tau2_mutau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
+            f"tau1_HasMatching_mutau ? (tau1_legType == Leg::tau ? eff_mc_tau1_mutau_triggerleg_tau_Up : (tau2_HasMatching_mutau ? (tau2_legType == Leg::tau ? eff_mc_tau2_mutau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
         )
 
         dfBuilder.df = dfBuilder.df.Define(
@@ -656,19 +656,19 @@ def defineTriggersWeightsErrors(dfBuilder):
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_etau_eleLeg_Up",
-            "tau1_legType == 1 ? eff_data_tau1_etau_triggerleg_e_Up : (tau2_legType == 1 ? eff_data_tau2_etau_triggerleg_e_Up : 1.f)",
+            "tau1_legType == Leg::e ? eff_data_tau1_etau_triggerleg_e_Up : (tau2_legType == Leg::e ? eff_data_tau2_etau_triggerleg_e_Up : 1.f)",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_etau_eleLeg_Up",
-            "tau1_legType == 1 ? eff_mc_tau1_etau_triggerleg_e_Up : (tau2_legType == 1 ? eff_mc_tau2_etau_triggerleg_e_Up : 1.f)",
+            "tau1_legType == Leg::e ? eff_mc_tau1_etau_triggerleg_e_Up : (tau2_legType == Leg::e ? eff_mc_tau2_etau_triggerleg_e_Up : 1.f)",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_data_etau_tauLeg_Up",
-            "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_data_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_data_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
+            "tau1_HasMatching_etau ? (tau1_legType == Leg::tau ? eff_data_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == Leg::tau ? eff_data_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"eff_mc_etau_tauLeg_Up",
-            "tau1_HasMatching_etau ? (tau1_legType == 3 ? eff_mc_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == 3 ? eff_mc_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
+            "tau1_HasMatching_etau ? (tau1_legType == Leg::tau ? eff_mc_tau1_etau_triggerleg_tau_Up : (tau2_HasMatching_etau ? (tau2_legType == Leg::tau ? eff_mc_tau2_etau_triggerleg_tau_Up : 1.f) : 1.f)) : 1.f",
         )
 
         dfBuilder.df = dfBuilder.df.Define(
@@ -709,7 +709,7 @@ def defineTriggersWeightsErrors(dfBuilder):
 
         dfBuilder.df = dfBuilder.df.Define(
             f"etau_tau_decayMode",
-            f"tau1_HasMatching_etau && tau1_legType == 3 ? tau1_decayMode : (tau2_HasMatching_etau && tau2_legType == 3 ? tau2_decayMode: -1.f)",
+            f"tau1_HasMatching_etau && tau1_legType == Leg::tau ? tau1_decayMode : (tau2_HasMatching_etau && tau2_legType == Leg::tau ? tau2_decayMode: -1.f)",
         )
         for dm in [0, 1, 10, 11]:
             dfBuilder.df = dfBuilder.df.Define(
@@ -794,11 +794,11 @@ def defineTriggersWeightsErrors(dfBuilder):
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"ditaujet_tau1_decayMode",
-            f"tau1_HasMatching_ditaujet && tau1_legType == 3 ? tau1_decayMode : -1.f",
+            f"tau1_HasMatching_ditaujet && tau1_legType == Leg::tau ? tau1_decayMode : -1.f",
         )
         dfBuilder.df = dfBuilder.df.Define(
             f"ditaujet_tau2_decayMode",
-            f"tau2_HasMatching_ditaujet && tau2_legType == 3 ? tau2_decayMode :  -1.f",
+            f"tau2_HasMatching_ditaujet && tau2_legType == Leg::tau ? tau2_decayMode :  -1.f",
         )
         for dm1 in [0, 1, 10, 11]:
             for dm2 in [0, 1, 10, 11]:

@@ -3,6 +3,7 @@ from FLAF.Common.Utilities import *
 from FLAF.Common.HistHelper import *
 from Corrections.Corrections import Corrections
 from Corrections.CorrectionsCore import getSystName, central
+from Analysis.GetCrossWeights import *
 
 initialized = False
 analysis = None
@@ -107,7 +108,6 @@ def DefineWeightForHistograms(
                 triggers_to_use.add(trigger)
         syst_name = getSystName(uncName, uncScale)
         is_central = uncName == central
-
         dfw.df, all_weights = corrections.getNormalisationCorrections(
             dfw.df,
             lepton_legs=lepton_legs,
@@ -120,10 +120,11 @@ def DefineWeightForHistograms(
             isCentral=is_central,
             use_genWeight_sign_only=True,
         )
-
+        if "trigger" in global_params.get("corrections", {}):
+            defineTriggersCentralWeights(dfw)
+            defineTriggersWeightsErrors(dfw)
         if df_is_central:
             central_df_weights_computed = True
-
     categories = global_params["categories"]
     boosted_categories = global_params.get("boosted_categories", [])
     process_group = global_params["process_group"]
