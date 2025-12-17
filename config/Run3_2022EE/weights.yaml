@@ -31,13 +31,7 @@ norm:
     name: trg_muMueMu_{}
   trg_eE:
     expression: weight_trgSF_eE_{scale}_rel * final_weight
-    name: trg_eE_{}  
-  # HLT_singleMu:
-  #   expression: weight_tau1_TrgSF_singleMu_IsoMu24{scale}_rel * final_weight
-  #   name: HLT_singleMu
-  # HLT_singleEle:
-  #   expression: weight_tau1_TrgSF_singleEle_singleEle{scale}_rel * final_weight
-  #   name: HLT_singleEle
+    name: trg_eE_{}
 
 shape: # syst unc conventions here: https://gitlab.cern.ch/cms-analysis/general/systematics
   JES_Total:
