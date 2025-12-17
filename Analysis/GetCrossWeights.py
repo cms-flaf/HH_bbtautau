@@ -348,19 +348,19 @@ def defineTriggersCentralWeights(dfBuilder):
 
         dfBuilder.df = dfBuilder.df.Define(
             "tau1_isMatched_mutau_muLeg",
-            "tau1_HasMatching_mutau && tau1_legType == Leg::mu"
+            "tau1_HasMatching_mutau && tau1_legType == Leg::mu",
         )
         dfBuilder.df = dfBuilder.df.Define(
             "tau2_isMatched_mutau_muLeg",
-            "tau2_HasMatching_mutau && tau2_legType == Leg::mu"
+            "tau2_HasMatching_mutau && tau2_legType == Leg::mu",
         )
         dfBuilder.df = dfBuilder.df.Define(
             "tau1_isMatched_mutau_tauLeg",
-            "tau1_HasMatching_mutau && tau1_legType == Leg::tau"
+            "tau1_HasMatching_mutau && tau1_legType == Leg::tau",
         )
         dfBuilder.df = dfBuilder.df.Define(
             "tau2_isMatched_mutau_tauLeg",
-            "tau2_HasMatching_mutau && tau2_legType == Leg::tau"
+            "tau2_HasMatching_mutau && tau2_legType == Leg::tau",
         )
 
         dfBuilder.df = dfBuilder.df.Define(
