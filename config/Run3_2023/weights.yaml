@@ -27,7 +27,7 @@ norm:
     expression: weight_trgSF_tauTau_jetleg_{scale}_rel * final_weight
     name: trg_tauTau_jet_{}
   trg_muMueMu:
-    expression:  weight_trgSF_muMueMu_{scale}_rel * final_weight
+    expression: weight_trgSF_muMueMu_{scale}_rel * final_weight
     name: trg_muMueMu_{}
   trg_eE:
     expression: weight_trgSF_eE_{scale}_rel * final_weight

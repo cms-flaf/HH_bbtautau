@@ -8,7 +8,7 @@ norm:
   MuonID_TightIDIso:
     expression: weight_tau1_MuonID_SF_LoosePFIso{scale}_rel * weight_tau2_MuonID_SF_LoosePFIso{scale}_rel * final_weight
     name: MuonID_TightIDIso
-      trg_eTau_e:
+  trg_eTau_e:
     expression: weight_trgSF_eTau_eleg_{scale}_rel * final_weight
     name: trg_eTau_e_{}
   trg_eTau_tau:
@@ -27,7 +27,7 @@ norm:
     expression: weight_trgSF_tauTau_jetleg_{scale}_rel * final_weight
     name: trg_tauTau_jet_{}
   trg_muMueMu:
-    expression:  weight_trgSF_muMueMu_{scale}_rel * final_weight
+    expression: weight_trgSF_muMueMu_{scale}_rel * final_weight
     name: trg_muMueMu_{}
   trg_eE:
     expression: weight_trgSF_eE_{scale}_rel * final_weight
