@@ -517,6 +517,11 @@ def defineTriggersWeightsErrors(dfBuilder):
             f"weight_trgSF_muMueMu_Down",
             f"weight_trgSF_muMueMu_Central - weight_trgSF_muMueMu_errMax",
         )
+        for scale in ["Up", "Down"]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_muMueMu_{scale}_rel",
+                f"weight_trgSF_muMueMu_{scale}/weight_trgSF_muMueMu_Central",
+            )
 
     if "eE" in dfBuilder.config["channels_to_consider"]:
         for scale in ["Up", "Down"]:
@@ -557,6 +562,11 @@ def defineTriggersWeightsErrors(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(
             "weight_trgSF_eE_Down", "weight_trgSF_eE_Central - weight_trgSF_eE_errMax"
         )
+        for scale in ["Up", "Down"]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_eE_{scale}_rel",
+                f"weight_trgSF_eE_{scale}/weight_trgSF_eE_Central",
+            )
 
     if "muTau" in dfBuilder.config["channels_to_consider"]:
         dfBuilder.df = dfBuilder.df.Define(
@@ -625,6 +635,11 @@ def defineTriggersWeightsErrors(dfBuilder):
             f"weight_trgSF_muTau_muleg_Down",
             f"weight_trgSF_muTau_Central - SF_muTau_errUp",
         )
+        for scale in ["Up", "Down"]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_muTau_muleg_{scale}_rel",
+                f"weight_trgSF_muTau_muleg_{scale}/weight_trgSF_muTau_Central",
+            )
         # maybe we can implement the same approach used for singleTriggers
 
         dfBuilder.df = dfBuilder.df.Define(
@@ -644,6 +659,11 @@ def defineTriggersWeightsErrors(dfBuilder):
                 "weight_trgSF_muTau_Central - singleTrgSFerr(weight_trgSF_muTau_Central, eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg, eff_data_mutau_tauLeg_Up-eff_data_mutau_tauLeg, eff_mc_mutau_tauLeg_Up-eff_data_mutau_tauLeg)"
                 ": weight_trgSF_muTau_Central",
             )
+            for scale in ["Up", "Down"]:
+                dfBuilder.df = dfBuilder.df.Define(
+                    f"weight_trgSF_muTau_tauleg_dm{dm}_{scale}_rel",
+                    f"weight_trgSF_muTau_tauleg_dm{dm}_{scale}/weight_trgSF_muTau_Central",
+                )
 
     if "eTau" in dfBuilder.config["channels_to_consider"]:
         dfBuilder.df = dfBuilder.df.Define(
@@ -710,6 +730,11 @@ def defineTriggersWeightsErrors(dfBuilder):
         dfBuilder.df = dfBuilder.df.Define(
             f"weight_trgSF_eTau_eleg_Down", f"weight_trgSF_eTau_Central - SF_eTau_errUp"
         )
+        for scale in ["Up", "Down"]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_eTau_eleg_{scale}_rel",
+                f"weight_trgSF_eTau_eleg_{scale}/weight_trgSF_eTau_Central",
+            )
 
         dfBuilder.df = dfBuilder.df.Define(
             f"etau_tau_decayMode",
@@ -728,6 +753,11 @@ def defineTriggersWeightsErrors(dfBuilder):
                 "weight_trgSF_eTau_Central - singleTrgSFerr(weight_trgSF_eTau_Central, eff_data_etau_tauLeg, eff_mc_etau_tauLeg, eff_data_etau_tauLeg_Up-eff_data_etau_tauLeg, eff_mc_etau_tauLeg_Up-eff_data_etau_tauLeg)"
                 ": weight_trgSF_eTau_Central",
             )
+            for scale in ["Up", "Down"]:
+                dfBuilder.df = dfBuilder.df.Define(
+                    f"weight_trgSF_eTau_tauleg_dm{dm}_{scale}_rel",
+                    f"weight_trgSF_eTau_tauleg_dm{dm}_{scale}/weight_trgSF_eTau_Central",
+                )
 
     if "tauTau" in dfBuilder.config["channels_to_consider"]:
         dfBuilder.df = dfBuilder.df.Define(
@@ -818,6 +848,11 @@ def defineTriggersWeightsErrors(dfBuilder):
                     "weight_trgSF_tauTau_Central - SF_tauTau_errUp"
                     ": weight_trgSF_tauTau_Central",
                 )
+                for scale in ["Up", "Down"]:
+                    dfBuilder.df = dfBuilder.df.Define(
+                        f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_{scale}_rel",
+                        f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_{scale}/weight_trgSF_tauTau_Central",
+                    )
 
         dfBuilder.df = dfBuilder.df.Define(
             f"sfjeterr",
@@ -830,6 +865,11 @@ def defineTriggersWeightsErrors(dfBuilder):
             f"weight_trgSF_tauTau_jetleg_Down",
             f"weight_trgSF_tauTau_Central - sfjeterr",
         )
+        for scale in ["Up", "Down"]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_tauTau_jetleg_{scale}_rel",
+                f"weight_trgSF_tauTau_jetleg_{scale}/weight_trgSF_tauTau_Central",
+            )
 
 
 def defineTriggerWeights(dfBuilder):  # needs application region def
