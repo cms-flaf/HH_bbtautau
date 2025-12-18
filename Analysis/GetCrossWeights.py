@@ -834,25 +834,43 @@ def defineTriggersWeightsErrors(dfBuilder):
             f"ditaujet_tau2_decayMode",
             f"tau2_HasMatching_ditaujet && tau2_legType == Leg::tau ? tau2_decayMode :  -1.f",
         )
+
         for dm1 in [0, 1, 10, 11]:
-            for dm2 in [0, 1, 10, 11]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_tauTau_tau1leg_dm{dm1}_Up",
+                f"(ditaujet_tau1_decayMode == {dm1}) ?"
+                "weight_trgSF_tauTau_Central + SF_tauTau_errUp"
+                ": weight_trgSF_tauTau_Central",
+            )
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_tauTau_tau1leg_dm{dm1}_Down",
+                f"(ditaujet_tau1_decayMode == {dm1}) ?"
+                "weight_trgSF_tauTau_Central - SF_tauTau_errUp"
+                ": weight_trgSF_tauTau_Central",
+            )
+            for scale in ["Up", "Down"]:
                 dfBuilder.df = dfBuilder.df.Define(
-                    f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_Up",
-                    f"(ditaujet_tau1_decayMode == {dm1} && ditaujet_tau2_decayMode == {dm2}) ?"
-                    "weight_trgSF_tauTau_Central + SF_tauTau_errUp"
-                    ": weight_trgSF_tauTau_Central",
+                    f"weight_trgSF_tauTau_tau1leg_dm{dm1}_{scale}_rel",
+                    f"weight_trgSF_tauTau_tau1leg_dm{dm1}_{scale}/weight_trgSF_tauTau_Central",
                 )
+        for dm2 in [0, 1, 10, 11]:
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_tauTau_tau2leg_dm{dm2}_Up",
+                f"(ditaujet_tau2_decayMode == {dm2}) ?"
+                "weight_trgSF_tauTau_Central + SF_tauTau_errUp"
+                ": weight_trgSF_tauTau_Central",
+            )
+            dfBuilder.df = dfBuilder.df.Define(
+                f"weight_trgSF_tauTau_tau2leg_dm{dm2}_Down",
+                f"(ditaujet_tau2_decayMode == {dm2}) ?"
+                "weight_trgSF_tauTau_Central - SF_tauTau_errUp"
+                ": weight_trgSF_tauTau_Central",
+            )
+            for scale in ["Up", "Down"]:
                 dfBuilder.df = dfBuilder.df.Define(
-                    f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_Down",
-                    f"(ditaujet_tau1_decayMode == {dm1} && ditaujet_tau2_decayMode == {dm2}) ?"
-                    "weight_trgSF_tauTau_Central - SF_tauTau_errUp"
-                    ": weight_trgSF_tauTau_Central",
+                    f"weight_trgSF_tauTau_tau2leg_dm{dm2}_{scale}_rel",
+                    f"weight_trgSF_tauTau_tau2leg_dm{dm2}_{scale}/weight_trgSF_tauTau_Central",
                 )
-                for scale in ["Up", "Down"]:
-                    dfBuilder.df = dfBuilder.df.Define(
-                        f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_{scale}_rel",
-                        f"weight_trgSF_tauTau_tauleg_dm{dm1}_dm{dm2}_{scale}/weight_trgSF_tauTau_Central",
-                    )
 
         dfBuilder.df = dfBuilder.df.Define(
             f"sfjeterr",
