@@ -150,6 +150,7 @@ def GetWeight(channels):
         "eTau": [
             "weight_tau1_EleSF_wp80iso_EleIDCentral",
             "weight_tau2_TauID_SF_Medium_Central",
+            "weight_trgSF_eTau_Central",
         ],  # theorically
         # 'muTau': ["weight_tau1_HighPt_MuonID_SF_RecoCentral", "weight_tau1_HighPt_MuonID_SF_TightIDCentral", "weight_tau1_MuonID_SF_RecoCentral", "weight_tau1_MuonID_SF_TightID_TrkCentral", "weight_tau1_MuonID_SF_TightRelIsoCentral","weight_tau2_TauID_SF_Medium_Central"],
         "muTau": [
@@ -157,10 +158,12 @@ def GetWeight(channels):
             "weight_tau1_HighPt_MuonID_SF_TightIDCentral",
             "weight_tau1_MuonID_SF_TightID_TrkCentral",
             "weight_tau2_TauID_SF_Medium_Central",
+            "weight_trgSF_muTau_Central",
         ],
         "tauTau": [
             "weight_tau1_TauID_SF_Medium_Central",
             "weight_tau2_TauID_SF_Medium_Central",
+            "weight_trgSF_tauTau_Central",
         ],
         # 'muMu': ["weight_tau1_HighPt_MuonID_SF_RecoCentral", "weight_tau1_HighPt_MuonID_SF_TightIDCentral", "weight_tau1_MuonID_SF_RecoCentral", "weight_tau1_MuonID_SF_TightID_TrkCentral", "weight_tau1_MuonID_SF_TightRelIsoCentral", "weight_tau2_HighPt_MuonID_SF_RecoCentral", "weight_tau2_HighPt_MuonID_SF_TightIDCentral", "weight_tau2_MuonID_SF_RecoCentral", "weight_tau2_MuonID_SF_TightID_TrkCentral", "weight_tau2_MuonID_SF_TightRelIsoCentral"],
         "muMu": [
@@ -170,18 +173,21 @@ def GetWeight(channels):
             "weight_tau2_HighPt_MuonID_SF_RecoCentral",
             "weight_tau2_HighPt_MuonID_SF_TightIDCentral",
             "weight_tau2_MuonID_SF_TightID_TrkCentral",
+            "weight_trgSF_muMueMu_Central",
         ],
         "eMu": [
             "weight_tau1_EleSF_wp80iso_EleIDCentral",
             "weight_tau2_HighPt_MuonID_SF_RecoCentral",
             "weight_tau2_HighPt_MuonID_SF_TightIDCentral",
             "weight_tau2_MuonID_SF_TightID_TrkCentral",
+            "weight_trgSF_muMueMu_Central",
         ],
         #'eMu': ["weight_tau1_EleSF_wp80iso_EleIDCentral","weight_tau2_HighPt_MuonID_SF_RecoCentral", "weight_tau2_HighPt_MuonID_SF_TightIDCentral", "weight_tau2_MuonID_SF_RecoCentral", "weight_tau2_MuonID_SF_TightID_TrkCentral", "weight_tau2_MuonID_SF_TightRelIsoCentral"],
         #'eMu': ["weight_tau1_MuonID_SF_RecoCentral","weight_tau1_HighPt_MuonID_SF_RecoCentral","weight_tau1_MuonID_SF_TightID_TrkCentral","weight_tau1_MuonID_SF_TightRelIsoCentral","weight_tau2_EleSF_wp80iso_EleIDCentral"]
         "eE": [
             "weight_tau1_EleSF_wp80iso_EleIDCentral",
             "weight_tau2_EleSF_wp80noiso_EleIDCentral",
+            "weight_trgSF_eE_Central",
         ],
     }
     weights_full_string = ""
@@ -591,10 +597,10 @@ def PrepareDfForHistograms(dfForHistograms):
     dfForHistograms.defineLeptonPreselection()
     dfForHistograms.defineApplicationRegions()
     # if not dfForHistograms.isData:
-    #     dfForHistograms.definePNetSFs()
-    #     defineTriggerWeights(dfForHistograms)
+    #     # dfForHistograms.definePNetSFs()
+    #     defineTriggersCentralWeights(dfForHistograms)
     #     if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
-    #         defineTriggerWeightsErrors(dfForHistograms)
+    #         defineTriggersWeightsErrors(dfForHistograms)
     dfForHistograms.defineCRs()
     dfForHistograms.defineCategories()
     dfForHistograms.defineQCDRegions()
