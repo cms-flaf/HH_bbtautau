@@ -206,8 +206,8 @@ def QCD_Estimation_symm(
     n_data_C = hist_data_C.Integral(0, hist_data_C.GetNbinsX() + 1)
     n_data_D = hist_data_D.Integral(0, hist_data_D.GetNbinsX() + 1)
     print(f"Initially Yield for data in OS AntiIso region is {key_B} is {n_data_B}")
-    print(f"Initially Yield for data in SS Iso region is{key_C} is {n_data_C}")
-    print(f"Initially Yield for data in SS AntiIso region is{key_D} is {n_data_D}")
+    print(f"Initially Yield for data in SS Iso region is {key_C} is {n_data_C}")
+    print(f"Initially Yield for data in SS AntiIso region is {key_D} is {n_data_D}")
     for sample in all_samples_list:
         if (
             sample == "data"
