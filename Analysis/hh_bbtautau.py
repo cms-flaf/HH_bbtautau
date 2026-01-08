@@ -30,6 +30,7 @@ WorkingPointsDeepFlav = {
     "Run3_2023BPix": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
 }
 
+
 def createInvMass(df):
     df = df.Define("tautau_m_vis", "static_cast<float>((tau1_p4+tau2_p4).M())")
     particleNet_mass = (
@@ -77,6 +78,7 @@ def createInvMass(df):
                 f"static_cast<float>((tau{tau_idx}_p4+{met_var}_p4).Mt())",
             )
     return df
+
 
 def createKeyFilterDict(global_params, period):
     filter_dict = {}
