@@ -969,3 +969,4 @@ pt_HH:
   use_log_x: False
   use_log_y: False
   max_y_sf: 1.8
+  divide_by_bin_width: True
