@@ -964,7 +964,7 @@ deltaPhi_Htt_Hbb:
 
 pt_HH:
   x_bins: "200|0:1000"
-  x_title: p_{T}(bb)(GeV)
+  x_title: p_{T}(HH) (GeV)
   y_title: "#frac{Events}{bin width} #left(#frac{1}{GeV}#right) "
   use_log_x: False
   use_log_y: False
