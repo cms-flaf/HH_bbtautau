@@ -672,7 +672,7 @@ nBJets:
   x_title: n_bJets
   y_title: Events
   use_log_y: False
-  max_y_sf: 1600
+  max_y_sf: 1.2
   divide_by_bin_width: False
 
 
