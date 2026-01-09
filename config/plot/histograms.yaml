@@ -956,7 +956,7 @@ deltaEta_Htt_Hbb:
 deltaPhi_Htt_Hbb:
   x_bins: "100|-3.2:3.2"
   x_rebin: [ -3.2, -2.88, -2.56, -2.24, -1.92, -1.6, -1.28, -0.96, -0.64, -0.32, -0.0, 0.32, 0.64, 0.96, 1.28, 1.6, 1.92, 2.24, 2.56, 2.88, 3.2 ]
-  x_title: \Delta(\phi_{H\tau\tau}, \phi_{H\b\b})
+  x_title: \Delta\phi(H_{\tau\tau}, H_{bb})
   y_title: Events
   use_log_y: False
   max_y_sf: 1.8
