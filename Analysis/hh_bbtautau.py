@@ -71,7 +71,7 @@ def createInvMass(df):
     )
     df = df.Define("dR_tautau", "ROOT::Math::VectorUtil::DeltaR(tau1_p4, tau2_p4)")
     df = df.Define("dR_bb", "ROOT::Math::VectorUtil::DeltaR(b1_p4, b2_p4)")
-
+    
     df = df.Define("Htt_p4", "(tau1_p4 + tau2_p4)")
     df = df.Define("Hbb_p4", "(b1_p4 + b2_p4)")
 
