@@ -30,6 +30,7 @@ WorkingPointsDeepFlav = {
     "Run3_2023BPix": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
 }
 
+
 def createInvMass(df):
     df = df.Define("tautau_m_vis", "static_cast<float>((tau1_p4+tau2_p4).M())")
     particleNet_mass = (
@@ -70,16 +71,18 @@ def createInvMass(df):
     )
     df = df.Define("dR_tautau", "ROOT::Math::VectorUtil::DeltaR(tau1_p4, tau2_p4)")
     df = df.Define("dR_bb", "ROOT::Math::VectorUtil::DeltaR(b1_p4, b2_p4)")
-    
+
     df = df.Define("Htt_p4", "(tau1_p4 + tau2_p4)")
     df = df.Define("Hbb_p4", "(b1_p4 + b2_p4)")
 
     df = df.Define("dR_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaR(Htt_p4, Hbb_p4)")
     df = df.Define("deltaEta_Htt_Hbb", "(Htt_p4.Eta() - Hbb_p4.Eta())")
-    df = df.Define("deltaPhi_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(Htt_p4, Hbb_p4)")
+    df = df.Define(
+        "deltaPhi_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(Htt_p4, Hbb_p4)"
+    )
 
-    df = df.Define("pt_HH",   "((Htt_p4 + Hbb_p4).Pt())")
-    
+    df = df.Define("pt_HH", "((Htt_p4 + Hbb_p4).Pt())")
+
     for tau_idx in [1, 2]:
         for met_var in ["met", "metnomu", "met_nano"]:
             df = df.Define(
@@ -87,6 +90,7 @@ def createInvMass(df):
                 f"static_cast<float>((tau{tau_idx}_p4+{met_var}_p4).Mt())",
             )
     return df
+
 
 def createKeyFilterDict(global_params, period):
     filter_dict = {}
