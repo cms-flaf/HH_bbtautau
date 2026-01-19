@@ -28,6 +28,7 @@ Muon_observables = [
     "Muon_highPtId",
     "Muon_tightId",
     "Muon_mediumId",
+    "Muon_looseId",
 ]
 Electron_observables = [
     "Electron_mvaNoIso_WP80",
@@ -212,6 +213,7 @@ def addAllVariables(
     applyTriggerFilter,
     global_params,
     channels,
+    dataset_cfg,
 ):
     dfw.Apply(AnaBaseline.RecoHttCandidateSelection, global_params)
     dfw.Apply(AnaBaseline.RecoJetSelection, global_params["era"])
