@@ -1,6 +1,8 @@
+import os
 import AnaProd.baseline as AnaBaseline
 import FLAF.Common.BaselineSelection as CommonBaseline
 from Corrections.Corrections import Corrections
+import ROOT
 
 loadTF = True
 loadHHBtag = True
@@ -194,6 +196,32 @@ defaultColToSave = [
     "DeepMETResponseTune_phi",
     "PV_npvs",
 ]
+
+
+initialized = False
+
+
+def Initialize(setup, dataset_name):
+    global initialized
+    if not initialized:
+        header_path_HHbTag = "include/HHbTagScores.h"
+        lib_path = os.path.join(
+            os.environ["FLAF_CMSSW_BASE"],
+            "lib",
+            os.environ["FLAF_CMSSW_ARCH"],
+            "libHHToolsHHbtag.so",
+        )
+        load_result = ROOT.gSystem.Load(lib_path)
+        if load_result != 0:
+            raise RuntimeError(
+                f"HHBtagWrapper failed to load with status {load_result}"
+            )
+        ROOT.gInterpreter.Declare(f'#include "{header_path_HHbTag}"')
+        ROOT.gROOT.ProcessLine(
+            f'HHBtagWrapper::Initialize("{os.environ["CMSSW_BASE"]}/src/HHTools/HHbtag/models/", 3)'
+        )
+
+        initialized = True
 
 
 def getDefaultColumnsToSave(isData):

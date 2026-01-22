@@ -2,6 +2,7 @@ anaTupleDef: AnaProd/anaTupleDef.py
 histTupleDef: Analysis/histTupleDef.py
 analysis_import: Analysis.hh_bbtautau
 phys_model: BaseModel
+use_cmssw_env_AnaTupleProduction: true
 signal_types:
   - HHnonRes
   # - GluGluToRadion
