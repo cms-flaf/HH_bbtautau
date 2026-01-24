@@ -71,7 +71,7 @@ JetObservables = [
     "hfcentralEtaStripSize",
     "hfsigmaEtaEta",
     "hfsigmaPhiPhi",
-    "jetId",
+    # "jetId",
     "muEF",
     "muonSubtrFactor",
     "nConstituents",
@@ -99,6 +99,9 @@ JetObservables = [
     "ptRes",
     "idbtagPNetB",
     "HHbtag",
+    "passJetIdTight",
+    "passJetIdTightLepVeto",
+    "isInsideVetoRegion",
 ]
 JetObservablesMC = ["hadronFlavour", "partonFlavour"]
 FatJetObservables = [
@@ -243,6 +246,8 @@ def addAllVariables(
     channels,
     dataset_cfg,
 ):
+    dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
+    dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(AnaBaseline.RecoHttCandidateSelection, global_params)
     dfw.Apply(AnaBaseline.RecoJetSelection, global_params["era"])
     dfw.Apply(AnaBaseline.ThirdLeptonVeto)
@@ -250,8 +255,6 @@ def addAllVariables(
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
     dfw.Apply(AnaBaseline.VBFJetSelection)
-    dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
-    dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
     jet_obs = []
