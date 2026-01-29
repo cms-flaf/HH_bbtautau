@@ -233,22 +233,10 @@ VBFHHto2B2Tau:
 Data:
   name: "Data"
   datasets:
-    - EGamma0_Run2023D_v1
-    - EGamma0_Run2023D_v2
-    - EGamma1_Run2023D_v1
-    - EGamma1_Run2023D_v2
-    - Muon0_Run2023D_v1
-    - Muon0_Run2023D_v2
-    - Muon1_Run2023D_v1
-    - Muon1_Run2023D_v2
-    - MuonEG_Run2023D_v1
-    - MuonEG_Run2023D_v2
-    - Tau_Run2023D_v1
-    - Tau_Run2023D_v2
-
+    - TO ADD
 
 custom_CI:
   name: "custom for CI and test purposes"
   color: "kAzure+10"
   datasets:
-    - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_0p00
+    - custom_CI
