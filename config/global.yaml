@@ -32,7 +32,7 @@ corrections:
   xs: { stage: AnaTuple }
   gen: { stage: AnaTuple }
   pu: { stages: [ AnaTuple ] }
-  MC: { stage: AnaTupleMerge }
+  base: { stage: AnaTupleMerge }
   tauID: { stage: HistTuple }
   tauES: { stage: AnaTuple }
   mu:
