@@ -189,7 +189,7 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
 def GetWeight(channels):
     weights_dict = {}
     weights_to_apply = [
-        "weight_MC_Lumi_pu"
+        "weight_base"
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
     trg_weights_dict = {
         "eTau": [
@@ -251,7 +251,7 @@ def GetWeight(channels):
     }
     weights_full_string = ""
     for channel in channels:
-        weights_list = ["weight_MC_Lumi_pu"]
+        weights_list = ["weight_base"]
         # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
         weights_list.extend(ID_weights_dict[channel])
 
