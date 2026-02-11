@@ -90,8 +90,7 @@ ROOT.gInterpreter.Declare("""
         }
         return sferr;
     }
-    """
-)
+    """)
 
 
 def get_scale_factor_error(eff_data, eff_mc, err_data, err_mc):
