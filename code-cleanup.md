@@ -1,32 +1,18 @@
-anaTupleDef: AnaProd/anaTupleDef.py
-histTupleDef: Analysis/histTupleDef.py
-analysis_import: Analysis.hh_bbtautau
-phys_model: BaseModel
-use_cmssw_env_AnaTupleProduction: true
+# Code Clean-Up
+### [**HH_bbtautau/config/global.yaml**](https://github.com/cms-flaf/HH_bbtautau/blob/96436eaf97a191bfde2f935d03cd1cdee69e77a2/config/global.yaml)
+
+```yaml
+https://github.com/cms-flaf/HH_bbtautau/blob/96436eaf97a191bfde2f935d03cd1cdee69e77a2/config/global.yaml#L6-L11
+
 signal_types:
-  - HHnonRes
+  - HHnonRes # We are now doing the Non-resonant study.
   # - GluGluToRadion
   # - GluGluToBulkGraviton
   # - VBFToRadion
   # - VBFToBulkGraviton
-genuineTau_SFtype:
-  eTau: dm
-  muTau: dm
-  tauTau: dm
-deepTauWPs:
-  eTau:
-    VSe: VVLoose
-    VSmu: Tight
-    VSjet: Medium
-  muTau:
-    VSe: VVLoose
-    VSmu: Tight
-    VSjet: Medium
-  tauTau:
-    VSe: VVLoose
-    VSmu: Tight
-    VSjet: Medium
+```
 
+```yaml
 corrections:
   lumi: { stage: AnaTuple }
   xs: { stage: AnaTuple }
@@ -74,56 +60,64 @@ mu_pt_for_definitions: "ScaRe" # here options are different: corr, nano, bsConst
 muonID_WP_for_triggerSF: "Tight" # only medium or tight for trigger SF, both iso and ID
 muIDWP: "Tight"
 muIsoWP: "Tight"
+  
+  
+ # need to apply any MET correction ? Jet and Tau coorection to MET
+ check this extraFormat 
+ we are missing recoil, DY Correction, 
+```
 
-variables:
-  - tau1_pt
-  - tau1_eta
-  - tau2_pt
-  - tau2_eta
-  - b1_pt
-  - b1_eta
-  - b2_pt
-  - b2_eta
-  - tautau_m_vis
-  - bb_m_vis
-  - met_pt
-  - nBJets
-  - nJet
+```yaml
+triggers:
+  eTau: [ singleEle, etau]
+  muTau: [singleMu, mutau]
+  tauTau: [ditau]
+  eE: [singleEle]
+  eMu: [singleEle, singleMu]
+  muMu: [singleMu]
 
-treeName: "Events"
+hist_triggers:
+  eTau:
+    default: ( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region)  || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+    ~~Run2_2016 :  ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))
+    Run2_2016_HIPM :  ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))~~
+  muTau:
+    default: (( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region)  || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+  tauTau:
+    default: ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region)  || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ) )
+  eE:
+    default: (HLT_singleEle && SingleEle_region)
+  eMu:
+    default: ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
+  muMu:
+    default: (HLT_singleMu && SingleMu_region)
+```
 
+```yaml
+ # Right now we need only 5: baseline, inclusive, res1b, res2b and boosted - the rest should be removed
+ 
 region: SR
 region_default: SR
 custom_regions: QCDRegions
 custom_categories: ""
 custom_subcategories: [ ]
 
-plot_wantQCD: true
-
-channelSelection:
-  - eTau
-  - muTau
-  - tauTau
-  - eE
-  - eMu
-  - muMu
-
-met_type: "PuppiMET"
-deepTauVersion: 2p5
-channels: ""
 QCDRegions:
   - OS_Iso
   - SS_Iso
   - OS_AntiIso
   - SS_AntiIso
+
 boosted_categories:
   # - boosted_cat2
   # - boosted_cat3
   # - boosted_masswindow
   # - boosted_cat2_masswindow
   - boosted_cat3_masswindow
+  
 categories:
   - inclusive
+  ~~ - btag_shape ~~
   - baseline
   - boosted_baseline
   # - boosted_baseline_cat3
@@ -152,79 +146,9 @@ categories:
   # - res2b_cat3_masswindow
   # - res1b_cat3_masswindow
   # - res0b_cat3_masswindow
-  - vbf_inclusive
-
-requireHbbJets: True
-storeExtraJets: False
-storeVBFJets: True
-deepTauYears:
-  v2p1: 2017
-  v2p5: 2018
-
-all_channels:
-  - eTau
-  - muTau
-  - muMu
-  - tauTau
-  - eE
-  - eMu
-
-gen_channels:
-  eTau:
-    - 3
-    - 5
-  muTau:
-    - 4
-    - 5
-  tauTau:
-    - 5
-    - 5
-
-channelDefinition:
-  eTau: 13
-  muTau: 23
-  tauTau: 33
-  eE: 11
-  eMu: 12
-  muMu: 22
-
-triggers:
-  eTau: [ singleEle, etau ]
-  muTau: [ singleMu, mutau ]
-  tauTau: [ ditau, ditaujet ]
-  eE: [ singleEle ]
-  eMu: [ singleMu ]
-  muMu: [ singleMu ]
-
-hist_triggers:
-  eTau:
-    default: ( HLT_singleEle && Legacy_region )  # ( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
-  muTau:
-    default: (HLT_singleMu && Legacy_region)  # (( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
-  tauTau:
-    # default: ( ( (HLT_ditau || HLT_ditaujet) && Legacy_Region ) ) # || (HLT_MET && !(Legacy_Region) ) )
-    default: (HLT_ditau && Legacy_region)  # ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ) )
-  eE:
-    default: (HLT_singleEle && SingleEle_region)
-  eMu:
-    default: (HLT_singleMu && SingleMu_region)  # ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
-  muMu:
-    default: (HLT_singleMu && SingleMu_region)
-
-# https://github.com/LLRCMS/KLUBAnalysis/blob/10821fdc58f6bdb68b0142740f05b8c9f6e23bf9/config/selectionCfg_MuTau_UL18.cfg
-# https://github.com/LLRCMS/KLUBAnalysis/blob/10821fdc58f6bdb68b0142740f05b8c9f6e23bf9/config/selectionCfg_TauTau_UL18.cfg
-# https://github.com/LLRCMS/KLUBAnalysis/blob/10821fdc58f6bdb68b0142740f05b8c9f6e23bf9/test/skimNtuple_HHbtag.cpp#L5199
-
-application_regions:
-  SingleMu_region: ((tau1_pt > {mu_th}  && abs(tau1_eta) < 2.4) ||  (tau2_pt > {mu_th}  && abs(tau2_eta) < 2.4))
-  CrossMuTau_region: (tau1_pt > 22 && abs(tau1_eta) < 2.1 && tau2_pt > 32 && abs(tau2_eta) < 2.1)
-  SingleEle_region: ((tau1_pt > {ele_th}  && abs(tau1_eta) < 2.5) || (tau2_pt > {ele_th}  && abs(tau2_eta) < 2.5))
-  CrossEleTau_region: (tau1_pt > 25 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1)
-  diTau_region: (tau1_pt > 40 && abs(tau1_eta) < 2.1 && tau2_pt > 40 && abs(tau2_eta) < 2.1)
-  diTauJet_region: (tau1_pt > 35 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1 )  # && Jet_pt>60)
-  SingleTau_region: (((tau1_pt > {tau_th} && abs(tau1_eta) < 2.1) || (tau2_pt > {tau_th} && abs(tau2_eta) < 2.1)) )
-  # MET_region: (!(Legacy_region) && !(SingleTau_region))
-
+ 
+ we need to have the VBF category, VBF inclusive, basic one. 
+ 
 category_definition:
   # w/o mass window
 
@@ -245,8 +169,6 @@ category_definition:
   boosted_cat3: "!(res2b_cat3) && boosted"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
   res1b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 1"
   res0b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 0"
-
-  vbf_inclusive: "nVBFJet >= 2"
 
   # w/ mass window
   # boosted_baseline: "(SelectedFatJet_p4[fatJet_sel].size()>0)" (commenting this out because it has been defined under w/o mass window already)
@@ -269,6 +191,11 @@ category_definition:
   boosted_cat3_masswindow: "!(res2b_cat3_masswindow) && boosted_masswindow"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
   res1b_cat3_masswindow: "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 1 && {region}"
   res0b_cat3_masswindow: "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 0 && {region}"
+
+```
+
+```yaml
+check the trigger config, could be duplication
 
 singleMu_th:
   "Run2_2016": 26
@@ -320,43 +247,11 @@ muTau_th:
   "Run3_2023":
   "Run3_2023BPix":
 
-btag_wps:
-  res2b: Medium
-  res1b: Medium
-  boosted: Loose
+```
 
-mass_cut_limits:
-  bb_m_vis:
-    boosted:
-      - 30
-      - 450
-    other:
-      - 40
-      - 270
-  tautau_m_vis:
-    - 15
-    - 130
+```yaml
+Uncertatinties are in another PR.
 
-scales:
-  - Up
-  - Down
-
-TTCR_mass_limits:
-  eTau:
-    - 15
-    - 130
-  muTau:
-    - 15
-    - 130
-  muMu:
-    - 70
-    - 100
-  tauTau:
-    - 15
-    - 130
-  eE:
-    - 70
-    - 100
 # preVFP == APV == HIPM
 unc_2018:
   - JES_BBEC1_2018
@@ -382,13 +277,16 @@ unc_2016postVFP:
   - JES_EC2_2016postVFP
   - JES_HF_2016postVFP
   - JES_RelativeSample_2016postVFP
+  - JES_RelativeSample_2016postVFP
+```
 
+```yaml
 uncs_to_exclude:
   Run3_2022: [ ]
   Run3_2022EE: [ ]
   Run3_2023: [ ]
   Run3_2023BPix: [ ]
-  Run2_2018:
+  ~~Run2_2018:
     - JES_BBEC1_2017
     - JES_Absolute_2017
     - JES_EC2_2017
@@ -406,8 +304,8 @@ uncs_to_exclude:
     - JES_RelativeSample_2016postVFP
   Run2_2017:
     - JES_BBEC1_2018
-    - JES_Absolute_2018
-    - JES_EC2_2018
+    - JES_Ab~~solute_2018
+    ~~- JES_EC2_2018
     - JES_HF_2018
     - JES_RelativeSample_2018
     - JES_BBEC1_2016preVFP
@@ -451,122 +349,80 @@ uncs_to_exclude:
     - JES_Absolute_2016postVFP
     - JES_EC2_2016postVFP
     - JES_HF_2016postVFP
-    - JES_RelativeSample_2016postVFP
-bjet_vars:
-  - b1_pt
-  - b2_pt
-  - b1_eta
-  - b2_eta
+    - JES_RelativeSample_2016postVFP~~
+```
 
-FatJetObservables:
-  - area
-  - btagCSVV2
-  - btagDDBvLV2
-  - btagDeepB
-  - btagHbb
-  - deepTagMD_HbbvsQCD
-  - deepTagMD_ZHbbvsQCD
-  - deepTagMD_ZbbvsQCD
-  - deepTagMD_bbvsLight
-  - deepTag_H
-  - jetId
-  - msoftdrop
-  - nBHadrons
-  - nCHadrons
-  - nConstituents
-  - rawFactor
-  - particleNetMD_QCD
-  - particleNetMD_Xbb
-  - particleNet_HbbvsQCD
-  - particleNet_mass
-  - particleNet_QCD
-  - particleNet_XbbVsQCD
-  - particleNetLegacy_QCD
-  - particleNetLegacy_Xbb
-  - particleNetLegacy_mass
-  - particleNetWithMass_QCD
-  - particleNetWithMass_HbbvsQCD
-  - particleNet_massCorr
-  - p4
-  - pt
-  - eta
-  - phi
-  - mass
+**Analysis/hh_bbtautau.py**
 
-var_only_boosted:
-  - bbtautau_mass
-  - SelectedFatJet_area_boosted
-  - SelectedFatJet_btagCSVV2_boosted
-  - SelectedFatJet_btagDDBvLV2_boosted
-  - SelectedFatJet_btagDeepB_boosted
-  - SelectedFatJet_btagHbb_boosted
-  - SelectedFatJet_deepTagMD_HbbvsQCD_boosted
-  - SelectedFatJet_deepTagMD_ZHbbvsQCD_boosted
-  - SelectedFatJet_deepTagMD_ZbbvsQCD_boosted
-  - SelectedFatJet_deepTagMD_bbvsLight_boosted
-  - SelectedFatJet_deepTag_H_boosted
-  - SelectedFatJet_jetId_boosted
-  - SelectedFatJet_msoftdrop_boosted
-  - SelectedFatJet_nBHadrons_boosted
-  - SelectedFatJet_nCHadrons_boosted
-  - SelectedFatJet_nConstituents_boosted
-  - SelectedFatJet_rawFactor_boosted
-  - SelectedFatJet_particleNetMD_QCD_boosted
-  - SelectedFatJet_particleNetMD_Xbb_boosted
-  - SelectedFatJet_particleNet_HbbvsQCD_boosted
-  - SelectedFatJet_particleNet_mass_boosted
-  - SelectedFatJet_particleNet_QCD_boosted
-  - SelectedFatJet_particleNet_XbbVsQCD_boosted
-  - SelectedFatJet_particleNetLegacy_QCD_boosted
-  - SelectedFatJet_particleNetLegacy_Xbb_boosted
-  - SelectedFatJet_particleNetLegacy_mass_boosted
-  - SelectedFatJet_particleNetWithMass_QCD_boosted
-  - SelectedFatJet_particleNetWithMass_HbbvsQCD_boosted
-  - SelectedFatJet_particleNet_massCorr_boosted
-  - SelectedFatJet_p4_boosted
-  - SelectedFatJet_pt_boosted
-  - SelectedFatJet_eta_boosted
-  - SelectedFatJet_phi_boosted
-  - SelectedFatJet_mass_boosted
-  - SelectedFatJet_particleNetLegacy_mass_boosted
-  - SelectedFatJet_mass_boosted
-  - SelectedFatJet_msoftdrop_boosted
-  - bb_m_vis_softdrop
-  - bb_m_vis_pnet
-  - bb_m_vis_fj
+```python
+if __name__ == "__main__":
+    sys.path.append(os.environ["ANALYSIS_PATH"])
 
-unc_to_not_consider_boosted:
-  - PUJetID
-  - JER
-  - JES_FlavorQCD
-  - JES_RelativeBal
-  - JES_HF
-  - JES_BBEC1
-  - JES_EC2
-  - JES_Absolute
-  - JES_Total
-  - JES_BBEC1_2018
-  - JES_Absolute_2018
-  - JES_EC2_2018
-  - JES_HF_2018
-  - JES_RelativeSample_2018
-  - bTagSF_Loose_btagSFbc_correlated
-  - bTagSF_Loose_btagSFbc_uncorrelated
-  - bTagSF_Loose_btagSFlight_correlated
-  - bTagSF_Loose_btagSFlight_uncorrelated
-  - bTagSF_Medium_btagSFbc_correlated
-  - bTagSF_Medium_btagSFbc_uncorrelated
-  - bTagSF_Medium_btagSFlight_correlated
-  - bTagSF_Medium_btagSFlight_uncorrelated
-  - bTagSF_Tight_btagSFbc_correlated
-  - bTagSF_Tight_btagSFbc_uncorrelated
-  - bTagSF_Tight_btagSFlight_correlated
-  - bTagSF_Tight_btagSFlight_uncorrelated
-  - bTagShapeSF_lf
-  - bTagShapeSF_hf
-  - bTagShapeSF_lfstats1
-  - bTagShapeSF_lfstats2
-  - bTagShapeSF_hfstats1
-  - bTagShapeSF_hfstats2
-  - bTagShapeSF_cferr1
-  - bTagShapeSF_cferr2
+~~if __name__ == "__main__":
+    sys.path.append(os.environ["ANALYSIS_PATH"])
+    sys.path.append(os.environ["ANALYSIS_PATH"])~~ 
+    
+
+ def defineLeptonPreselection(self):  # needs channel def
+        ~~if self.period == "Run2_2016" or self.period == "Run2_2016_HIPM":
+            self.df = self.df.Define(
+                "eleEta2016",
+                "if(eE) {return (abs(tau1_eta) < 2 && abs(tau2_eta)<2); } if(eTau||eMu) {return (abs(tau1_eta) < 2); } return true;",
+            )
+        else:
+            self.df = self.df.Define("eleEta2016", "return true;")~~
+        self.df = self.df.Define(
+            "muon1_tightId",
+            "if(muTau || muMu) {return (tau1_Muon_tightId && tau1_Muon_pfRelIso04_all < 0.15); } return true;",
+        )
+        self.df = self.df.Define(
+            "muon2_tightId",
+            "if(muMu || eMu) {return (tau2_Muon_tightId && tau2_Muon_pfRelIso04_all < 0.3);} return true;",
+        )
+        self.df = self.df.Define(
+            "firstele_mvaIso",
+            "if(eMu || eE){return tau1_Electron_mvaIso_WP80==1 && tau1_Electron_pfRelIso03_all < 0.15 ; } return true; ",
+        )
+        self.df = self.df.Define(
+            "tau1_iso_medium",
+            f"if(tauTau) return (tau1_idDeepTau{self.deepTauYear()}v{self.deepTauVersion}VSjet >= {Utilities.WorkingPointsTauVSjet.Medium.value}); return true;",
+        )
+        if f"tau1_gen_kind" not in self.df.GetColumnNames():
+            self.df = self.df.Define("tau1_gen_kind", "if(isData) return 5; return 0;")
+        if f"tau2_gen_kind" not in self.df.GetColumnNames():
+            self.df = self.df.Define("tau2_gen_kind", "if(isData) return 5; return 0;")
+        self.df = self.df.Define(
+            "tau_true", f"""(tau1_gen_kind==5 && tau2_gen_kind==5)"""
+        )
+        self.df = self.df.Define(
+            f"lepton_preselection",
+            "~~eleEta2016~~ && tau1_iso_medium && muon1_tightId && muon2_tightId && firstele_mvaIso",
+        )
+
+```
+
+Analysis/GetCrossWeights.py
+
+```python
+def defineTriggerWeightsErrors(dfBuilder):
+	
+	.
+	.
+	.
+	
+	~~if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_cross_mu_Up", " 1.f ")
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_cross_mu_Down", " 1.f ")
+	        dfBuilder.df = dfBuilder.df.Define(
+	            f"weight_trigSF_SL_mu_Up",
+	            "if ((HLT_singleMu) && Legacy_region ) {return weight_tau1_TrgSF_singleMuUp_rel*weight_tau1_TrgSF_singleMuCentral;} return 1.f; ",
+	        )
+	        dfBuilder.df = dfBuilder.df.Define(
+	            f"weight_trigSF_SL_mu_Down",
+	            "if ((HLT_singleMu) && Legacy_region ) {return weight_tau1_TrgSF_singleMuUp_rel*weight_tau1_TrgSF_singleMuCentral;} return 1.f; ",
+	        )
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_mu_Up", " 1.f; ")
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_mu_Down", " 1.f; ")
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_mutau_tau_Up", "  1.f; ")
+	        dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_mutau_tau_Down", "  1.f; ")~~
+```
