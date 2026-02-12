@@ -124,7 +124,6 @@ boosted_categories:
   - boosted_cat3_masswindow
 categories:
   - inclusive
-  - btag_shape
   - baseline
   - boosted_baseline
   # - boosted_baseline_cat3
@@ -153,6 +152,7 @@ categories:
   # - res2b_cat3_masswindow
   # - res1b_cat3_masswindow
   # - res0b_cat3_masswindow
+  - vbf_inclusive
 
 requireHbbJets: True
 storeExtraJets: False
@@ -199,8 +199,6 @@ triggers:
 hist_triggers:
   eTau:
     default: ( HLT_singleEle && Legacy_region )  # ( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
-    Run2_2016: ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))
-    Run2_2016_HIPM: ( ( (HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) )))
   muTau:
     default: (HLT_singleMu && Legacy_region)  # (( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
   tauTau:
@@ -247,6 +245,8 @@ category_definition:
   boosted_cat3: "!(res2b_cat3) && boosted"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
   res1b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 1"
   res0b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 0"
+
+  vbf_inclusive: "nVBFJet >= 2"
 
   # w/ mass window
   # boosted_baseline: "(SelectedFatJet_p4[fatJet_sel].size()>0)" (commenting this out because it has been defined under w/o mass window already)

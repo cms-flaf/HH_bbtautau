@@ -3,10 +3,6 @@ import ROOT
 if __name__ == "__main__":
     sys.path.append(os.environ["ANALYSIS_PATH"])
 
-if __name__ == "__main__":
-    sys.path.append(os.environ["ANALYSIS_PATH"])
-    sys.path.append(os.environ["ANALYSIS_PATH"])
-
 from FLAF.Common.HistHelper import *
 from Analysis.GetCrossWeights import *
 
@@ -515,13 +511,6 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             )
 
     def defineLeptonPreselection(self):  # needs channel def
-        if self.period == "Run2_2016" or self.period == "Run2_2016_HIPM":
-            self.df = self.df.Define(
-                "eleEta2016",
-                "if(eE) {return (abs(tau1_eta) < 2 && abs(tau2_eta)<2); } if(eTau||eMu) {return (abs(tau1_eta) < 2); } return true;",
-            )
-        else:
-            self.df = self.df.Define("eleEta2016", "return true;")
         self.df = self.df.Define(
             "muon1_tightId",
             "if(muTau || muMu) {return (tau1_Muon_tightId && tau1_Muon_pfRelIso04_all < 0.15); } return true;",
@@ -547,7 +536,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         )
         self.df = self.df.Define(
             f"lepton_preselection",
-            "eleEta2016 && tau1_iso_medium && muon1_tightId && muon2_tightId && firstele_mvaIso",
+            "tau1_iso_medium && muon1_tightId && muon2_tightId && firstele_mvaIso",
         )
 
     def defineQCDRegions(self):
