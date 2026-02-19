@@ -3,6 +3,18 @@ histTupleDef: Analysis/histTupleDef.py
 analysis_import: Analysis.hh_bbtautau
 phys_model: BaseModel
 use_cmssw_env_AnaTupleProduction: true
+
+WLCGFileSystem:
+  remotePathCacheHost: cms-flaf.cern.ch
+  remotePathCachePort: 5000
+  localPathCacheValidity: 600
+  verbose: 0
+
+nEventsPerFile:
+  data: 1000000
+  signals: 100000
+  backgrounds: 100000
+
 signal_types:
   - HHnonRes
   # - GluGluToRadion
