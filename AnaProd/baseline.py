@@ -229,9 +229,11 @@ def ExtraRecoJetSelection(df, era):
     )
     return df
 
+
 def ExtraTauSelection(df):
     df = df.Define(
-        "ExtraTau_sel", "RemoveOverlaps(Tau_p4, Tau_B0, {HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}, 0.5)"
+        "ExtraTau_sel",
+        "RemoveOverlaps(Tau_p4, Tau_B0, {HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}, 0.5)",
     )
     return df
 

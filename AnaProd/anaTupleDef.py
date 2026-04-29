@@ -206,6 +206,7 @@ defaultColToSave = [
 
 initialized = False
 
+
 def Initialize(setup, dataset_name):
     global initialized
     if not initialized:
@@ -235,13 +236,19 @@ def getDefaultColumnsToSave(isData):
         colToSave.extend(["Pileup_nTrueInt"])
     return colToSave
 
+
 def defineExtraTauVariables(dfw, isData):
     dfw.DefineAndAppend(f"ExtraTau_seedingJet_valid", "Tau_jetIdx[ExtraTau_sel] >= 0")
-    dfw.Define("ExtraTau_seedingJet_p4", "Take(Jet_p4, Tau_jetIdx[ExtraTau_sel], LorentzVectorM())")
+    dfw.Define(
+        "ExtraTau_seedingJet_p4",
+        "Take(Jet_p4, Tau_jetIdx[ExtraTau_sel], LorentzVectorM())",
+    )
 
     for var in ["pt", "eta", "phi", "mass"]:
         dfw.DefineAndAppend(f"ExtraTau_{var}", f"v_ops::{var}(Tau_p4[ExtraTau_sel])")
-        dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}", f"v_ops::{var}(ExtraTau_seedingJet_p4)")
+        dfw.DefineAndAppend(
+            f"ExtraTau_seedingJet_{var}", f"v_ops::{var}(ExtraTau_seedingJet_p4)"
+        )
     dfw.DefineAndAppend("ExtraTau_charge", "Tau_charge[ExtraTau_sel]")
 
     for var in [
@@ -252,18 +259,21 @@ def defineExtraTauVariables(dfw, isData):
         "btagPNetQvG",
         "btagPNetTauVJet",
     ]:
-        dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}",
-                            f"Take(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1.f)")
+        dfw.DefineAndAppend(
+            f"ExtraTau_seedingJet_{var}",
+            f"Take(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1.f)",
+        )
 
     for var in deepTauScores:
-        dfw.DefineAndAppend(f'ExtraTau_{var}', f'Tau_{var}[ExtraTau_sel]')
+        dfw.DefineAndAppend(f"ExtraTau_{var}", f"Tau_{var}[ExtraTau_sel]")
 
     if not isData:
-        dfw.DefineAndAppend('ExtraTau_gen_kind', 'Tau_genPartFlav[ExtraTau_sel]')
+        dfw.DefineAndAppend("ExtraTau_gen_kind", "Tau_genPartFlav[ExtraTau_sel]")
         for var in ["partonFlavour", "hadronFlavour"]:
-            dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}",
-                            f"TakeAndCast(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1)")
-
+            dfw.DefineAndAppend(
+                f"ExtraTau_seedingJet_{var}",
+                f"TakeAndCast(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1)",
+            )
 
 
 def addAllVariables(
