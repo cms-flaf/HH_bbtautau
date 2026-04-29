@@ -229,10 +229,16 @@ def ExtraRecoJetSelection(df, era):
     )
     return df
 
+def ExtraTauSelection(df):
+    df = df.Define(
+        "ExtraTau_sel", "RemoveOverlaps(Tau_p4, Tau_B0, {HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}, 0.5)"
+    )
+    return df
+
 
 def ApplyJetSelection(df):
     return df.Filter(
-        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1 || HttCandidate.channel() == Channel::tauTau",
+        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1",
         "Reco bjet candidates",
     )
 

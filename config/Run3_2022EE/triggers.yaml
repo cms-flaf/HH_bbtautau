@@ -155,6 +155,41 @@ singleEle:
         2022_Summer22EE: "Electron-HLT-{}Eff"
       jsonTRGcorrection_elepath: "HLT_SF_Ele30_TightID"
 
+ditau_monitoring:
+  channels:
+    - muTau
+  path:
+    - HLT_IsoMu24_eta2p1_MediumDeepTauPFTauHPS30_L2NN_eta2p1_CrossL1
+  legs:
+    - offline_obj:
+        cut: "{obj}_legType == Leg::mu && {obj}_pt > 26"
+      online_obj:
+        cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
+      doMatching: True
+    - offline_obj:
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 40 && abs({obj}_eta) < 2.1"
+      online_obj:
+        cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&(1<<23))!=0
+      dRMatching: 0.4
+      doMatching: True
+
+ditaujet_monitoring:
+  channels:
+    - muTau
+  path:
+    - HLT_IsoMu24_eta2p1_MediumDeepTauPFTauHPS30_L2NN_eta2p1_PFJet60_CrossL1
+  legs:
+    - offline_obj:
+        cut: "{obj}_legType == Leg::mu && {obj}_pt > 26"
+      online_obj:
+        cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
+      doMatching: True
+    - offline_obj:
+        cut: "{obj}_legType == Leg::tau && {obj}_pt > 35 && abs({obj}_eta) < 2.1"
+      online_obj:
+        cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&(1<<20))!=0
+      doMatching: True
+
 ####################################
 # MET:
 #     channels:

@@ -10,20 +10,21 @@ lepton_legs = ["tau1", "tau2"]
 offline_legs = ["tau1", "tau2", "b1", "b2"]
 
 deepTauScores = [
-    "rawDeepTau2017v2p1VSe",
-    "rawDeepTau2017v2p1VSmu",
-    "rawDeepTau2017v2p1VSjet",
+    # "rawDeepTau2017v2p1VSe",
+    # "rawDeepTau2017v2p1VSmu",
+    # "rawDeepTau2017v2p1VSjet",
     "rawDeepTau2018v2p5VSe",
     "rawDeepTau2018v2p5VSmu",
     "rawDeepTau2018v2p5VSjet",
-    "idDeepTau2017v2p1VSe",
-    "idDeepTau2017v2p1VSjet",
-    "idDeepTau2017v2p1VSmu",
+    # "idDeepTau2017v2p1VSe",
+    # "idDeepTau2017v2p1VSjet",
+    # "idDeepTau2017v2p1VSmu",
     "idDeepTau2018v2p5VSe",
     "idDeepTau2018v2p5VSjet",
     "idDeepTau2018v2p5VSmu",
     "decayMode",
 ]
+
 Muon_observables = [
     "Muon_tkRelIso",
     "Muon_pfRelIso04_all",
@@ -32,6 +33,7 @@ Muon_observables = [
     "Muon_mediumId",
     "Muon_looseId",
 ]
+
 Electron_observables = [
     "Electron_mvaNoIso_WP80",
     "Electron_mvaIso_WP80",
@@ -104,6 +106,7 @@ JetObservables = [
     "isInsideVetoRegion",
 ]
 JetObservablesMC = ["hadronFlavour", "partonFlavour"]
+
 FatJetObservables = [
     "area",
     "chEmEF",
@@ -203,7 +206,6 @@ defaultColToSave = [
 
 initialized = False
 
-
 def Initialize(setup, dataset_name):
     global initialized
     if not initialized:
@@ -233,6 +235,36 @@ def getDefaultColumnsToSave(isData):
         colToSave.extend(["Pileup_nTrueInt"])
     return colToSave
 
+def defineExtraTauVariables(dfw, isData):
+    dfw.DefineAndAppend(f"ExtraTau_seedingJet_valid", "Tau_jetIdx[ExtraTau_sel] >= 0")
+    dfw.Define("ExtraTau_seedingJet_p4", "Take(Jet_p4, Tau_jetIdx[ExtraTau_sel], LorentzVectorM())")
+
+    for var in ["pt", "eta", "phi", "mass"]:
+        dfw.DefineAndAppend(f"ExtraTau_{var}", f"v_ops::{var}(Tau_p4[ExtraTau_sel])")
+        dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}", f"v_ops::{var}(ExtraTau_seedingJet_p4)")
+    dfw.DefineAndAppend("ExtraTau_charge", "Tau_charge[ExtraTau_sel]")
+
+    for var in [
+        "btagPNetB",
+        "btagPNetCvB",
+        "btagPNetCvL",
+        "btagPNetCvNotB",
+        "btagPNetQvG",
+        "btagPNetTauVJet",
+    ]:
+        dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}",
+                            f"Take(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1.f)")
+
+    for var in deepTauScores:
+        dfw.DefineAndAppend(f'ExtraTau_{var}', f'Tau_{var}[ExtraTau_sel]')
+
+    if not isData:
+        dfw.DefineAndAppend('ExtraTau_gen_kind', 'Tau_genPartFlav[ExtraTau_sel]')
+        for var in ["partonFlavour", "hadronFlavour"]:
+            dfw.DefineAndAppend(f"ExtraTau_seedingJet_{var}",
+                            f"TakeAndCast(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1)")
+
+
 
 def addAllVariables(
     dfw,
@@ -254,6 +286,7 @@ def addAllVariables(
     dfw.Apply(AnaBaseline.DefineHbbCand, global_params["met_type"])
     dfw.DefineAndAppend("Hbb_isValid", "HbbCandidate.has_value()")
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
+
     dfw.Apply(AnaBaseline.VBFJetSelection)
     dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
     dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
@@ -300,6 +333,10 @@ def addAllVariables(
             dfw.DefineAndAppend(f"VBFJet_{jetVar}", f"Jet_{jetVar}[VBFJet_B1]")
     else:
         dfw.DefineAndAppend(f"nVBFJets", f"Jet_p4[VBFJet_B1].size()")
+
+    if global_params["storeExtraTaus"]:
+        dfw.Apply(AnaBaseline.ExtraTauSelection)
+        defineExtraTauVariables(dfw, isData)
 
     if not isData:
         dfw.colToSave.append("nLHEPart")
@@ -587,7 +624,7 @@ def addAllVariables(
                 default="-1.f",
             )
 
-        # Save the lep* p4 and index directly to avoid using HwwCandidate in SF LUTs
+        # Save the lep* p4 and index directly to avoid using HttCandidate in SF LUTs
         dfw.Define(
             f"tau{leg_idx+1}_p4",
             f"HttCandidate.leg_type.size() > {leg_idx} ? HttCandidate.leg_p4.at({leg_idx}) : LorentzVectorM()",
