@@ -203,7 +203,7 @@ channelDefinition:
 
 triggers:
   eTau: [ singleEle, etau ]
-  muTau: [ singleMu, mutau, ditau_monitoring, ditaujet_monitoring ]
+  muTau: [ singleMu, mutau ]
   tauTau: [ ditau, ditaujet ]
   eE: [ singleEle ]
   eMu: [ singleMu ]

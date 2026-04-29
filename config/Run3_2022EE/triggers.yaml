@@ -156,6 +156,7 @@ singleEle:
       jsonTRGcorrection_elepath: "HLT_SF_Ele30_TightID"
 
 ditau_monitoring:
+  apply_corrections: false
   channels:
     - muTau
   path:
@@ -174,6 +175,7 @@ ditau_monitoring:
       doMatching: True
 
 ditaujet_monitoring:
+  apply_corrections: false
   channels:
     - muTau
   path:
