@@ -1,1 +1,8 @@
 triggerFile: config/Run3_2022EE/triggers.yaml
+triggers:
+  eTau: [ singleEle, etau ]
+  muTau: [ singleMu, mutau, ditau_monitoring, ditaujet_monitoring ]
+  tauTau: [ ditau, ditaujet ]
+  eE: [ singleEle ]
+  eMu: [ singleMu ]
+  muMu: [ singleMu ]
