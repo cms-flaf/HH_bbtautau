@@ -9,20 +9,16 @@ loadHHBtag = True
 lepton_legs = ["tau1", "tau2"]
 offline_legs = ["tau1", "tau2", "b1", "b2"]
 
-deepTauScores = [
-    # "rawDeepTau2017v2p1VSe",
-    # "rawDeepTau2017v2p1VSmu",
-    # "rawDeepTau2017v2p1VSjet",
+tauObservables = [
     "rawDeepTau2018v2p5VSe",
     "rawDeepTau2018v2p5VSmu",
     "rawDeepTau2018v2p5VSjet",
-    # "idDeepTau2017v2p1VSe",
-    # "idDeepTau2017v2p1VSjet",
-    # "idDeepTau2017v2p1VSmu",
     "idDeepTau2018v2p5VSe",
     "idDeepTau2018v2p5VSjet",
     "idDeepTau2018v2p5VSmu",
     "decayMode",
+    "decayModePNet",
+    "decayModeUParT",
 ]
 
 Muon_observables = [
@@ -264,7 +260,7 @@ def defineExtraTauVariables(dfw, isData):
             f"Take(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1.f)",
         )
 
-    for var in deepTauScores:
+    for var in tauObservables:
         dfw.DefineAndAppend(f"ExtraTau_{var}", f"Tau_{var}[ExtraTau_sel]")
 
     if not isData:
@@ -548,12 +544,12 @@ def addAllVariables(
                 default="-1.f",
             )
 
-        for deepTauScore in deepTauScores:
+        for tau_obs in tauObservables:
             LegVar(
-                deepTauScore,
-                f"Tau_{deepTauScore}.at(HttCandidate.leg_index[{leg_idx}])",
+                tau_obs,
+                f"Tau_{tau_obs}.at(HttCandidate.leg_index[{leg_idx}])",
                 var_cond=f"HttCandidate.leg_type[{leg_idx}] == Leg::tau",
-                default="-1.f",
+                default="0",
             )
         for muon_obs in Muon_observables:
             LegVar(
