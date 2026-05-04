@@ -306,13 +306,19 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             f"SelectedFatJet_particleNet_MD_JetTagger_boosted_vec",
             f"SelectedFatJet_particleNet_MD_JetTagger[fatJet_sel]",
         )
+        # Run 3
+        self.df = self.df.Define(
+            "SelectedFatJet_particleNet_XbbVsQCD_boosted_vec",
+            "SelectedFatJet_particleNet_XbbVsQCD[fatJet_sel];" # FatJet_particleNet_XbbVsQCD: ParticleNet X->bb vs. QCD score: Xbb/(Xbb+QCD)
+        )
         self.df = self.df.Define(
             "SelectedFatJet_idxUnordered",
             "CreateIndexes(SelectedFatJet_p4[fatJet_sel].size())",
         )
         self.df = self.df.Define(
             "SelectedFatJet_idxOrdered",
-            f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)",
+            "ReorderObjects(SelectedFatJet_particleNet_XbbVsQCD_boosted_vec, SelectedFatJet_idxUnordered)",
+            # f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)",
         )
 
         for fatJetVar in FatJetObservables:
