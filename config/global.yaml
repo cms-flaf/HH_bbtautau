@@ -166,9 +166,10 @@ categories:
   # - res0b_cat3_masswindow
   - vbf_inclusive
 
-requireHbbJets: True
+requireHbbJets: False
 storeExtraJets: False
 storeVBFJets: True
+storeExtraTaus: True
 deepTauYears:
   v2p1: 2017
   v2p5: 2018
