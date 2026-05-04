@@ -309,7 +309,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         # Run 3
         self.df = self.df.Define(
             "SelectedFatJet_particleNet_XbbVsQCD_boosted_vec",
-            "SelectedFatJet_particleNet_XbbVsQCD[fatJet_sel];" # FatJet_particleNet_XbbVsQCD: ParticleNet X->bb vs. QCD score: Xbb/(Xbb+QCD)
+            "SelectedFatJet_particleNet_XbbVsQCD[fatJet_sel];",# FatJet_particleNet_XbbVsQCD: ParticleNet X->bb vs. QCD score: Xbb/(Xbb+QCD)
         )
         self.df = self.df.Define(
             "SelectedFatJet_idxUnordered",
