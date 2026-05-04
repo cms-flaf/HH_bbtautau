@@ -3,6 +3,7 @@ import AnaProd.baseline as AnaBaseline
 import FLAF.Common.BaselineSelection as CommonBaseline
 from Corrections.Corrections import Corrections
 import ROOT
+from FLAF.Common.Utilities import defineP4
 
 loadTF = True
 loadHHBtag = True
@@ -542,6 +543,7 @@ def addAllVariables(
                     var_cond=f"tau{leg_idx+1}_genMatchIdx>=0",
                     default="-1.f",
                 )
+            defineP4(dfw, f"tau{leg_idx+1}_gen_vis")
             LegVar(
                 "gen_nChHad",
                 f"genLeptons.at(tau{leg_idx+1}_genMatchIdx).nChargedHadrons()",
