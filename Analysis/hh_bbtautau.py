@@ -287,10 +287,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.df = self.df.Define(
             "SelectedFatJet_particleNet_MD_JetTagger", particleNet_MD_JetTagger
         )
-        self.df = self.df.Define(
-            "fatJet_presel",
-            f"SelectedFatJet_pt>{self.config['boosted_fatjet_presel']['pt']} && abs(SelectedFatJet_eta)<{self.config['boosted_fatjet_presel']['eta']}",
-        )
+        self.df = self.df.Define("fatJet_presel", f"SelectedFatJet_pt>250")
         self.df = self.df.Define(
             "fatJet_sel",
             " RemoveOverlaps(SelectedFatJet_p4, fatJet_presel, {tau1_p4, tau2_p4}, 0.8)",
