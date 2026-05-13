@@ -128,7 +128,7 @@ QCDRegions:
   - SS_Iso
   - OS_AntiIso
   - SS_AntiIso
-boosted_categories: []
+boosted_categories: [ ]
 categories:
   - inclusive
   - baseline
