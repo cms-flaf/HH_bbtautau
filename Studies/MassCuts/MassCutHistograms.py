@@ -101,13 +101,13 @@ def Plot2DMassRes1b(
     y_bins = hist_cfg_dict["tautau_m_vis"]["x_rebin"]["other"]
     hist_denum = (
         df.Filter(
-            f"OS_Iso && {channel} && !(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 1"
+            f"OS_Iso && {channel} && !(res2b) && !(!(res2b) && (boosted_baseline)) && nSelBtag == 1"
         )
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
     hist_num = (
-        df.Filter(f"OS_Iso && {channel} && res1b_cat3")
+        df.Filter(f"OS_Iso && {channel} && (!(res2b) && !(!(res2b) && (boosted_baseline)) && nSelBtag == 1)")
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
@@ -189,12 +189,12 @@ def Plot2DMassRes2b(
     x_bins = hist_cfg_dict["bb_m_vis"]["x_rebin"]["other"]
     y_bins = hist_cfg_dict["tautau_m_vis"]["x_rebin"]["other"]
     hist_denum = (
-        df.Filter(f"OS_Iso && {channel} && res2b_inclusive")
+        df.Filter(f"OS_Iso && {channel} && res2b")
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
     hist_num = (
-        df.Filter(f"OS_Iso && {channel} && res2b_cat3")
+        df.Filter(f"OS_Iso && {channel} && res2b")
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
@@ -274,17 +274,17 @@ def Plot2DMassboosted(
     mass="1250",
     resonance="",
 ):
-    x_bins = hist_cfg_dict["bb_m_vis"]["x_rebin"]["boosted_cat3_masswindow"]
+    x_bins = hist_cfg_dict["bb_m_vis"]["x_rebin"]["boosted"]
     y_bins = hist_cfg_dict["tautau_m_vis"]["x_rebin"]["other"]
     hist_denum = (
         df.Filter(
-            f"OS_Iso && {channel} && !(res2b_cat3) && SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0"
+            f"OS_Iso && {channel} && !(res2b) && boosted"
         )
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis_softdrop", "tautau_m_vis")
         .GetValue()
     )
     hist_num = (
-        df.Filter(f"OS_Iso && {channel} && boosted_cat3")
+        df.Filter(f"OS_Iso && {channel} && !(res2b) && boosted")
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
