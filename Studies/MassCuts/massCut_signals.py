@@ -4,7 +4,6 @@ import sys
 import yaml
 import numpy as np
 
-
 if __name__ == "__main__":
     sys.path.append(os.environ["ANALYSIS_PATH"])
 

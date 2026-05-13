@@ -107,7 +107,9 @@ def Plot2DMassRes1b(
         .GetValue()
     )
     hist_num = (
-        df.Filter(f"OS_Iso && {channel} && (!(res2b) && !(!(res2b) && (boosted_baseline)) && nSelBtag == 1)")
+        df.Filter(
+            f"OS_Iso && {channel} && (!(res2b) && !(!(res2b) && (boosted_baseline)) && nSelBtag == 1)"
+        )
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis", "tautau_m_vis")
         .GetValue()
     )
@@ -277,9 +279,7 @@ def Plot2DMassboosted(
     x_bins = hist_cfg_dict["bb_m_vis"]["x_rebin"]["boosted"]
     y_bins = hist_cfg_dict["tautau_m_vis"]["x_rebin"]["other"]
     hist_denum = (
-        df.Filter(
-            f"OS_Iso && {channel} && !(res2b) && boosted"
-        )
+        df.Filter(f"OS_Iso && {channel} && !(res2b) && boosted")
         .Histo2D(GetModel2D(x_bins, y_bins), "bb_m_vis_softdrop", "tautau_m_vis")
         .GetValue()
     )
