@@ -4,7 +4,6 @@ import sys
 import yaml
 import numpy as np
 
-
 if __name__ == "__main__":
     sys.path.append(os.environ["ANALYSIS_PATH"])
 
@@ -55,7 +54,7 @@ if __name__ == "__main__":
         dfWrapped_DY,
         global_cfg_dict,
         global_cfg_dict["channels_to_consider"],
-        ["inclusive", "res2b_cat3"],
+        ["inclusive", "res2b"],
         0.95,
     )
 
@@ -136,7 +135,7 @@ if __name__ == "__main__":
         dfWrapped,
         global_cfg_dict,
         global_cfg_dict["channels_to_consider"],
-        ["inclusive", "res2b_cat3"],
+        ["inclusive", "res2b"],
         0.90,
     )
     # GetIntervals.GetMassCut(dfWrapped,global_cfg_dict,global_cfg_dict['channels_to_consider'], 0.99)
