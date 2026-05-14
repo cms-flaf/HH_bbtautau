@@ -48,6 +48,8 @@ corrections:
     enabled:
       AnaTuple: true
       AnaTupleMerge: false
+  dy_hhbbtautau:
+    stages: [ HistTuple ]
   base: { stage: AnaTupleMerge }
   tauID: { stage: HistTuple }
   tauES: { stage: AnaTuple }
