@@ -413,11 +413,11 @@ if __name__ == "__main__":
         res_str = "rad"
     for channel in ["eTau", "muTau", "tauTau"]:
         for cat in [
-            "res1b_cat3_masswindow",
-            "res2b_cat3_masswindow",
-            "boosted_cat3_masswindow",
-            "baseline_masswindow",
-            "inclusive_masswindow",
+            # "res1b_cat3_masswindow",
+            # "res2b_cat3_masswindow",
+            # "boosted_cat3_masswindow",
+            # "baseline_masswindow",
+            # "inclusive_masswindow",
             "baseline",
             "inclusive",
         ]:
