@@ -303,13 +303,19 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             f"SelectedFatJet_particleNet_MD_JetTagger_boosted_vec",
             f"SelectedFatJet_particleNet_MD_JetTagger[fatJet_sel]",
         )
+        # Run 3
+        self.df = self.df.Define(
+            f"SelectedFatJet_particleNet_XbbVsQCD_boosted_vec",
+            f"SelectedFatJet_particleNet_XbbVsQCD[fatJet_sel];",
+        )  # FatJet_particleNet_XbbVsQCD: ParticleNet X->bb vs. QCD score: Xbb/(Xbb+QCD)
         self.df = self.df.Define(
             "SelectedFatJet_idxUnordered",
             "CreateIndexes(SelectedFatJet_p4[fatJet_sel].size())",
         )
         self.df = self.df.Define(
             "SelectedFatJet_idxOrdered",
-            f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)",
+            "ReorderObjects(SelectedFatJet_particleNet_XbbVsQCD_boosted_vec, SelectedFatJet_idxUnordered)",
+            # f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)",
         )
 
         for fatJetVar in FatJetObservables:
@@ -461,10 +467,14 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         )
         for category_to_def in self.config["category_definition"].keys():
             category_name = category_to_def
+            if category_name == "boosted":
+                pNetWP = 0.75  # Run 3 AN has optimized cut at 0.75
+            else:
+                pNetWP = self.pNetWP
             self.DefineAndAppend(
                 category_to_def,
                 self.config["category_definition"][category_to_def].format(
-                    pNetWP=self.pNetWP, region=self.region
+                    pNetWP=pNetWP, region=self.region
                 ),
             )
 

@@ -128,47 +128,18 @@ QCDRegions:
   - SS_Iso
   - OS_AntiIso
   - SS_AntiIso
-boosted_categories:
-  # - boosted_cat2
-  # - boosted_cat3
-  # - boosted_masswindow
-  # - boosted_cat2_masswindow
-  - boosted_cat3_masswindow
+boosted_categories: [ ]
 categories:
   - inclusive
   - baseline
-  - boosted_baseline
-  # - boosted_baseline_cat3
-  # - boosted_baseline_masswindow
-  # - boosted_baseline_cat3_masswindow
-  - res0b_inclusive
-  - res1b_inclusive
-  - res2b_inclusive
   - boosted
-  # - boosted_cat3
-  # - res0b_cat2
-  # - res1b_cat2
-  # - res2b_cat2
-  # - res2b_cat3
-  # - res1b_cat3
-  # - res0b_cat3
-  # - inclusive_masswindow
-  # - btag_shape_masswindow
-  # - baseline_masswindow
-  # - res0b_inclusive_masswindow
-  # - res1b_inclusive_masswindow
-  # - res2b_inclusive_masswindow
-  # - res0b_cat2_masswindow
-  # - res1b_cat2_masswindow
-  # - res2b_cat2_masswindow
-  # - res2b_cat3_masswindow
-  # - res1b_cat3_masswindow
-  # - res0b_cat3_masswindow
-  - vbf_inclusive
+  - res2b
+  - res1b
 
-requireHbbJets: True
+requireHbbJets: False
 storeExtraJets: False
 storeVBFJets: True
+storeExtraTaus: True
 deepTauYears:
   v2p1: 2017
   v2p5: 2018
@@ -238,49 +209,12 @@ application_regions:
   # MET_region: (!(Legacy_region) && !(SingleTau_region))
 
 category_definition:
-  # w/o mass window
 
-  # boosted_baseline: "(SelectedFatJet_p4[fatJet_sel].size()>0)"
-  inclusive: "b2_pt>0"  # "!(boosted_baseline)"
-  btag_shape: "!(boosted_baseline)"
   baseline: "return true;"
-  res0b_inclusive: "nSelBtag == 0"
-  res1b_inclusive: "nSelBtag == 1"
-  res2b_inclusive: "nSelBtag == 2"
-  boosted: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0"
-  res0b_cat2: "!boosted_baseline && nSelBtag == 0 "
-  res1b_cat2: "!boosted_baseline && nSelBtag == 1 "
-  res2b_cat2: "!boosted_baseline && nSelBtag == 2 "
-  boosted_cat2: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0 "
-  res2b_cat3: "nSelBtag == 2"
-  boosted_baseline_cat3: "!(res2b_cat3) && (boosted_baseline)"
-  boosted_cat3: "!(res2b_cat3) && boosted"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
-  res1b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 1"
-  res0b_cat3: "!(res2b_cat3) && !(boosted_baseline_cat3) && nSelBtag == 0"
-
-  vbf_inclusive: "nVBFJet >= 2"
-
-  # w/ mass window
-  # boosted_baseline: "(SelectedFatJet_p4[fatJet_sel].size()>0)" (commenting this out because it has been defined under w/o mass window already)
-  inclusive_masswindow: "!(boosted_baseline) && {region}"
-  btag_shape_masswindow: "!(boosted_baseline) && {region}"
-  baseline_masswindow: "return {region};"
-  res0b_inclusive_masswindow: "nSelBtag == 0 && {region}"
-  res1b_inclusive_masswindow: "nSelBtag == 1 && {region}"
-  res2b_inclusive_masswindow: "nSelBtag == 2 && {region}"
-
-  boosted_baseline_masswindow: "(SelectedFatJet_p4[fatJet_sel].size()>0) && {region}_boosted"
-  boosted_masswindow: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0 && {region}_boosted"
-  res0b_cat2_masswindow: "!boosted_baseline && nSelBtag == 0 && {region}"
-  res1b_cat2_masswindow: "!boosted_baseline && nSelBtag == 1 && {region}"
-  res2b_cat2_masswindow: "!boosted_baseline && nSelBtag == 2 && {region}"
-  boosted_cat2_masswindow: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0 && {region}_boosted"
-
-  res2b_cat3_masswindow: "nSelBtag == 2 && {region}"
-  boosted_baseline_cat3_masswindow: "!(res2b_cat3_masswindow) && (boosted_baseline)"
-  boosted_cat3_masswindow: "!(res2b_cat3_masswindow) && boosted_masswindow"  # (SelectedFatJet_p4[fatJet_sel && SelectedFatJet_particleNet_MD_JetTagger>={pNetWP}].size()>0) && {region}_boosted"
-  res1b_cat3_masswindow: "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 1 && {region}"
-  res0b_cat3_masswindow: "!(res2b_cat3_masswindow) && !(boosted_baseline_cat3) && nSelBtag == 0 && {region}"
+  inclusive: "b2_pt>0"
+  boosted: "SelectedFatJet_p4[fatJet_sel && SelectedFatJet_pt>300 && abs(SelectedFatJet_eta)<2.5 && SelectedFatJet_msoftdrop > 80 && SelectedFatJet_msoftdrop < 170 && SelectedFatJet_particleNet_XbbVsQCD>={pNetWP}].size()>0"
+  res2b: "nSelBtag == 2 && !(boosted)"
+  res1b: "nSelBtag == 1 && !(boosted)"
 
 singleMu_th:
   "Run2_2016": 26
