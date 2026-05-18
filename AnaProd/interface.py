@@ -60,8 +60,7 @@ def rotate_to_phi(
 
 class NNInterface(object):
 
-    # n_folds = 5
-    n_folds = 1
+    n_folds = 5
     n_out = 3
 
     array_inputs = [
