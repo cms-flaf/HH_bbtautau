@@ -676,7 +676,9 @@ def defineAllP4(df):
         df = Utilities.defineP4(df, f"tau{idx+1}")
         df = Utilities.defineP4(df, f"b{idx+1}")
         tau_gen_vis_col = f"tau{idx+1}_gen_vis"
-        if all(f"{tau_gen_vis_col}_{var}" in cols for var in ["pt", "eta", "phi", "mass"]):
+        if all(
+            f"{tau_gen_vis_col}_{var}" in cols for var in ["pt", "eta", "phi", "mass"]
+        ):
             df = Utilities.defineP4(df, f"tau{idx+1}_gen_vis")
     for met_var in ["met", "metnomu"]:
         df = df.Define(
