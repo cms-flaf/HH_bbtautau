@@ -226,60 +226,60 @@ def run_inference_on_events_tree(
     print(f"NN scores for Events tree saved in the output ROOT file")
 
 
-def run_inference_on_uncertainty_trees(
-    df_begin,
-    inFileName,
-    models,
-    globalConfig,
-    unc_cfg_dict,
-    scales,
-    output_root_file,
-    snapshotOptions,
-    period,
-    mass,
-    spin,
-):
-    dfWrapped_central = Utilities.DataFrameBuilderBase(df_begin)
-    colNames = dfWrapped_central.df.GetColumnNames()
-    colTypes = []
-    for colName in colNames:
-        colTypes.append(dfWrapped_central.df.GetColumnType(colName))
+# def run_inference_on_uncertainty_trees(
+#     df_begin,
+#     inFileName,
+#     models,
+#     globalConfig,
+#     unc_cfg_dict,
+#     scales,
+#     output_root_file,
+#     snapshotOptions,
+#     period,
+#     mass,
+#     spin,
+# ):
+#     # dfWrapped_central = Utilities.DataFrameBuilderBase(df_begin)
+#     # colNames = dfWrapped_central.df.GetColumnNames()
+#     # colTypes = []
+#     # for colName in colNames:
+#     #     colTypes.append(dfWrapped_central.df.GetColumnType(colName))
         
-    dfWrapped_central.df = createCentralQuantities(df_begin, colTypes, colNames)
-    print(dfWrapped_central.df.GetColumnNames())
-    if dfWrapped_central.df.Filter("map_placeholder > 0").Count().GetValue() <= 0:
-        raise RuntimeError("No events passed the map placeholder")
+#     # dfWrapped_central.df = createCentralQuantities(df_begin, colTypes, colNames)
+#     # if dfWrapped_central.df.Filter("map_placeholder > 0").Count().GetValue() <= 0:
+#     #     raise RuntimeError("No events passed the map placeholder")
 
-    snapshotOptions.fLazy = False
-    for uncName in unc_cfg_dict["shape"]:
-        for scale in scales:
-            treeName = f"Events_{uncName}{scale}"
-            for suffix in ["_noDiff", "_Valid", "_nonValid"]:
-                treeName_with_suffix = f"{treeName}{suffix}"
-                if treeName_with_suffix in getKeyNames(inFileName):
-                    print(f"  Processing {treeName_with_suffix}")
-                    df_unc = ROOT.RDataFrame(treeName_with_suffix, inFileName)
-                    dfWrapped_unc = Utilities.DataFrameBuilderBase(df_unc)
-                    if "_nonValid" not in treeName_with_suffix:
-                        dfWrapped_unc.CreateFromDelta(colNames, colTypes)
-                    dfWrapped_unc.AddMissingColumns(colNames, colTypes)
-                    dfW_unc = Utilities.DataFrameWrapper(
-                        dfWrapped_unc.df, defaultColToSave
-                    )
+#     snapshotOptions.fLazy = False
+#     for uncName in unc_cfg_dict["shape"]:
+#         for scale in scales:
+#             treeName = f"Events_{uncName}{scale}"
+#             for suffix in ["_noDiff", "_Valid", "_nonValid"]:
+#                 treeName_with_suffix = f"{treeName}{suffix}"
+#                 print(f"Checking for tree: {treeName_with_suffix}")
+#                 if treeName_with_suffix in getKeyNames(inFileName):
+#                     print(f"  Processing {treeName_with_suffix}")
+#                     df_unc = ROOT.RDataFrame(treeName_with_suffix, inFileName)
+#                     dfWrapped_unc = Utilities.DataFrameBuilderBase(df_unc)
+#                     if "_nonValid" not in treeName_with_suffix:
+#                         dfWrapped_unc.CreateFromDelta(colNames, colTypes)
+#                     dfWrapped_unc.AddMissingColumns(colNames, colTypes)
+#                     dfW_unc = Utilities.DataFrameWrapper(
+#                         dfWrapped_unc.df, defaultColToSave
+#                     )
 
-                    run_inference_for_tree(
-                        tree_name=treeName_with_suffix,
-                        rdf=dfW_unc.df,
-                        models=models,
-                        globalConfig=globalConfig,
-                        output_root_file=output_root_file,
-                        snapshotOptions=snapshotOptions,
-                        period=period,
-                        mass=mass,
-                        spin=spin,
-                    )
+#                     run_inference_for_tree(
+#                         tree_name=treeName_with_suffix,
+#                         rdf=dfW_unc.df,
+#                         models=models,
+#                         globalConfig=globalConfig,
+#                         output_root_file=output_root_file,
+#                         snapshotOptions=snapshotOptions,
+#                         period=period,
+#                         mass=mass,
+#                         spin=spin,
+#                     )
 
-    print(f"NN scores saved to {output_file_name}")
+#     print(f"NN scores saved to {output_file_name}")
 
 
 def run_inference_for_tree(
@@ -530,19 +530,19 @@ if __name__ == "__main__":
     )
 
     # Run inference on uncertainty trees
-    run_inference_on_uncertainty_trees(
-        df_begin=df_begin,
-        inFileName=args.inFile,
-        models=models,
-        globalConfig=globalConfig,
-        unc_cfg_dict=unc_cfg_dict,
-        scales=scales,
-        output_root_file=output_root_file,
-        snapshotOptions=snapshotOptions,
-        period=args.period,
-        mass=args.mass,
-        spin=args.spin,
-    )
+    # run_inference_on_uncertainty_trees(
+    #     df_begin=df_begin,
+    #     inFileName=args.inFile,
+    #     models=models,
+    #     globalConfig=globalConfig,
+    #     unc_cfg_dict=unc_cfg_dict,
+    #     scales=scales,
+    #     output_root_file=output_root_file,
+    #     snapshotOptions=snapshotOptions,
+    #     period=args.period,
+    #     mass=args.mass,
+    #     spin=args.spin,
+    # )
 
     output_root_file.Write()
     output_root_file.Close()
