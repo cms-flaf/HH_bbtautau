@@ -101,6 +101,14 @@ def DefineWeightForHistograms(
             defineTriggersWeightsErrors(dfw)
         if df_is_central:
             central_df_weights_computed = True
+
+        # Save all DY correction branches in HisTuple
+        for w in all_weights:
+            if w == "weight_dy_central":
+                continue
+            if w.startswith("weight_dy_") and w not in dfw.colToSave:
+                dfw.colToSave.append(w)
+
     categories = global_params["categories"]
     boosted_categories = global_params.get("boosted_categories", [])
     process_group = global_params["process_group"]
@@ -113,6 +121,21 @@ def DefineWeightForHistograms(
     weight_name = "final_weight"
     if weight_name not in dfw.df.GetColumnNames():
         dfw.df = dfw.df.Define(weight_name, total_weight_expression)
+
+    cols = {str(c) for c in dfw.df.GetColumnNames()}
+    if (
+        is_central
+        and final_weight_name == "weight_central"
+        and "weight_dy_central" in cols
+    ):
+        dy_weight_name = "_final_central_weight_withDY"
+        if dy_weight_name not in cols:
+            dfw.df = dfw.df.Define(
+                dy_weight_name,
+                "final_weight*weight_dy_central",
+            )
+        weight_name = dy_weight_name
+
     if not is_central and type(unc_cfg_dict) == dict:
         if (
             uncName in unc_cfg_dict.keys()

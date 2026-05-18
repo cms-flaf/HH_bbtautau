@@ -663,6 +663,7 @@ def defineAllP4(df):
     )
     for idx in [0, 1]:
         df = Utilities.defineP4(df, f"tau{idx+1}")
+        df = Utilities.defineP4(df, f"tau{idx+1}_gen_vis")
         df = Utilities.defineP4(df, f"b{idx+1}")
     for met_var in ["met", "metnomu"]:
         df = df.Define(
