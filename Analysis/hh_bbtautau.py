@@ -671,10 +671,13 @@ def defineAllP4(df):
         f"SelectedFatJet_p4",
         f"GetP4(SelectedFatJet_pt, SelectedFatJet_eta, SelectedFatJet_phi, SelectedFatJet_mass, SelectedFatJet_idx)",
     )
+    cols = set(str(c) for c in df.GetColumnNames())
     for idx in [0, 1]:
         df = Utilities.defineP4(df, f"tau{idx+1}")
-        df = Utilities.defineP4(df, f"tau{idx+1}_gen_vis")
         df = Utilities.defineP4(df, f"b{idx+1}")
+        tau_gen_vis_col = f"tau{idx+1}_gen_vis"
+        if all(f"{tau_gen_vis_col}_{var}" in cols for var in ["pt", "eta", "phi", "mass"]):
+            df = Utilities.defineP4(df, f"tau{idx+1}_gen_vis")
     for met_var in ["met", "metnomu"]:
         df = df.Define(
             f"{met_var}_p4",
