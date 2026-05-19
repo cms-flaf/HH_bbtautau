@@ -585,12 +585,13 @@ unc_to_not_consider_boosted:
 
 payload_producers:
   ggF_DNN:
-    producers_module_name: Analysis.DNN_Application
+    producers_module_name: Analysis.DNN_application
     producer_name: DNNProducer
     channels:  
       - eTau
       - muTau
       - tauTau
+    dependencies:
     model_dir: "config/nn_models/"
     version: "model_fold{}_moe"
     features:
@@ -647,8 +648,8 @@ payload_producers:
     n_cpus: 4
     max_runtime: 8.0
     cmssw_env: False
-    awkward_based: False
-    uproot_stepsize: none
+    awkward_based: True
+    uproot_stepsize: '50MB'
     class_names:
     - Signal
     - TT
