@@ -65,6 +65,21 @@ norm:
   trg_eE:
     expression: weight_trgSF_eE_{scale}_rel * final_weight
     name: trg_eE_{}
+  DY_stat_btag0:
+    expression: weight_dy_stat_btag0_{scale} / weight_dy_central * final_weight
+    name: CMS_dy_stat_btag0_{}
+  DY_stat_btag1:
+    expression: weight_dy_stat_btag1_{scale} / weight_dy_central * final_weight
+    name: CMS_dy_stat_btag1_{}
+  DY_stat_btag2:
+    expression: weight_dy_stat_btag2_{scale} / weight_dy_central * final_weight
+    name: CMS_dy_stat_btag2_{}
+  DY_syst_gauss:
+    expression: weight_dy_syst_gauss_{scale} / weight_dy_central * final_weight
+    name: CMS_dy_syst_gauss_{}
+  DY_syst_linear:
+    expression: weight_dy_syst_linear_{scale} / weight_dy_central * final_weight
+    name: CMS_dy_syst_linear_{}
 
 shape: # syst unc conventions here: https://gitlab.cern.ch/cms-analysis/general/systematics
   JES_Total:
