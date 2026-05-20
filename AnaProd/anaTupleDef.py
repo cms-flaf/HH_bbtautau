@@ -219,6 +219,7 @@ def Initialize(setup, dataset_name):
                 f"HHBtagWrapper failed to load with status {load_result}"
             )
         ROOT.gInterpreter.Declare(f'#include "{header_path_HHbTag}"')
+        ROOT.gInterpreter.Declare('#include "include/RecoilGenParticles.h"')
         ROOT.gROOT.ProcessLine(
             f'HHBtagWrapper::Initialize("{os.environ["CMSSW_BASE"]}/src/HHTools/HHbtag/models/", 3)'
         )
@@ -389,6 +390,22 @@ def addAllVariables(
         # dfw.colToSave.append("GenJetAK8_partonFlavour")
         # dfw.colToSave.append("GenJetAK8_phi")
         # dfw.colToSave.append("GenJetAK8_pt")
+
+        # following variables needed for Recoil bosonic correction inputs
+        dfw.Define("recoil_genboson_p4", "recoil_boson::GetGenBosonP4(GenPart_pt, GenPart_eta, GenPart_phi, GenPart_mass, GenPart_pdgId, GenPart_status, GenPart_statusFlags)")
+        dfw.Define("recoil_genboson_vis_p4", "recoil_boson::GetGenBosonVisP4(GenPart_pt, GenPart_eta, GenPart_phi, GenPart_mass, GenPart_pdgId, GenPart_status, GenPart_statusFlags)")
+
+        dfw.DefineAndAppend("recoil_GenBoson_pt", "static_cast<float>(recoil_genboson_p4.pt())")
+        dfw.DefineAndAppend("recoil_GenBoson_eta", "static_cast<float>(recoil_genboson_p4.eta())")
+        dfw.DefineAndAppend("recoil_GenBoson_phi", "static_cast<float>(recoil_genboson_p4.phi())")
+        dfw.DefineAndAppend("recoil_GenBoson_mass", "static_cast<float>(recoil_genboson_p4.mass())")
+
+        dfw.DefineAndAppend("recoil_GenBoson_vis_pt", "static_cast<float>(recoil_genboson_vis_p4.pt())")
+        dfw.DefineAndAppend("recoil_GenBoson_vis_eta", "static_cast<float>(recoil_genboson_vis_p4.eta())")
+        dfw.DefineAndAppend("recoil_GenBoson_vis_phi", "static_cast<float>(recoil_genboson_vis_p4.phi())")
+        dfw.DefineAndAppend("recoil_GenBoson_vis_mass", "static_cast<float>(recoil_genboson_vis_p4.mass())")
+
+        dfw.DefineAndAppend("recoil_njet", "recoil_boson::GetRecoilNJetCategoryFloat(GenJet_pt, GenJet_eta)")
 
     pf_str = global_params["met_type"]
     dfw.DefineAndAppend(f"met_pt_nano", f"static_cast<float>({pf_str}_p4_nano.pt())")

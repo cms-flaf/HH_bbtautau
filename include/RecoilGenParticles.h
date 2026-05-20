@@ -99,7 +99,7 @@ inline int GetRecoilNJet(const RVecF& genJet_pt, const RVecF& genJet_eta)
     // recoil jet multiplicity with recommended threshold
 
     if (genJet_pt.size() != genJet_eta.size()) {
-        throw std::runtime_error("GetRecoilNJet: inconsistent GenJet collection sizes");
+        throw std::runtime_error("GetRecoilNJet: inconsistent GenJet collection sizes (between pt and eta)");
     }
 
     int njet = 0;
