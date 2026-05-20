@@ -6,12 +6,18 @@ DY:
     - DYto2E_M_50
     - DYto2Mu_M_50
     - DYto2Tau_M_50
+  recoil:
+    enabled: true
+    order: NLO
 
 DY_M_10to50:
   datasets:
     - DYto2E_M_10to50_amcatnloFXFX
     - DYto2Mu_M_10to50_amcatnloFXFX
     - DYto2Tau_M_10to50_amcatnloFXFX
+  recoil:
+    enabled: true
+    order: NLO
 
 DYto2E_M_50:
   processors: *DY_processors
@@ -31,6 +37,9 @@ DYto2E_M_50:
     - DYto2E_M_50_PTLL_200to400_2J_amcatnloFXFX
     - DYto2E_M_50_PTLL_400to600_2J_amcatnloFXFX
     - DYto2E_M_50_PTLL_600_2J_amcatnloFXFX
+  recoil:
+    enabled: true
+    order: NLO
 
 DYto2Mu_M_50:
   processors: *DY_processors
@@ -50,6 +59,9 @@ DYto2Mu_M_50:
     - DYto2Mu_M_50_PTLL_200to400_2J_amcatnloFXFX
     - DYto2Mu_M_50_PTLL_400to600_2J_amcatnloFXFX
     - DYto2Mu_M_50_PTLL_600_2J_amcatnloFXFX
+  recoil:
+    enabled: true
+    order: NLO
 
 DYto2Tau_M_50:
   processors: *DY_processors
@@ -57,6 +69,9 @@ DYto2Tau_M_50:
     - DYto2Tau_M_50_0J_amcatnloFXFX
     - DYto2Tau_M_50_1J_amcatnloFXFX
     - DYto2Tau_M_50_2J_amcatnloFXFX
+  recoil:
+    enabled: true
+    order: NLO
 
 TT:
   name: "t#bar{t}"

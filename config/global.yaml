@@ -80,6 +80,10 @@ corrections:
       AnaTuple: shape
     tagger: particleNet
     jetCollection: centralJet
+  recoil:
+    stage: HistTuple
+    method: Rescaling # QuantileMapHist 
+    apply_systematics: true
 
 extraFormat_for_triggerMatchingAndSF:
   pt: "nano"
