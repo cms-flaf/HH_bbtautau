@@ -128,7 +128,7 @@ class NNInterface(object):
         # parameterized input features
         spin: int,
         mass: float,
-        era: Era,  # a single value, assuming that the predict() is not called in parallel over multuple eras
+        # era: Era,  # a single value, assuming that the predict() is not called in parallel over multuple eras
         # features are defined in the array_inputs list
         **features: dict[
             str, npt.NDArray[np.int64] | npt.NDArray[np.int32] | npt.NDArray[np.float32]
@@ -283,6 +283,11 @@ class NNInterface(object):
             axis=1,
         )
 
+        # match the SavedModel signature exactly: continuous features as float32,
+        # categorical features as int32.
+        cont_inputs = tf.cast(cont_inputs, tf.float32)
+        cat_inputs = tf.cast(cat_inputs, tf.int32)
+
         # evaluate the model
         predictions = self.model([cont_inputs, cat_inputs], training=False)
 
@@ -326,7 +331,7 @@ if __name__ == "__main__":
         event_number=al(0),
         spin=0,
         mass=400.0,
-        era=Era.Run3_2022EE,
+        # era=Era.Run3_2022EE,
         pair_type=ai(0),
         dau1_dm=ai(0),
         dau2_dm=ai(0),

@@ -595,7 +595,7 @@ payload_producers:
     model_dir: "config/nn_models/"
     version: "model_fold{}_moe"
     features:
-      - entry_index
+      # - entry_index
       - luminosityBlock
       - run
       - event
@@ -627,10 +627,10 @@ payload_producers:
       - b2_btagPNetCvB
       - b2_btagPNetCvL
       - b2_HHbtag
-      - SelectedFatJet_pt
-      - SelectedFatJet_eta
-      - SelectedFatJet_phi
-      - SelectedFatJet_mass
+      - SelectedFatJet_pt_boosted
+      - SelectedFatJet_eta_boosted
+      - SelectedFatJet_phi_boosted
+      - SelectedFatJet_mass_boosted
       - met_pt
       - met_phi
       - met_covXX
