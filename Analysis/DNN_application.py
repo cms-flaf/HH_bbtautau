@@ -54,7 +54,6 @@ class DNNProducer:
     
     def prepare_dfw(self, rdf, dataset):
         rdf.df = analysis.PrepareDfForDNN(analysis.DataFrameBuilderForHistograms(rdf.df, self.cfg, self.period)).df
-        rdf.df = rdf.df.Define("entry_index", "(UInt_t)(FullEventId & 0xFFFFFFFF)")
         return rdf
 
     def run(self, array):
@@ -83,27 +82,26 @@ class DNNProducer:
         num_events = len(array["event"])
 
         if num_events == 0:
-            print(f"No events found for {tree_name}, skipping inference.")
+            print(f"No events found for inference, skipping.")
             return
+
+        # mask events to only those with channelId in [13,23,33]
+        valid_channels = np.isin(array["channelId"], [13, 23, 33])
+        if not np.any(valid_channels):
+            print("No events with channelId in [13,23,33], skipping inference.")
+            return array
 
         predictions_array = np.zeros(
             (NNInterface.n_folds, num_events, NNInterface.n_out)
         )
+
         for fold_index, nn_interface in enumerate(models):
-            for i in range(num_events):
-                if i % 10000 == 0:
-                    print(f"  Event No. {i}")
-
-                event_data = {col: array[col][i] for col in self.features}
-                if event_data["channelId"] not in [13,23,33]:
-                    continue
-                inputs = convert_to_numpy(event_data, self.period, 400, 2)
-
-                predictions = self.run_inference(nn_interface, inputs)
-                predictions_array[fold_index, i, :] = predictions.flatten()
+            # build inputs only for valid events
+            inputs = convert_to_numpy(array[valid_channels], self.period, 400, 2)
+            predictions = self.run_inference(nn_interface, inputs)
+            predictions_array[fold_index, valid_channels, :] = predictions
 
         mean_predictions = np.nanmean(predictions_array, axis=0)
-        print(f"Mean predictions: {mean_predictions}")
         for i, col in enumerate(self.dnnConfig["columns"]):
             array[f"{col}"] = mean_predictions[:, i]
         
@@ -139,84 +137,77 @@ def convert_to_numpy(event_data, period, mass, spin):
         event_data["b2_phi"],
         event_data["b2_mass"],
     )
-
-    selected_fatjet_pt = np.array(event_data["SelectedFatJet_pt"])
-    selected_fatjet_eta = np.array(event_data["SelectedFatJet_eta"])
-    selected_fatjet_phi = np.array(event_data["SelectedFatJet_phi"])
-    selected_fatjet_mass = np.array(event_data["SelectedFatJet_mass"])
-
-    if len(selected_fatjet_pt) != 0:
-        max_pt_index = np.argmax(selected_fatjet_pt)
-        fatjet_pt = selected_fatjet_pt[max_pt_index]
-        fatjet_eta = selected_fatjet_eta[max_pt_index]
-        fatjet_phi = selected_fatjet_phi[max_pt_index]
-        fatjet_mass = selected_fatjet_mass[max_pt_index]
-        fatjet_px, fatjet_py, fatjet_pz, fatjet_e = convert_kinematics(
-            fatjet_pt, fatjet_eta, fatjet_phi, fatjet_mass
-        )
-    else:
-        fatjet_px, fatjet_py, fatjet_pz, fatjet_e = 0.0, 0.0, 0.0, 0.0
+    
+    fatjet_pt = event_data["SelectedFatJet_pt_boosted"]
+    fatjet_eta = event_data["SelectedFatJet_eta_boosted"]
+    fatjet_phi = event_data["SelectedFatJet_phi_boosted"]
+    fatjet_mass = event_data["SelectedFatJet_mass_boosted"]
+    fatjet_px, fatjet_py, fatjet_pz, fatjet_e = convert_kinematics(
+        fatjet_pt, fatjet_eta, fatjet_phi, fatjet_mass
+    )
 
     met_px, met_py, _, _ = convert_kinematics(
         event_data["met_pt"], 0, event_data["met_phi"], 0
     )
 
-    def ai(v):
-        return np.array([v], dtype=np.int32)
-
-    def al(v):
-        return np.array([v], dtype=np.int64)
-
-    def af(v):
-        return np.array([v], dtype=np.float32)
-
     pairtype_map = {23: 0, 13: 1, 33: 2}
-
+    event_data["channelId"] = np.where(event_data["channelId"] == 23, 0, event_data["channelId"])
+    event_data["channelId"] = np.where(event_data["channelId"] == 13, 1, event_data["channelId"])
+    event_data["channelId"] = np.where(event_data["channelId"] == 33, 2, event_data["channelId"])
     inputs = {
-        "event_number": al(event_data["entry_index"]),
-        "spin": ai(spin),
-        "mass": ai(mass),
-        "era": Era[period],
-        "pair_type": ai(pairtype_map.get(event_data["channelId"], 2)),
-        "dau1_dm": ai(event_data["tau1_decayMode"]),
-        "dau2_dm": ai(event_data["tau2_decayMode"]),
-        "dau1_charge": ai(event_data["tau1_charge"]),
-        "dau2_charge": ai(event_data["tau2_charge"]),
-        "is_boosted": ai(event_data["boosted_baseline"]),
-        "has_bjet_pair": ai(event_data["Hbb_isValid"]),
-        "met_px": af(met_px),
-        "met_py": af(met_py),
-        "met_cov00": af(event_data["met_covXX"]),
-        "met_cov01": af(event_data["met_covXY"]),
-        "met_cov11": af(event_data["met_covYY"]),
-        "dau1_e": af(dau1_e),
-        "dau1_px": af(dau1_px),
-        "dau1_py": af(dau1_py),
-        "dau1_pz": af(dau1_pz),
-        "dau2_e": af(dau2_e),
-        "dau2_px": af(dau2_px),
-        "dau2_py": af(dau2_py),
-        "dau2_pz": af(dau2_pz),
-        "bjet1_e": af(bjet1_e),
-        "bjet1_px": af(bjet1_px),
-        "bjet1_py": af(bjet1_py),
-        "bjet1_pz": af(bjet1_pz),
-        "bjet1_btag_df": af(event_data["b1_btagDeepFlavB"]),
-        "bjet1_cvsb": af(event_data["b1_btagPNetCvB"]),
-        "bjet1_cvsl": af(event_data["b1_btagPNetCvL"]),
-        "bjet1_hhbtag": af(event_data["b1_HHbtag"]),
-        "bjet2_e": af(bjet2_e),
-        "bjet2_px": af(bjet2_px),
-        "bjet2_py": af(bjet2_py),
-        "bjet2_pz": af(bjet2_pz),
-        "bjet2_btag_df": af(event_data["b2_btagDeepFlavB"]),
-        "bjet2_cvsb": af(event_data["b2_btagPNetCvB"]),
-        "bjet2_cvsl": af(event_data["b2_btagPNetCvL"]),
-        "bjet2_hhbtag": af(event_data["b2_HHbtag"]),
-        "fatjet_e": af(np.array(fatjet_e)),
-        "fatjet_px": af(np.array(fatjet_px)),
-        "fatjet_py": af(np.array(fatjet_py)),
-        "fatjet_pz": af(np.array(fatjet_pz)),
+        "event_number": np.array(event_data["event"]),
+        "spin": np.full(
+            np.array(event_data["event"]).shape,
+            spin,
+        ),
+        "mass": np.full(
+            np.array(event_data["event"]).shape,
+            mass,
+        ),
+        # "era": np.full(
+        #     np.array(event_data["event"]).shape,
+        #     Era[period].value,
+        # ),
+        "pair_type": np.array(event_data["channelId"]),
+        "dau1_dm": np.array(event_data["tau1_decayMode"]),
+        "dau2_dm": np.array(event_data["tau2_decayMode"]),
+        "dau1_charge": np.array(event_data["tau1_charge"]),
+        "dau2_charge": np.array(event_data["tau2_charge"]),
+        "is_boosted": np.array(event_data["boosted_baseline"]),
+        "has_bjet_pair": np.array(event_data["Hbb_isValid"]),
+        "met_px": np.array(met_px),
+        "met_py": np.array(met_py),
+        "met_cov00": np.array(event_data["met_covXX"]),
+        "met_cov01": np.array(event_data["met_covXY"]),
+        "met_cov11": np.array(event_data["met_covYY"]),
+        "dau1_e": np.array(dau1_e),
+        "dau1_px": np.array(dau1_px),
+        "dau1_py": np.array(dau1_py),
+        "dau1_pz": np.array(dau1_pz),
+        "dau2_e": np.array(dau2_e),
+        "dau2_px": np.array(dau2_px),
+        "dau2_py": np.array(dau2_py),
+        "dau2_pz": np.array(dau2_pz),
+        "bjet1_e": np.array(bjet1_e),
+        "bjet1_px": np.array(bjet1_px),
+        "bjet1_py": np.array(bjet1_py),
+        "bjet1_pz": np.array(bjet1_pz),
+        "bjet1_btag_df": np.array(event_data["b1_btagDeepFlavB"]),
+        "bjet1_cvsb": np.array(event_data["b1_btagPNetCvB"]),
+        "bjet1_cvsl": np.array(event_data["b1_btagPNetCvL"]),
+        "bjet1_hhbtag": np.array(event_data["b1_HHbtag"]),
+        "bjet2_e": np.array(bjet2_e),
+        "bjet2_px": np.array(bjet2_px),
+        "bjet2_py": np.array(bjet2_py),
+        "bjet2_pz": np.array(bjet2_pz),
+        "bjet2_btag_df": np.array(event_data["b2_btagDeepFlavB"]),
+        "bjet2_cvsb": np.array(event_data["b2_btagPNetCvB"]),
+        "bjet2_cvsl": np.array(event_data["b2_btagPNetCvL"]),
+        "bjet2_hhbtag": np.array(event_data["b2_HHbtag"]),
+        "fatjet_e": np.array(fatjet_e),
+        "fatjet_px": np.array(fatjet_px),
+        "fatjet_py": np.array(fatjet_py),
+        "fatjet_pz": np.array(fatjet_pz),
     }
     return inputs
 
@@ -227,15 +218,15 @@ def convert_kinematics(pt, eta, phi, mass):
     energy = np.sqrt(pt**2 * np.cosh(eta) ** 2 + mass**2)
     return px, py, pz, energy
 
-class Era(enum.Enum):
+# class Era(enum.Enum):
 
-    Run2_2016H = 1
-    Run2_2016 = 2
-    Run2_2017 = 3
-    Run2_2018 = 4
-    Run3_2022 = 5
-    Run3_2022EE = 6
-    Run3_2023 = 7
-    Run3_2023BPix = 8
-    Run3_2024 = 9
-    Run3_2025 = 10
+#     Run2_2016H = 1
+#     Run2_2016 = 2
+#     Run2_2017 = 3
+#     Run2_2018 = 4
+#     Run3_2022 = 5
+#     Run3_2022EE = 6
+#     Run3_2023 = 7
+#     Run3_2023BPix = 8
+#     Run3_2024 = 9
+#     Run3_2025 = 10
