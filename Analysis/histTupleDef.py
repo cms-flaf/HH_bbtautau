@@ -114,14 +114,13 @@ def DefineWeightForHistograms(
         if process_group != "data"
         else "1"
     )  # are we sure?
-    
+
     if isDY:
         total_weight_expression = f"({total_weight_expression})*weight_dy_central"
-    
+
     weight_name = "final_weight"
     if weight_name not in dfw.df.GetColumnNames():
         dfw.df = dfw.df.Define(weight_name, total_weight_expression)
-
 
     if not is_central and type(unc_cfg_dict) == dict:
         if (
