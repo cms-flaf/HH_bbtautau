@@ -13,7 +13,7 @@ from Analysis.interface import NNInterface
 import enum
 
 class DNNProducer:
-    def __init__(self, cfg, payload_name, period, global_params):
+    def __init__(self, cfg, payload_name, period, global_params=None):
 
         self.payload_name = payload_name
         self.period = period
