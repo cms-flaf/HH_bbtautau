@@ -81,10 +81,8 @@ norm:
     expression: weight_dy_syst_linear_{scale} / weight_dy_central * final_weight
     name: CMS_dy_syst_linear_{}
 
-
 shape: # syst unc conventions here: https://gitlab.cern.ch/cms-analysis/general/systematics
   JES_Total:
     name: CMS_scale_j_{}
   JER:
     name: CMS_res_j_{}
-
