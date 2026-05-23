@@ -110,13 +110,13 @@ def DefineWeightForHistograms(
 
     total_weight_expression = (
         # channel, cat, boosted_categories --> these are not needed in the GetWeight function therefore I just put some placeholders
-        analysis.GetWeight(global_params["channels_to_consider"])
+        analysis.GetWeight(
+            global_params["channels_to_consider"],
+            isDY=isDY,
+        )
         if process_group != "data"
         else "1"
     )  # are we sure?
-
-    if isDY:
-        total_weight_expression = f"({total_weight_expression})*weight_dy_central"
 
     weight_name = "final_weight"
     if weight_name not in dfw.df.GetColumnNames():
