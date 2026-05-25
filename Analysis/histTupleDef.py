@@ -107,7 +107,7 @@ def DefineWeightForHistograms(
     process_group = global_params["process_group"]
 
     isDY = process_group == "DY"
-
+    
     total_weight_expression = (
         # channel, cat, boosted_categories --> these are not needed in the GetWeight function therefore I just put some placeholders
         analysis.GetWeight(
