@@ -22,16 +22,6 @@ DYto2E_M_50:
     - DYto2E_M_50_0J_amcatnloFXFX
     - DYto2E_M_50_1J_amcatnloFXFX
     - DYto2E_M_50_2J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_40to100_1J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_100to200_1J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_200to400_1J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_400to600_1J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_600_1J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_40to100_2J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_100to200_2J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_200to400_2J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_400to600_2J_amcatnloFXFX
-    - DYto2E_M_50_PTLL_600_2J_amcatnloFXFX
 
 DYto2Mu_M_50:
   processors: *DY_processors
@@ -40,16 +30,6 @@ DYto2Mu_M_50:
     - DYto2Mu_M_50_0J_amcatnloFXFX
     - DYto2Mu_M_50_1J_amcatnloFXFX
     - DYto2Mu_M_50_2J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_40to100_1J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_100to200_1J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_200to400_1J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_400to600_1J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_600_1J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_40to100_2J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_100to200_2J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_200to400_2J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_400to600_2J_amcatnloFXFX
-    - DYto2Mu_M_50_PTLL_600_2J_amcatnloFXFX
 
 DYto2Tau_M_50:
   processors: *DY_processors
@@ -66,32 +46,11 @@ TT:
     - TTtoLNu2Q
     - TTto4Q
 
-TT_Inclusive:
-  name: "t#bar{t} Inclusive"
-  color: "kGreen-3"
-  datasets:
-    - TT
 
 ST:
   name: "Single Top"
   color: "kGreen-5"
-  datasets:
-    - TbarBtoLminusNuB_s_channel_4FS
-    - TBbartoLplusNuBbar_s_channel_4FS
-    - TbarBQ_t_channel_4FS
-    - TBbarQ_t_channel_4FS
-    - TbarWplusto2L2Nu
-    # - TbarWplusto2L2Nu_ext1
-    - TbarWplusto4Q
-    # - TbarWplusto4Q_ext1
-    - TbarWplustoLNu2Q
-    # - TbarWplustoLNu2Q_ext1
-    - TWminusto2L2Nu
-    # - TWminusto2L2Nu_ext1
-    - TWminusto4Q
-    # - TWminusto4Q_ext1
-    - TWminustoLNu2Q
-    # - TWminustoLNu2Q_ext1
+  datasets: [ ]
 
 ttH:
   name: "ttH"
@@ -103,34 +62,22 @@ ttH:
 WtoLNu:
   name: "W+jets"
   color: "kOrange"
-  datasets:
-    - WtoLNu_0J_amcatnloFXFX
-    - WtoLNu_1J_amcatnloFXFX
-    - WtoLNu_2J_amcatnloFXFX
+  datasets: [ ]
 
 VV:
   name: "VV"
   color: "kRed+1"
   datasets:
     - WWto2L2Nu_powheg
-    # - WWto2L2Nu_powheg_ext1
     - WWtoLNu2Q_powheg
-    # - WWtoLNu2Q_powheg_ext1
     - WWto4Q_powheg
-    # - WWto4Q_powheg_ext1
     - WZto3LNu_powheg
     - WZto2L2Q_powheg
-    # - WZto2L2Q_powheg_ext1
     - WZtoLNu2Q_powheg
-    # - WZtoLNu2Q_powheg_ext1
     - ZZto4L_powheg
-    # - ZZto4L_powheg_ext1
     - ZZto2L2Nu_powheg
-    # - ZZto2L2Nu_powheg_ext1
     - ZZto2L2Q_powheg
-    # - ZZto2L2Q_powheg_ext1
     - ZZto2Nu2Q_powheg
-    # - ZZto2Nu2Q_powheg_ext1
 
 VVV:
   name: "VVV"
@@ -144,41 +91,17 @@ VVV:
 VBFH:
   name: "VBF H"
   color: "kCyan-7"
-  datasets:
-    - VBFHto2B_M125
-    - VBFHto2Tau_UncorrelatedDecay_UnFiltered
-    # - VBFHto2Tau_UncorrelatedDecay_Filtered
+  datasets: [ ]
 
 ggH:
   name: "ggH"
   color: "kMagenta-7"
-  datasets:
-    - GluGluHto2Tau_M125
-    # - GluGluHto2Tau_UncorrelatedDecay_Filtered
-    - GluGluHto2Tau_UncorrelatedDecay_UnFiltered
-    - GluGluHto2B_M125
-    - GluGluHto2Wto2L2Nu_M125
+  datasets: [ ]
 
 VH:
   name: "VH"
   color: "kMagenta-3"
-  datasets:
-    - ggZH_Hto2B_Zto2L
-    # - ggZH_Hto2B_Zto2L_ext1
-    - ggZH_Hto2B_Zto2Q
-    # - ggZH_Hto2B_Zto2Q_ext1
-    - WminusH_Hto2B_WtoLNu
-    # - WminusH_Hto2B_WtoLNu_ext1
-    - WminusH_Hto2B_Wto2Q
-    # - WminusH_Hto2B_Wto2Q_ext1
-    # - WminusHto2Tau_UncorrelatedDecay_Filtered
-    - WminusHto2Tau_UncorrelatedDecay_UnFiltered
-    - WplusH_Hto2B_WtoLNu
-    # - WplusH_Hto2B_WtoLNu_ext1
-    - WplusH_Hto2B_Wto2Q
-    # - WplusH_Hto2B_Wto2Q_ext1
-    # - WplusHto2Tau_UncorrelatedDecay_Filtered
-    - WplusHto2Tau_UncorrelatedDecay_UnFiltered
+  datasets: [ ]
 
 GluGlutoHHto2B2Tau:
   name: "GluGlutoHHto2B2Tau"
@@ -197,13 +120,11 @@ GluGlutoHHto2B2Tau:
     - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_0p00
     - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_1p00
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p00
-    # - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p00_LHEweights
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p10
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p35
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_3p00
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_m2p00
     - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00
-    # - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00_LHEweights
     - GluGlutoHHto2B2Tau_kl_5p00_kt_1p00_c2_0p00
 
 VBFHHto2B2Tau:
@@ -232,8 +153,7 @@ VBFHHto2B2Tau:
 
 Data:
   name: "Data"
-  datasets:
-    - TO ADD
+  datasets: [ ]
 
 custom_CI:
   name: "custom for CI and test purposes"

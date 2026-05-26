@@ -32,7 +32,7 @@ def GetMassCut(
                 ### boosted_cat_3 redefinition: to apply also mass cuts ####
                 df_ch = df_ch.Define(
                     "boosted_cat_3",
-                    "boosted && !(res2b_cat3 && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis < 270 && bb_m_vis>20)",
+                    "boosted && !(res2b && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis < 270 && bb_m_vis>20)",
                 ).Filter("boosted_cat_3")
 
                 masses_boosted = [
@@ -111,7 +111,7 @@ def GetMassCut(
                 df_ch = (
                     df_ch.Define(
                         "boosted_cat3_SR",
-                        "boosted && !(res2b_cat3 && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis < 270 && bb_m_vis>20) && (res2b_cat3 && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis_boosted_softdrop < 450 && bb_m_vis_boosted_softdrop>30)",
+                        "boosted && !(res2b && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis < 270 && bb_m_vis>20) && (res2b && tautau_m_vis > 15 && tautau_m_vis < 130 && bb_m_vis_boosted_softdrop < 450 && bb_m_vis_boosted_softdrop>30)",
                     )
                     .Define("res1b_cat3_SR", "!(boosted_cat3_SR)")
                     .Filter("res1b_cat3_SR")
