@@ -87,21 +87,38 @@ class DNNProducer:
 
         # mask events to only those with channelId in [13,23,33]
         valid_channels = np.isin(array["channelId"], [13, 23, 33])
+        valid_event_indices = np.flatnonzero(valid_channels)
         if not np.any(valid_channels):
             print("No events with channelId in [13,23,33], skipping inference.")
             return array
 
-        predictions_array = np.zeros(
-            (NNInterface.n_folds, num_events, NNInterface.n_out)
+        predictions_array = np.full(
+            (NNInterface.n_folds, num_events, NNInterface.n_out),
+            np.nan,
         )
-
         for fold_index, nn_interface in enumerate(models):
             # build inputs only for valid events
-            inputs = convert_to_numpy(array[valid_channels], self.period, 400, 2)
+            valid_array = array[valid_channels]
+            inputs = convert_to_numpy(valid_array, self.period, 400, 2)
             predictions = self.run_inference(nn_interface, inputs)
-            predictions_array[fold_index, valid_channels, :] = predictions
+            predictions_array[fold_index, valid_event_indices, :] = predictions
+                
+        valid_predictions = predictions_array[:, valid_event_indices, :]
+        finite_mask = np.isfinite(valid_predictions)
+        counts = finite_mask.sum(axis=0)
+        sums = np.nansum(valid_predictions, axis=0)
+        mean_predictions_valid = np.divide(
+            sums,
+            counts,
+            out=np.full_like(sums, np.nan, dtype=np.float32),
+            where=counts > 0,
+        )
 
-        mean_predictions = np.nanmean(predictions_array, axis=0)
+        mean_predictions = np.full(
+            (num_events, NNInterface.n_out),
+            np.nan,
+        )
+        mean_predictions[valid_event_indices, :] = mean_predictions_valid
         for i, col in enumerate(self.dnnConfig["columns"]):
             array[f"{col}"] = mean_predictions[:, i]
         
