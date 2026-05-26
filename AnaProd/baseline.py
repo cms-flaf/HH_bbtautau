@@ -230,9 +230,17 @@ def ExtraRecoJetSelection(df, era):
     return df
 
 
+def ExtraTauSelection(df):
+    df = df.Define(
+        "ExtraTau_sel",
+        "RemoveOverlaps(Tau_p4, Tau_B0, {HttCandidate.leg_p4[0], HttCandidate.leg_p4[1]}, 0.5)",
+    )
+    return df
+
+
 def ApplyJetSelection(df):
     return df.Filter(
-        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1 || HttCandidate.channel() == Channel::tauTau",
+        "Jet_idx[Jet_bCand].size()>=2 || FatJet_idx[FatJet_bbCand].size()>=1",
         "Reco bjet candidates",
     )
 
@@ -252,7 +260,7 @@ def GenRecoJetMatching(df):
 def DefineHbbCand(df, met_type):
     df = df.Define(
         "Jet_HHbtag",
-        f"if(HttCandidate.channel()==Channel::eTau || HttCandidate.channel()==Channel::muTau || HttCandidate.channel()==Channel::tauTau) return GetHHBtagScore(Jet_bCand, Jet_idx, Jet_p4,Jet_btagDeepFlavB, {met_type}_pt,  {met_type}_phi, HttCandidate, period, event); return Jet_btagDeepFlavB;",
+        f"return GetHHBtagScore(Jet_bCand, Jet_idx, Jet_p4, Jet_btagPNetB, {met_type}_pt,  {met_type}_phi, HttCandidate, period, event);",
     )
     df = df.Define(
         "HbbCandidate", "GetHbbCandidate(Jet_HHbtag, Jet_bCand, Jet_p4, Jet_idx)"

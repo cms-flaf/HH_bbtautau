@@ -4,7 +4,6 @@ import sys
 import yaml
 import numpy as np
 
-
 if __name__ == "__main__":
     sys.path.append(os.environ["ANALYSIS_PATH"])
 
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     dfWrapped.df = dfWrapped.df.Define(
         "bb_m_vis_pnet",
         f"""
-                   if (!boosted || !boosted_cat3 || !boosted_inclusive){{
+                   if (!boosted || !(!(res2b) && boosted) || !boosted_inclusive){{
                        return static_cast<float>((b1_p4+b2_p4).M());
                        }}
                     return static_cast<float>(SelectedFatJet_{particleNet_mass}_boosted);""",
@@ -121,7 +120,7 @@ if __name__ == "__main__":
     dfWrapped.df = dfWrapped.df.Define(
         "bb_m_vis_boosted_softdrop",
         f"""
-                   if (!boosted || !boosted_cat3 || !boosted_inclusive){{
+                   if (!boosted || !(!(res2b) && boosted) || !boosted_inclusive){{
                        return static_cast<float>((b1_p4+b2_p4).M());
                        }}
                     return static_cast<float>(SelectedFatJet_msoftdrop_boosted);""",
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     dfWrapped.df = dfWrapped.df.Define(
         "bb_m_vis_boosted_fjmass",
         f"""
-                   if (!boosted || !boosted_cat3 || !boosted_inclusive){{
+                   if (!boosted || !(!(res2b) && boosted) || !boosted_inclusive){{
                        return static_cast<float>((b1_p4+b2_p4).M());
                        }}
                     return static_cast<float>(SelectedFatJet_mass_boosted);""",
@@ -140,10 +139,7 @@ if __name__ == "__main__":
             dfWrapped,
             global_cfg_dict,
             ["eTau", "muTau", "tauTau"],
-            [
-                "res2b_cat3",
-                "res2b_cat2",
-            ],
+            ["res2b"],
             0.99,
         )
     if args.cat == "res1b":
