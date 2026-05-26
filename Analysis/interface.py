@@ -290,10 +290,8 @@ class NNInterface(object):
 
         # evaluate the model
         predictions = self.model([cont_inputs, cat_inputs], training=False)
-
         # insert into the output array
         pred[fold_mask] = predictions.numpy()
-
         return pred
 
 
