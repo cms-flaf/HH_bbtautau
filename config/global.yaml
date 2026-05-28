@@ -525,7 +525,7 @@ payload_producers:
   ggF_DNN:
     producers_module_name: Analysis.DNN_application
     producer_name: DNNProducer
-    channels:  
+    channels:
       - eTau
       - muTau
       - tauTau
@@ -589,6 +589,6 @@ payload_producers:
     awkward_based: True
     uproot_stepsize: '50MB'
     class_names:
-    - Signal
-    - TT
-    - DY
+      - Signal
+      - TT
+      - DY
