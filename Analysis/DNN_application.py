@@ -12,6 +12,7 @@ import tensorflow as tf
 from Analysis.interface import NNInterface
 import enum
 
+
 class DNNProducer:
     def __init__(self, cfg, payload_name, period, global_params=None):
 
@@ -37,7 +38,6 @@ class DNNProducer:
         ]
         load_features = self.features
         self.vars_to_save = load_features
-        
 
     def load_models(self, model_dir):
         models = [
@@ -51,9 +51,11 @@ class DNNProducer:
             for fold_index in range(NNInterface.n_folds)
         ]
         return models
-    
+
     def prepare_dfw(self, rdf, dataset):
-        rdf.df = analysis.PrepareDfForDNN(analysis.DataFrameBuilderForHistograms(rdf.df, self.cfg, self.period)).df
+        rdf.df = analysis.PrepareDfForDNN(
+            analysis.DataFrameBuilderForHistograms(rdf.df, self.cfg, self.period)
+            ).df
         return rdf
 
     def run(self, array):
@@ -77,7 +79,7 @@ class DNNProducer:
 
     def ApplyDNN(self, array):
         models = self.models
-        
+
         other_columns_dict = array
         num_events = len(array["event"])
 
@@ -102,7 +104,7 @@ class DNNProducer:
             inputs = convert_to_numpy(valid_array, self.period, 400, 2)
             predictions = self.run_inference(nn_interface, inputs)
             predictions_array[fold_index, valid_event_indices, :] = predictions
-                
+
         valid_predictions = predictions_array[:, valid_event_indices, :]
         finite_mask = np.isfinite(valid_predictions)
         counts = finite_mask.sum(axis=0)
@@ -121,13 +123,12 @@ class DNNProducer:
         mean_predictions[valid_event_indices, :] = mean_predictions_valid
         for i, col in enumerate(self.dnnConfig["columns"]):
             array[f"{col}"] = mean_predictions[:, i]
-        
+
         return array
     
-    def run_inference(self,nn_interface, inputs):
+    def run_inference(self, nn_interface, inputs):
         predictions = nn_interface(**inputs)
         return predictions
-    
 
 def convert_to_numpy(event_data, period, mass, spin):
     dau1_px, dau1_py, dau1_pz, dau1_e = convert_kinematics(
@@ -154,7 +155,7 @@ def convert_to_numpy(event_data, period, mass, spin):
         event_data["b2_phi"],
         event_data["b2_mass"],
     )
-    
+
     fatjet_pt = event_data["SelectedFatJet_pt_boosted"]
     fatjet_eta = event_data["SelectedFatJet_eta_boosted"]
     fatjet_phi = event_data["SelectedFatJet_phi_boosted"]
@@ -168,9 +169,15 @@ def convert_to_numpy(event_data, period, mass, spin):
     )
 
     pairtype_map = {23: 0, 13: 1, 33: 2}
-    event_data["channelId"] = np.where(event_data["channelId"] == 23, 0, event_data["channelId"])
-    event_data["channelId"] = np.where(event_data["channelId"] == 13, 1, event_data["channelId"])
-    event_data["channelId"] = np.where(event_data["channelId"] == 33, 2, event_data["channelId"])
+    event_data["channelId"] = np.where(
+        event_data["channelId"] == 23, 0, event_data["channelId"]
+        )
+    event_data["channelId"] = np.where(
+        event_data["channelId"] == 13, 1, event_data["channelId"]
+        )
+    event_data["channelId"] = np.where(
+        event_data["channelId"] == 33, 2, event_data["channelId"]
+        )
     inputs = {
         "event_number": np.array(event_data["event"]),
         "spin": np.full(
@@ -228,22 +235,10 @@ def convert_to_numpy(event_data, period, mass, spin):
     }
     return inputs
 
+
 def convert_kinematics(pt, eta, phi, mass):
     px = pt * np.cos(phi)
     py = pt * np.sin(phi)
     pz = pt * np.sinh(eta)
     energy = np.sqrt(pt**2 * np.cosh(eta) ** 2 + mass**2)
     return px, py, pz, energy
-
-# class Era(enum.Enum):
-
-#     Run2_2016H = 1
-#     Run2_2016 = 2
-#     Run2_2017 = 3
-#     Run2_2018 = 4
-#     Run3_2022 = 5
-#     Run3_2022EE = 6
-#     Run3_2023 = 7
-#     Run3_2023BPix = 8
-#     Run3_2024 = 9
-#     Run3_2025 = 10

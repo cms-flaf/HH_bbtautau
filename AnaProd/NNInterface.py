@@ -244,7 +244,7 @@ def run_inference_on_events_tree(
 #     # colTypes = []
 #     # for colName in colNames:
 #     #     colTypes.append(dfWrapped_central.df.GetColumnType(colName))
-        
+
 #     # dfWrapped_central.df = createCentralQuantities(df_begin, colTypes, colNames)
 #     # if dfWrapped_central.df.Filter("map_placeholder > 0").Count().GetValue() <= 0:
 #     #     raise RuntimeError("No events passed the map placeholder")
@@ -366,7 +366,7 @@ def run_inference_for_tree(
                     print(f"  Event No. {i}")
 
                 event_data = {col: other_columns_dict[col][i] for col in columns}
-                if event_data["channelId"] not in [13,23,33]:
+                if event_data["channelId"] not in [13, 23, 33]:
                     continue
                 inputs = convert_to_numpy(event_data, period, mass, spin)
 
@@ -430,7 +430,6 @@ if __name__ == "__main__":
     import yaml
     import argparse
     import numpy as np
-    # from Analysis.HistHelper import *
     from FLAF.Common.Utilities import *
     from Analysis.hh_bbtautau import *
     from Analysis.GetCrossWeights import *
