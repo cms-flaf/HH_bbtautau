@@ -74,16 +74,21 @@ def createInvMass(df):
     df = df.Define(
         "deltaPhi_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(Htt_p4, Hbb_p4)"
     )
-    
-    df = df.Define("deltaPhi_met_Htt", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Htt_p4)")
-    df = df.Define("deltaPhi_met_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Hbb_p4)")
+
+    df = df.Define(
+        "deltaPhi_met_Htt", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Htt_p4)"
+    )
+    df = df.Define(
+        "deltaPhi_met_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Hbb_p4)"
+    )
     df = df.Define(
         "deltaPhi_metnomu_Htt",
         "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Htt_p4)",
     )
     df = df.Define(
         "deltaPhi_metnomu_Hbb",
-        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Hbb_p4)",)
+        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Hbb_p4)",
+    )
 
     df = df.Define("pt_HH", "((Htt_p4 + Hbb_p4).Pt())")
 
