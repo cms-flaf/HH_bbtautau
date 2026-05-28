@@ -55,7 +55,7 @@ class DNNProducer:
     def prepare_dfw(self, rdf, dataset):
         rdf.df = analysis.PrepareDfForDNN(
             analysis.DataFrameBuilderForHistograms(rdf.df, self.cfg, self.period)
-            ).df
+        ).df
         return rdf
 
     def run(self, array):
@@ -125,10 +125,11 @@ class DNNProducer:
             array[f"{col}"] = mean_predictions[:, i]
 
         return array
-    
+
     def run_inference(self, nn_interface, inputs):
         predictions = nn_interface(**inputs)
         return predictions
+
 
 def convert_to_numpy(event_data, period, mass, spin):
     dau1_px, dau1_py, dau1_pz, dau1_e = convert_kinematics(
@@ -171,13 +172,13 @@ def convert_to_numpy(event_data, period, mass, spin):
     pairtype_map = {23: 0, 13: 1, 33: 2}
     event_data["channelId"] = np.where(
         event_data["channelId"] == 23, 0, event_data["channelId"]
-        )
+    )
     event_data["channelId"] = np.where(
         event_data["channelId"] == 13, 1, event_data["channelId"]
-        )
+    )
     event_data["channelId"] = np.where(
         event_data["channelId"] == 33, 2, event_data["channelId"]
-        )
+    )
     inputs = {
         "event_number": np.array(event_data["event"]),
         "spin": np.full(
