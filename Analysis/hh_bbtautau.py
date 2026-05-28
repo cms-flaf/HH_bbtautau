@@ -74,6 +74,16 @@ def createInvMass(df):
     df = df.Define(
         "deltaPhi_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(Htt_p4, Hbb_p4)"
     )
+    
+    df = df.Define("deltaPhi_met_Htt", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Htt_p4)")
+    df = df.Define("deltaPhi_met_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Hbb_p4)")
+    df = df.Define(
+        "deltaPhi_metnomu_Htt",
+        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Htt_p4)",
+    )
+    df = df.Define(
+        "deltaPhi_metnomu_Hbb",
+        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Hbb_p4)",)
 
     df = df.Define("pt_HH", "((Htt_p4 + Hbb_p4).Pt())")
 
@@ -676,8 +686,8 @@ def defineAllP4(df, isData=False):
     for idx in [0, 1]:
         df = Utilities.defineP4(df, f"tau{idx+1}")
         df = Utilities.defineP4(df, f"b{idx+1}")
-        if not isData:
-            df = Utilities.defineP4(df, f"tau{idx+1}_gen_vis")
+    if not isData:
+        df = df.Define(f"pt_ll_gen", f"LHE_Vpt")
     for met_var in ["met", "metnomu"]:
         df = df.Define(
             f"{met_var}_p4",
