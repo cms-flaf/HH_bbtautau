@@ -101,18 +101,27 @@ def DefineWeightForHistograms(
             defineTriggersWeightsErrors(dfw)
         if df_is_central:
             central_df_weights_computed = True
+
     categories = global_params["categories"]
     boosted_categories = global_params.get("boosted_categories", [])
     process_group = global_params["process_group"]
+
+    isDY = process_group == "DY"
+
     total_weight_expression = (
         # channel, cat, boosted_categories --> these are not needed in the GetWeight function therefore I just put some placeholders
-        analysis.GetWeight(global_params["channels_to_consider"])
+        analysis.GetWeight(
+            global_params["channels_to_consider"],
+            isDY=isDY,
+        )
         if process_group != "data"
         else "1"
     )  # are we sure?
+
     weight_name = "final_weight"
     if weight_name not in dfw.df.GetColumnNames():
         dfw.df = dfw.df.Define(weight_name, total_weight_expression)
+
     if not is_central and type(unc_cfg_dict) == dict:
         if (
             uncName in unc_cfg_dict.keys()
