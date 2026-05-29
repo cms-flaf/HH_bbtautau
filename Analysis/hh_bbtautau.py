@@ -75,6 +75,21 @@ def createInvMass(df):
         "deltaPhi_Htt_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(Htt_p4, Hbb_p4)"
     )
 
+    df = df.Define(
+        "deltaPhi_met_Htt", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Htt_p4)"
+    )
+    df = df.Define(
+        "deltaPhi_met_Hbb", "ROOT::Math::VectorUtil::DeltaPhi(met_p4, Hbb_p4)"
+    )
+    df = df.Define(
+        "deltaPhi_metnomu_Htt",
+        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Htt_p4)",
+    )
+    df = df.Define(
+        "deltaPhi_metnomu_Hbb",
+        "ROOT::Math::VectorUtil::DeltaPhi(metnomu_p4, Hbb_p4)",
+    )
+
     df = df.Define("pt_HH", "((Htt_p4 + Hbb_p4).Pt())")
 
     for tau_idx in [1, 2]:
@@ -182,7 +197,7 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channels):
+def GetWeight(channels, isDY=False):
     weights_dict = {}
     weights_to_apply = [
         "weight_base"
@@ -250,6 +265,8 @@ def GetWeight(channels):
         weights_list = ["weight_base"]
         # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
         weights_list.extend(ID_weights_dict[channel])
+        if isDY:
+            weights_list.append("weight_dy_central")
 
         # if categories dependent weights are present do a sub loop here extending the dict
         weights_full_string += (
@@ -631,7 +648,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
 
 
 def PrepareDfForDNN(dfForHistograms):
-    dfForHistograms.df = defineAllP4(dfForHistograms.df)
+    dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
     dfForHistograms.defineBoostedVariables()
     return dfForHistograms
 
@@ -646,7 +663,7 @@ def PrepareDfForHistograms(dfForHistograms):
             f"b{leg_idx}_legType", f"b{leg_idx}_pt > 0 ? Leg::jet : Leg::none"
         )
         dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
-    dfForHistograms.df = defineAllP4(dfForHistograms.df)
+    dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
     dfForHistograms.defineTriggers()
     dfForHistograms.defineBoostedVariables()
     dfForHistograms.redefinePUJetIDWeights()
@@ -665,7 +682,7 @@ def PrepareDfForHistograms(dfForHistograms):
     return dfForHistograms
 
 
-def defineAllP4(df):
+def defineAllP4(df, isData=False):
     df = df.Define(f"SelectedFatJet_idx", f"CreateIndexes(SelectedFatJet_pt.size())")
     df = df.Define(
         f"SelectedFatJet_p4",
@@ -674,6 +691,8 @@ def defineAllP4(df):
     for idx in [0, 1]:
         df = Utilities.defineP4(df, f"tau{idx+1}")
         df = Utilities.defineP4(df, f"b{idx+1}")
+    if not isData:
+        df = df.Define(f"pt_ll_gen", f"LHE_Vpt")
     for met_var in ["met", "metnomu"]:
         df = df.Define(
             f"{met_var}_p4",
