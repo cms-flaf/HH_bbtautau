@@ -82,8 +82,7 @@ corrections:
     jetCollection: centralJet
   recoil:
     stage: HistTuple
-    method: Rescaling # QuantileMapHist
-    order: NLO
+    method: QuantileMapHist # Rescaling
     apply_systematics: true
 
 extraFormat_for_triggerMatchingAndSF:
