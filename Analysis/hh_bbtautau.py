@@ -5,6 +5,7 @@ if __name__ == "__main__":
 
 from FLAF.Common.HistHelper import *
 from Analysis.GetCrossWeights import *
+from Corrections.Corrections import Corrections
 
 # from Analysis.GetTauTauWeights import *
 from FLAF.Common.Utilities import *
@@ -664,6 +665,20 @@ def PrepareDfForHistograms(dfForHistograms):
         )
         dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
     dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
+    if not dfForHistograms.isData:
+        dfForHistograms.df = Corrections.getGlobal().applyRecoilCorrections(
+            dfForHistograms.df,
+            Corrections.getGlobal().process_cfg,
+        )
+    if "PuppiMET_pt_recoil" in dfForHistograms.df.GetColumnNames():
+        dfForHistograms.df = dfForHistograms.df.Redefine("met_pt", "PuppiMET_pt_recoil")
+        dfForHistograms.df = dfForHistograms.df.Redefine(
+            "met_phi", "PuppiMET_phi_recoil"
+        )
+        dfForHistograms.df = dfForHistograms.df.ReDefine(
+            "met_p4",
+            "ROOT::Math::LorentzVector<ROOT::Math>>PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
+        )
     dfForHistograms.defineTriggers()
     dfForHistograms.defineBoostedVariables()
     dfForHistograms.redefinePUJetIDWeights()
