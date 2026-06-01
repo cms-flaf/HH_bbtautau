@@ -14,11 +14,10 @@ import enum
 
 
 class DNNProducer:
-    def __init__(self, cfg, payload_name, period, global_params=None):
+    def __init__(self, cfg, payload_name, period):
 
         self.payload_name = payload_name
         self.period = period
-        self.cfg = global_params
 
         sys.path.append(os.environ["ANALYSIS_PATH"])
         ROOT.gROOT.ProcessLine(".include " + os.environ["ANALYSIS_PATH"])
@@ -53,9 +52,6 @@ class DNNProducer:
         return models
 
     def prepare_dfw(self, rdf, dataset):
-        rdf.df = analysis.PrepareDfForDNN(
-            analysis.DataFrameBuilderForHistograms(rdf.df, self.cfg, self.period)
-        ).df
         return rdf
 
     def run(self, array):
