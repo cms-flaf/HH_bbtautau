@@ -401,8 +401,6 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                 ),
             )
             self.colToSave.append(reg_name)
-        self.df = self.df.Define("Legacy_region", legacy_region_definition)
-        self.colToSave.append("Legacy_region")
 
     def DefineAndAppend(self, varToDefine, var_expression):
         self.df = self.df.Define(varToDefine, var_expression)
