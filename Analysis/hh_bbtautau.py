@@ -390,7 +390,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         singleTau_th_dict = self.config["singleTau_th"]
         singleMu_th_dict = self.config["singleMu_th"]
         singleEle_th_dict = self.config["singleEle_th"]
-        legacy_region_definition= self.config["application_regions"]["legacy_region"]
+        legacy_region_definition = self.config["application_regions"]["legacy_region"]
         for reg_name, reg_exp in self.config["application_regions"].items():
             self.df = self.df.Define(
                 reg_name,
