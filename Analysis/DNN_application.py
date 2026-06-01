@@ -27,7 +27,7 @@ class DNNProducer:
         ROOT.gROOT.ProcessLine(f'#include "FLAF/include/AnalysisTools.h"')
         ROOT.gROOT.ProcessLine(f'#include "FLAF/include/AnalysisMath.h"')
         ROOT.gROOT.ProcessLine(f'#include "FLAF/include/MT2.h"')
-        ROOT.gROOT.ProcessLine(f'#include "FLAF/include/Lester_mt2_bisect.cpp"')
+
         self.dnnConfig = cfg
 
         self.models = self.load_models(self.dnnConfig["model_dir"])
