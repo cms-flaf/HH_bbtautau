@@ -322,7 +322,9 @@ if __name__ == "__main__":
 
     nn0 = NNInterface(
         fold_index=0,
-        model_path=os.path.join(os.environ["ANALYSIS_PATH"], "config/nn_models/model_fold0_moe"),  # noqa
+        model_path=os.path.join(
+            os.environ["ANALYSIS_PATH"], "config/nn_models/model_fold0_moe"
+        ),  # noqa
     )
 
     predictions = nn0(
