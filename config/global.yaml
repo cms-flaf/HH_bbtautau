@@ -185,7 +185,7 @@ triggers:
 
 hist_triggers:
   eTau:
-    default: (HLT_singleEle || HLT_etau) # && Legacy_region 
+    default: (HLT_singleEle || HLT_etau) # && Legacy_region
   muTau:
     default: (HLT_singleMu || HLT_mutau) # && Legacy_region
   tauTau:
