@@ -85,7 +85,7 @@ class DNNProducer:
 
         if num_events == 0:
             print(f"No events found for inference, skipping.")
-            return
+            return array
 
         # mask events to only those with channelId in [13,23,33]
         valid_channels = np.isin(array["channelId"], [13, 23, 33])
