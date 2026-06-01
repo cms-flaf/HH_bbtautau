@@ -185,17 +185,17 @@ triggers:
 
 hist_triggers:
   eTau:
-    default: ( (HLT_singleEle || HLT_etau) && Legacy_region )
+    default: (HLT_singleEle || HLT_etau) # && Legacy_region 
   muTau:
-    default: ((HLT_singleMu || HLT_mutau) && Legacy_region)
+    default: (HLT_singleMu || HLT_mutau) # && Legacy_region
   tauTau:
-    default: ((HLT_ditau || HLT_ditaujet) && Legacy_region)
+    default: (HLT_ditau || HLT_ditaujet) # && Legacy_region
   eE:
-    default: (HLT_singleEle && SingleEle_region)
+    default: HLT_singleEle # && SingleEle_region
   eMu:
-    default: (HLT_singleMu && SingleMu_region)
+    default: HLT_singleMu # && SingleMu_region
   muMu:
-    default: (HLT_singleMu && SingleMu_region)
+    default: HLT_singleMu # && SingleMu_region
 
 # https://github.com/LLRCMS/KLUBAnalysis/blob/10821fdc58f6bdb68b0142740f05b8c9f6e23bf9/config/selectionCfg_MuTau_UL18.cfg
 # https://github.com/LLRCMS/KLUBAnalysis/blob/10821fdc58f6bdb68b0142740f05b8c9f6e23bf9/config/selectionCfg_TauTau_UL18.cfg
