@@ -185,16 +185,15 @@ triggers:
 
 hist_triggers:
   eTau:
-    default: ( HLT_singleEle && Legacy_region )  # ( ( (HLT_singleEle || HLT_etau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+    default: ( (HLT_singleEle || HLT_etau) && Legacy_region )
   muTau:
-    default: (HLT_singleMu && Legacy_region)  # (( (HLT_singleMu || HLT_mutau ) && Legacy_region ) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ))
+    default: ((HLT_singleMu || HLT_mutau) && Legacy_region)
   tauTau:
-    # default: ( ( (HLT_ditau || HLT_ditaujet) && Legacy_Region ) ) # || (HLT_MET && !(Legacy_Region) ) )
-    default: (HLT_ditau && Legacy_region)  # ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region) || (HLT_MET && (!(Legacy_region) && !(SingleTau_region)) ) )
+    default: ((HLT_ditau || HLT_ditaujet) && Legacy_region)
   eE:
     default: (HLT_singleEle && SingleEle_region)
   eMu:
-    default: (HLT_singleMu && SingleMu_region)  # ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
+    default: (HLT_singleMu && SingleMu_region)
   muMu:
     default: (HLT_singleMu && SingleMu_region)
 
@@ -210,7 +209,7 @@ application_regions:
   diTau_region: (tau1_pt > 40 && abs(tau1_eta) < 2.1 && tau2_pt > 40 && abs(tau2_eta) < 2.1)
   diTauJet_region: (tau1_pt > 35 && abs(tau1_eta) < 2.1 && tau2_pt > 35 && abs(tau2_eta) < 2.1 )  # && Jet_pt>60)
   SingleTau_region: (((tau1_pt > {tau_th} && abs(tau1_eta) < 2.1) || (tau2_pt > {tau_th} && abs(tau2_eta) < 2.1)) )
-  # MET_region: (!(Legacy_region) && !(SingleTau_region))
+  legacy_region: "( ( eTau && (SingleEle_region  || CrossEleTau_region) ) || ( muTau && (SingleMu_region  || CrossMuTau_region) ) || ( tauTau && ( diTau_region || diTauJet_region) ) || ( eE && (SingleEle_region)) || (eMu && ( SingleEle_region || SingleMu_region ) ) || (muMu && (SingleMu_region)) )"
 
 category_definition:
 
