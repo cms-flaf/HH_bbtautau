@@ -290,10 +290,8 @@ class NNInterface(object):
 
         # evaluate the model
         predictions = self.model([cont_inputs, cat_inputs], training=False)
-
         # insert into the output array
         pred[fold_mask] = predictions.numpy()
-
         return pred
 
 
@@ -324,14 +322,16 @@ if __name__ == "__main__":
 
     nn0 = NNInterface(
         fold_index=0,
-        model_path="/afs/cern.ch/work/a/acagnott/Hbbtautau/HH_bbtautau/test/data/model_fold0_moe",  # noqa
+        model_path=os.path.join(
+            os.environ["ANALYSIS_PATH"], "config/nn_models/model_fold0_moe"
+        ),  # noqa
     )
 
     predictions = nn0(
         event_number=al(0),
         spin=0,
         mass=400.0,
-        # era=Era.Run3_2022EE,
+        era=Era.Run3_2022EE,
         pair_type=ai(0),
         dau1_dm=ai(0),
         dau2_dm=ai(0),
