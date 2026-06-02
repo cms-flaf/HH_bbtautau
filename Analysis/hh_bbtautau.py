@@ -668,14 +668,16 @@ def PrepareDfForHistograms(dfForHistograms):
     if (not dfForHistograms.isData) and (
         "bosonicRecoil" in Corrections.getGlobal().to_apply
     ):
-        dfForHistograms.df = dfForHistograms.df.Redefine("met_pt", "PuppiMET_pt_recoil")
-        dfForHistograms.df = dfForHistograms.df.Redefine(
-            "met_phi", "PuppiMET_phi_recoil"
-        )
-        dfForHistograms.df = dfForHistograms.df.Redefine(
-            "met_p4",
-            "ROOT::Math::LorentzVector<ROOT::Math>>PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
-        )
+        processes_cfg = Corrections.getGlobal().processes_cfg
+        if processes_cfg.get("corrections", {}).get("bosonicRecoil", {}).get("enabled", False):
+            dfForHistograms.df = dfForHistograms.df.Redefine("met_pt", "PuppiMET_pt_recoil")
+            dfForHistograms.df = dfForHistograms.df.Redefine(
+                "met_phi", "PuppiMET_phi_recoil"
+            )
+            dfForHistograms.df = dfForHistograms.df.Redefine(
+                "met_p4",
+                "ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
+            )
 
     dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
 
