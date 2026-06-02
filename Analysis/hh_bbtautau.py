@@ -668,9 +668,9 @@ def PrepareDfForHistograms(dfForHistograms):
     if (not dfForHistograms.isData) and (
         "bosonicRecoil" in Corrections.getGlobal().to_apply
     ):
-        processes_cfg = Corrections.getGlobal().processes_cfg
+        process_cfg = Corrections.getGlobal().process_cfg
         if (
-            processes_cfg.get("corrections", {})
+            process_cfg.get("corrections", {})
             .get("bosonicRecoil", {})
             .get("enabled", False)
         ):
