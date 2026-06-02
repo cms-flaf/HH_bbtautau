@@ -35,7 +35,7 @@ def GetDfw(df, setup, dataset_name):
     kwargset = {}
 
     kwargset["isData"] = global_params["process_group"] == "data"
-    kwargset["wantTriggerSFErrors"] = global_params["compute_rel_weights"]
+    kwargset["wantTriggerSFErrors"] = global_params.get("compute_rel_weights", False)
     kwargset["wantScales"] = global_params["compute_unc_variations"]
     kwargset["colToSave"] = []
     kwargset["deepTauVersion"] = global_params["deepTauVersion"]

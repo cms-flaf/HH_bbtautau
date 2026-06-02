@@ -32,10 +32,16 @@ import tensorflow as tf  # type: ignore[import-untyped]
 
 class Era(enum.Enum):
 
-    e2016APV = 0
-    e2016 = 1
-    e2017 = 2
-    e2018 = 3
+    Run2_2016H = 1
+    Run2_2016 = 2
+    Run2_2017 = 3
+    Run2_2018 = 4
+    Run3_2022 = 5
+    Run3_2022EE = 6
+    Run3_2023 = 7
+    Run3_2023BPix = 8
+    Run3_2024 = 9
+    Run3_2025 = 10
 
 
 def rotate_to_phi(
@@ -122,7 +128,7 @@ class NNInterface(object):
         # parameterized input features
         spin: int,
         mass: float,
-        era: Era,  # a single value, assuming that the predict() is not called in parallel over multuple eras
+        # era: Era,  # a single value, assuming that the predict() is not called in parallel over multuple eras
         # features are defined in the array_inputs list
         **features: dict[
             str, npt.NDArray[np.int64] | npt.NDArray[np.int32] | npt.NDArray[np.float32]
@@ -253,7 +259,7 @@ class NNInterface(object):
                     f.httfatjet_px,
                     f.httfatjet_py,
                     f.httfatjet_pz,
-                    cont_ones * mass,
+                    # cont_ones * mass,
                 ]
             ],
             axis=1,
@@ -270,12 +276,17 @@ class NNInterface(object):
                     f.dau2_charge,
                     f.is_boosted,
                     f.has_bjet_pair,
-                    cat_ones * era.value,
-                    cat_ones * spin,
+                    # cat_ones * era.value,
+                    # cat_ones * spin,
                 ]
             ],
             axis=1,
         )
+
+        # match the SavedModel signature exactly: continuous features as float32,
+        # categorical features as int32.
+        cont_inputs = tf.cast(cont_inputs, tf.float32)
+        cat_inputs = tf.cast(cat_inputs, tf.int32)
 
         # evaluate the model
         predictions = self.model([cont_inputs, cat_inputs], training=False)
@@ -313,14 +324,14 @@ if __name__ == "__main__":
 
     nn0 = NNInterface(
         fold_index=0,
-        model_path="/nfs/dust/cms/user/riegerma/taunn_data/store/ExportEnsemble/prod3/hbtres_PSnew_baseline_LSmulti3_SSdefault_FSdefault_daurot_composite-default_extended_pair_ED10_LU8x128_CTdense_ACTelu_BNy_LT50_DO0_BS4096_OPadamw_LR1.0e-03_YEARy_SPINy_MASSy_RSv6_fi80_lbn_ft_lt20_lr1_LBdefault_daurot_fatjet_composite_FI0_SDx5",  # noqa
+        model_path="/afs/cern.ch/work/a/acagnott/Hbbtautau/HH_bbtautau/test/data/model_fold0_moe",  # noqa
     )
 
     predictions = nn0(
         event_number=al(0),
         spin=0,
         mass=400.0,
-        era=Era.e2016,
+        # era=Era.Run3_2022EE,
         pair_type=ai(0),
         dau1_dm=ai(0),
         dau2_dm=ai(0),
