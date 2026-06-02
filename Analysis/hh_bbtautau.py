@@ -682,7 +682,7 @@ def PrepareDfForHistograms(dfForHistograms):
             )
             dfForHistograms.df = dfForHistograms.df.Redefine(
                 "met_p4",
-                "ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)"
+                "ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
             )
 
     dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
