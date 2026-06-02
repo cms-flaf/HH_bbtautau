@@ -665,7 +665,9 @@ def PrepareDfForHistograms(dfForHistograms):
         )
         dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
 
-    if (not dfForHistograms.isData) and ("bosonicRecoil" in Corrections.getGlobal().to_apply):
+    if (not dfForHistograms.isData) and (
+        "bosonicRecoil" in Corrections.getGlobal().to_apply
+    ):
         dfForHistograms.df = dfForHistograms.df.Redefine("met_pt", "PuppiMET_pt_recoil")
         dfForHistograms.df = dfForHistograms.df.Redefine(
             "met_phi", "PuppiMET_phi_recoil"
