@@ -80,7 +80,7 @@ corrections:
       AnaTuple: shape
     tagger: particleNet
     jetCollection: centralJet
-  recoil:
+  bosonicRecoil:
     stage: HistTuple
     method: QuantileMapHist # Rescaling
     apply_systematics: true

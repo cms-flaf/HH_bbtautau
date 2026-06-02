@@ -664,21 +664,19 @@ def PrepareDfForHistograms(dfForHistograms):
             f"b{leg_idx}_legType", f"b{leg_idx}_pt > 0 ? Leg::jet : Leg::none"
         )
         dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
-    dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
-    if not dfForHistograms.isData:
-        dfForHistograms.df = Corrections.getGlobal().applyRecoilCorrections(
-            dfForHistograms.df,
-            Corrections.getGlobal().process_cfg,
-        )
-    if "PuppiMET_pt_recoil" in dfForHistograms.df.GetColumnNames():
+
+    if (not dfForHistograms.isData) and ("bosonicRecoil" in Corrections.getGlobal().to_apply):
         dfForHistograms.df = dfForHistograms.df.Redefine("met_pt", "PuppiMET_pt_recoil")
         dfForHistograms.df = dfForHistograms.df.Redefine(
             "met_phi", "PuppiMET_phi_recoil"
         )
-        dfForHistograms.df = dfForHistograms.df.ReDefine(
+        dfForHistograms.df = dfForHistograms.df.Redefine(
             "met_p4",
             "ROOT::Math::LorentzVector<ROOT::Math>>PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
         )
+
+    dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
+
     dfForHistograms.defineTriggers()
     dfForHistograms.defineBoostedVariables()
     dfForHistograms.redefinePUJetIDWeights()
