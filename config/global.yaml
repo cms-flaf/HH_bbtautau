@@ -121,6 +121,9 @@ corrections:
       AnaTuple: shape
     tagger: particleNet
     jetCollection: centralJet
+  dy_hhbbtautau:
+    stages: [ HistTuple ]
+    processes: [ DYto2E_M_50, DYto2Mu_M_50, DYto2Tau_M_50 ]
 
 extraFormat_for_triggerMatchingAndSF:
   pt: "nano"
