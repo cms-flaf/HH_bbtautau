@@ -16,10 +16,16 @@ import sys
 
 class Era(enum.Enum):
 
-    Run2_2016H = 0
-    Run2_2016 = 1
-    Run2_2017 = 2
-    Run2_2018 = 3
+    Run2_2016H = 1
+    Run2_2016 = 2
+    Run2_2017 = 3
+    Run2_2018 = 4
+    Run3_2022 = 5
+    Run3_2022EE = 6
+    Run3_2023 = 7
+    Run3_2023BPix = 8
+    Run3_2024 = 9
+    Run3_2025 = 10
 
 
 class DotDict(dict):
@@ -109,7 +115,7 @@ def convert_to_numpy(event_data, period, mass, spin):
     pairtype_map = {23: 0, 13: 1, 33: 2}
 
     inputs = {
-        "event_number": al(event_data["event"]),
+        "event_number": al(event_data["entry_index"]),
         "spin": ai(spin),
         "mass": ai(mass),
         "era": Era[period],
@@ -187,7 +193,7 @@ def load_models(model_dir):
             fold_index=fold_index,
             model_path=os.path.join(
                 model_dir,
-                f"hbtres_PSnew_baseline_LSmulti3_SSdefault_FSdefault_daurot_composite-default_extended_pair_ED10_LU8x128_CTdense_ACTelu_BNy_LT50_DO0_BS4096_OPadamw_LR1.0e-03_YEARy_SPINy_MASSy_RSv6_fi80_lbn_ft_lt20_lr1_LBdefault_daurot_fatjet_composite_FI{fold_index}_SDx5",
+                f"model_fold{fold_index}_moe",
             ),
         )
         for fold_index in range(NNInterface.n_folds)
@@ -220,57 +226,60 @@ def run_inference_on_events_tree(
     print(f"NN scores for Events tree saved in the output ROOT file")
 
 
-def run_inference_on_uncertainty_trees(
-    df_begin,
-    inFileName,
-    models,
-    globalConfig,
-    unc_cfg_dict,
-    scales,
-    output_root_file,
-    snapshotOptions,
-    period,
-    mass,
-    spin,
-):
-    dfWrapped_central = Utilities.DataFrameBuilderBase(df_begin)
-    colNames = dfWrapped_central.colNames
-    colTypes = dfWrapped_central.colTypes
-    dfWrapped_central.df = createCentralQuantities(df_begin, colTypes, colNames)
+# def run_inference_on_uncertainty_trees(
+#     df_begin,
+#     inFileName,
+#     models,
+#     globalConfig,
+#     unc_cfg_dict,
+#     scales,
+#     output_root_file,
+#     snapshotOptions,
+#     period,
+#     mass,
+#     spin,
+# ):
+#     # dfWrapped_central = Utilities.DataFrameBuilderBase(df_begin)
+#     # colNames = dfWrapped_central.df.GetColumnNames()
+#     # colTypes = []
+#     # for colName in colNames:
+#     #     colTypes.append(dfWrapped_central.df.GetColumnType(colName))
 
-    if dfWrapped_central.df.Filter("map_placeholder > 0").Count().GetValue() <= 0:
-        raise RuntimeError("No events passed the map placeholder")
+#     # dfWrapped_central.df = createCentralQuantities(df_begin, colTypes, colNames)
+#     # if dfWrapped_central.df.Filter("map_placeholder > 0").Count().GetValue() <= 0:
+#     #     raise RuntimeError("No events passed the map placeholder")
 
-    snapshotOptions.fLazy = False
-    for uncName in unc_cfg_dict["shape"]:
-        for scale in scales:
-            treeName = f"Events_{uncName}{scale}"
-            for suffix in ["_noDiff", "_Valid", "_nonValid"]:
-                treeName_with_suffix = f"{treeName}{suffix}"
-                if treeName_with_suffix in getKeyNames(inFileName):
-                    print(f"  Processing {treeName_with_suffix}")
-                    df_unc = ROOT.RDataFrame(treeName_with_suffix, inFileName)
-                    dfWrapped_unc = Utilities.DataFrameBuilderBase(df_unc)
-                    if "_nonValid" not in treeName_with_suffix:
-                        dfWrapped_unc.CreateFromDelta(colNames, colTypes)
-                    dfWrapped_unc.AddMissingColumns(colNames, colTypes)
-                    dfW_unc = Utilities.DataFrameWrapper(
-                        dfWrapped_unc.df, defaultColToSave
-                    )
+#     snapshotOptions.fLazy = False
+#     for uncName in unc_cfg_dict["shape"]:
+#         for scale in scales:
+#             treeName = f"Events_{uncName}{scale}"
+#             for suffix in ["_noDiff", "_Valid", "_nonValid"]:
+#                 treeName_with_suffix = f"{treeName}{suffix}"
+#                 print(f"Checking for tree: {treeName_with_suffix}")
+#                 if treeName_with_suffix in getKeyNames(inFileName):
+#                     print(f"  Processing {treeName_with_suffix}")
+#                     df_unc = ROOT.RDataFrame(treeName_with_suffix, inFileName)
+#                     dfWrapped_unc = Utilities.DataFrameBuilderBase(df_unc)
+#                     if "_nonValid" not in treeName_with_suffix:
+#                         dfWrapped_unc.CreateFromDelta(colNames, colTypes)
+#                     dfWrapped_unc.AddMissingColumns(colNames, colTypes)
+#                     dfW_unc = Utilities.DataFrameWrapper(
+#                         dfWrapped_unc.df, defaultColToSave
+#                     )
 
-                    run_inference_for_tree(
-                        tree_name=treeName_with_suffix,
-                        rdf=dfW_unc.df,
-                        models=models,
-                        globalConfig=globalConfig,
-                        output_root_file=output_root_file,
-                        snapshotOptions=snapshotOptions,
-                        period=period,
-                        mass=mass,
-                        spin=spin,
-                    )
+#                     run_inference_for_tree(
+#                         tree_name=treeName_with_suffix,
+#                         rdf=dfW_unc.df,
+#                         models=models,
+#                         globalConfig=globalConfig,
+#                         output_root_file=output_root_file,
+#                         snapshotOptions=snapshotOptions,
+#                         period=period,
+#                         mass=mass,
+#                         spin=spin,
+#                     )
 
-    print(f"NN scores saved to {output_file_name}")
+#     print(f"NN scores saved to {output_file_name}")
 
 
 def run_inference_for_tree(
@@ -288,9 +297,9 @@ def run_inference_for_tree(
     rdf_setup = PrepareDfForDNN(
         DataFrameBuilderForHistograms(rdf, globalConfig, period)
     ).df
-
+    rdf_setup = rdf_setup.Define("entry_index", "(UInt_t)(FullEventId & 0xFFFFFFFF)")
     columns = [
-        "entryIndex",
+        "entry_index",
         "luminosityBlock",
         "run",
         "event",
@@ -333,8 +342,8 @@ def run_inference_for_tree(
         "met_covYY",
         "Hbb_isValid",
         "boosted_baseline",
-        "X_mass",
-        "X_spin",
+        # "X_mass",
+        # "X_spin",
         "channelId",
     ]
 
@@ -357,6 +366,8 @@ def run_inference_for_tree(
                     print(f"  Event No. {i}")
 
                 event_data = {col: other_columns_dict[col][i] for col in columns}
+                if event_data["channelId"] not in [13, 23, 33]:
+                    continue
                 inputs = convert_to_numpy(event_data, period, mass, spin)
 
                 predictions = run_inference(nn_interface, inputs)
@@ -374,12 +385,12 @@ def run_inference_for_tree(
         tree.Branch("TT_score", TT_score, "TT_score/D")
         tree.Branch("DY_score", DY_score, "DY_score/D")
 
-        entryIndex = np.zeros(1, dtype=np.int64)
+        FullEventId = np.zeros(1, dtype=np.int64)
         luminosityBlock = np.zeros(1, dtype=np.int64)
         run_num = np.zeros(1, dtype=np.int64)
         event_num = np.zeros(1, dtype=np.int64)
 
-        tree.Branch("entryIndex", entryIndex, "entryIndex/L")
+        tree.Branch("entry_index", FullEventId, "entry_index/L")
         tree.Branch("luminosityBlock", luminosityBlock, "luminosityBlock/L")
         tree.Branch("run", run_num, "run/L")
         tree.Branch("event", event_num, "event/L")
@@ -388,7 +399,7 @@ def run_inference_for_tree(
             HH_score[0] = mean_predictions[i, 0]
             TT_score[0] = mean_predictions[i, 1]
             DY_score[0] = mean_predictions[i, 2]
-            entryIndex[0] = other_columns_dict["entryIndex"][i]
+            FullEventId[0] = other_columns_dict["entry_index"][i]
             luminosityBlock[0] = other_columns_dict["luminosityBlock"][i]
             run_num[0] = other_columns_dict["run"][i]
             event_num[0] = other_columns_dict["event"][i]
@@ -404,17 +415,22 @@ if __name__ == "__main__":
 
     sys.path.append(os.environ["ANALYSIS_PATH"])
     ROOT.gROOT.ProcessLine(".include " + os.environ["ANALYSIS_PATH"])
-    ROOT.gInterpreter.Declare(f'#include "include/KinFitInterface.h"')
-    ROOT.gInterpreter.Declare(f'#include "include/HistHelper.h"')
-    ROOT.gInterpreter.Declare(f'#include "include/Utilities.h"')
-    ROOT.gROOT.ProcessLine(f'#include "include/AnalysisTools.h"')
-    ROOT.gROOT.ProcessLine(f'#include "include/pnetSF.h"')
+    ROOT.gInterpreter.Declare(f'#include "FLAF/include/Utilities.h"')
+    ROOT.gROOT.ProcessLine(f'#include "FLAF/include/HistHelper.h"')
+    ROOT.gROOT.ProcessLine(f'#include "FLAF/include/AnalysisTools.h"')
+    ROOT.gROOT.ProcessLine(f'#include "FLAF/include/AnalysisMath.h"')
+    ROOT.gROOT.ProcessLine(f'#include "FLAF/include/MT2.h"')
+    # ROOT.gROOT.ProcessLine(f'#include "FLAF/include/Lester_mt2_bisect.cpp"')
+    # ROOT.gInterpreter.Declare(f'#include "include/KinFitInterface.h"')
+    # ROOT.gInterpreter.Declare(f'#include "FLAF/include/HistHelper.h"')
+    # ROOT.gInterpreter.Declare(f'#include "FLAF/include/Utilities.h"')
+    # ROOT.gROOT.ProcessLine(f'#include "FLAF/include/AnalysisTools.h"')
+    # # ROOT.gROOT.ProcessLine(f'#include "FLAF/include/pnetSF.h"')
 
     import yaml
     import argparse
     import numpy as np
-    from Analysis.HistHelper import *
-    from Common.Utilities import *
+    from FLAF.Common.Utilities import *
     from Analysis.hh_bbtautau import *
     from Analysis.GetCrossWeights import *
 
@@ -437,7 +453,7 @@ if __name__ == "__main__":
         unc_cfg_dict = yaml.safe_load(f)
 
     defaultColToSave = [
-        "entryIndex",
+        "FullEventId",
         "luminosityBlock",
         "run",
         "event",
@@ -513,19 +529,19 @@ if __name__ == "__main__":
     )
 
     # Run inference on uncertainty trees
-    run_inference_on_uncertainty_trees(
-        df_begin=df_begin,
-        inFileName=args.inFile,
-        models=models,
-        globalConfig=globalConfig,
-        unc_cfg_dict=unc_cfg_dict,
-        scales=scales,
-        output_root_file=output_root_file,
-        snapshotOptions=snapshotOptions,
-        period=args.period,
-        mass=args.mass,
-        spin=args.spin,
-    )
+    # run_inference_on_uncertainty_trees(
+    #     df_begin=df_begin,
+    #     inFileName=args.inFile,
+    #     models=models,
+    #     globalConfig=globalConfig,
+    #     unc_cfg_dict=unc_cfg_dict,
+    #     scales=scales,
+    #     output_root_file=output_root_file,
+    #     snapshotOptions=snapshotOptions,
+    #     period=args.period,
+    #     mass=args.mass,
+    #     spin=args.spin,
+    # )
 
     output_root_file.Write()
     output_root_file.Close()
