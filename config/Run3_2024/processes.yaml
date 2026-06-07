@@ -25,59 +25,38 @@ DY_M_10to50:
 
 DYto2E_M_50:
   processors: *DY_processors
-<<<<<<< HEAD
-  corrections:
-    dy_hhbbtautau:
-      stages: [ HistTuple ]
-      type: DY
-    bosonicRecoil:
-      enabled: true
-      order: NLO
-
-=======
->>>>>>> main
   datasets:
     - DYto2E_M_50_amcatnloFXFX
     - DYto2E_M_50_0J_amcatnloFXFX
     - DYto2E_M_50_1J_amcatnloFXFX
     - DYto2E_M_50_2J_amcatnloFXFX
-
-DYto2Mu_M_50:
-  processors: *DY_processors
-<<<<<<< HEAD
   corrections:
-    dy_hhbbtautau:
-      stages: [ HistTuple ]
-      type: DY
     bosonicRecoil:
       enabled: true
       order: NLO
 
-=======
->>>>>>> main
+DYto2Mu_M_50:
+  processors: *DY_processors
   datasets:
     - DYto2Mu_M_50_amcatnloFXFX
     - DYto2Mu_M_50_0J_amcatnloFXFX
     - DYto2Mu_M_50_1J_amcatnloFXFX
     - DYto2Mu_M_50_2J_amcatnloFXFX
-
-DYto2Tau_M_50:
-  processors: *DY_processors
-<<<<<<< HEAD
   corrections:
-    dy_hhbbtautau:
-      stages: [ HistTuple ]
-      type: DY
     bosonicRecoil:
       enabled: true
       order: NLO
 
-=======
->>>>>>> main
+DYto2Tau_M_50:
+  processors: *DY_processors
   datasets:
     - DYto2Tau_M_50_0J_amcatnloFXFX
     - DYto2Tau_M_50_1J_amcatnloFXFX
     - DYto2Tau_M_50_2J_amcatnloFXFX
+  corrections:
+    bosonicRecoil:
+      enabled: true
+      order: NLO
 
 TT:
   name: "t#bar{t}"
