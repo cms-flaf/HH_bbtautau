@@ -4,6 +4,47 @@ analysis_import: Analysis.hh_bbtautau
 phys_model: BaseModel
 use_cmssw_env_AnaTupleProduction: true
 
+bundles:
+  core:
+    period_specific: false
+    patterns:
+      - FLAF
+      - AnaProd
+      - Analysis
+      - config
+      - env.sh
+      - soft/flaf_env
+      - HHbtag
+      - Corrections
+      - ClassicSVfit
+      - SVfitTF
+      - HHKinFit2
+      - include
+  cmssw:
+    period_specific: false
+    patterns:
+      - soft/CMSSW_16_0_6
+  inputFileList:
+    period_specific: true
+    patterns:
+      - data/{version}/InputFileTask/{period}
+    task_requires:
+      module: FLAF.AnaProd.tasks
+      class: InputFileTask
+  AnaTupleFileList:
+    period_specific: true
+    patterns:
+      - data/{version}/AnaTupleFileListBuilderTask/{period}
+      - data/{version}/AnaTupleFileListTask/{period}
+    task_requires:
+      module: FLAF.AnaProd.tasks
+      class: AnaTupleFileListBuilderTask
+  inference:
+    period_specific: false
+    patterns:
+      - inference
+      - StatInference
+
 WLCGFileSystem:
   remotePathCacheHost: cms-flaf.cern.ch
   remotePathCachePort: 5000
@@ -80,10 +121,9 @@ corrections:
       AnaTuple: shape
     tagger: particleNet
     jetCollection: centralJet
-  bosonicRecoil:
-    stage: HistTuple
-    method: QuantileMapHist # Rescaling
-    apply_systematics: true
+  dy_hhbbtautau:
+    stages: [ HistTuple ]
+    processes: [ DYto2E_M_50, DYto2Mu_M_50, DYto2Tau_M_50 ]
 
 extraFormat_for_triggerMatchingAndSF:
   pt: "nano"

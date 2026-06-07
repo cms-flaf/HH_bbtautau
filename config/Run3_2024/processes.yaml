@@ -25,6 +25,7 @@ DY_M_10to50:
 
 DYto2E_M_50:
   processors: *DY_processors
+<<<<<<< HEAD
   corrections:
     dy_hhbbtautau:
       stages: [ HistTuple ]
@@ -33,6 +34,8 @@ DYto2E_M_50:
       enabled: true
       order: NLO
 
+=======
+>>>>>>> main
   datasets:
     - DYto2E_M_50_amcatnloFXFX
     - DYto2E_M_50_0J_amcatnloFXFX
@@ -41,6 +44,7 @@ DYto2E_M_50:
 
 DYto2Mu_M_50:
   processors: *DY_processors
+<<<<<<< HEAD
   corrections:
     dy_hhbbtautau:
       stages: [ HistTuple ]
@@ -49,6 +53,8 @@ DYto2Mu_M_50:
       enabled: true
       order: NLO
 
+=======
+>>>>>>> main
   datasets:
     - DYto2Mu_M_50_amcatnloFXFX
     - DYto2Mu_M_50_0J_amcatnloFXFX
@@ -57,6 +63,7 @@ DYto2Mu_M_50:
 
 DYto2Tau_M_50:
   processors: *DY_processors
+<<<<<<< HEAD
   corrections:
     dy_hhbbtautau:
       stages: [ HistTuple ]
@@ -65,6 +72,8 @@ DYto2Tau_M_50:
       enabled: true
       order: NLO
 
+=======
+>>>>>>> main
   datasets:
     - DYto2Tau_M_50_0J_amcatnloFXFX
     - DYto2Tau_M_50_1J_amcatnloFXFX
