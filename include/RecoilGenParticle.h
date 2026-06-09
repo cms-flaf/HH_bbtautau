@@ -71,12 +71,12 @@ namespace recoil_boson {
         const std::size_t n = pt.size();
         if (eta.size() != n || phi.size() != n || mass.size() != n || pdgId.size() != n || status.size() != n ||
             statusFlags.size() != n) {
-            throw std::runtime_error("GetGenBosonVisP4: inconsistent GenPart collection sizes");
+            throw std::runtime_error("GetGenBosonP4: inconsistent GenPart collection sizes");
         }
 
         LorentzVectorM p4(0., 0., 0., 0.);
         for (std::size_t i = 0; i < n; ++i) {
-            if (!PassRecoilGenParticleSelection(pdgId[i] status[i], statusFlags[i], true))
+            if (!PassRecoilGenParticleSelection(pdgId[i], status[i], statusFlags[i], true))
                 continue;
             p4 += LorentzVectorM(pt[i], eta[i], phi[i], mass[i]);
         }
