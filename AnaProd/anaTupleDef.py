@@ -406,33 +406,19 @@ def addAllVariables(
             "recoil_GenBoson_pt", "static_cast<float>(recoil_GenBoson_p4.pt())"
         )
         dfw.DefineAndAppend(
-            "recoil_GenBoson_eta", "static_cast<float>(recoil_GenBoson_p4.eta())"
-        )
-        dfw.DefineAndAppend(
             "recoil_GenBoson_phi", "static_cast<float>(recoil_GenBoson_p4.phi())"
-        )
-        dfw.DefineAndAppend(
-            "recoil_GenBoson_mass", "static_cast<float>(recoil_GenBoson_p4.mass())"
         )
         dfw.DefineAndAppend(
             "recoil_GenBoson_vis_pt", "static_cast<float>(recoil_GenBoson_vis_p4.pt())"
         )
         dfw.DefineAndAppend(
-            "recoil_GenBoson_vis_eta",
-            "static_cast<float>(recoil_GenBoson_vis_p4.eta())",
-        )
-        dfw.DefineAndAppend(
             "recoil_GenBoson_vis_phi",
             "static_cast<float>(recoil_GenBoson_vis_p4.phi())",
         )
-        dfw.DefineAndAppend(
-            "recoil_GenBoson_vis_mass",
-            "static_cast<float>(recoil_GenBoson_vis_p4.mass())",
-        )
-        dfw.DefineAndAppend(
-            "recoil_njet",
-            "recoil_boson::GetRecoilNJetCategoryFloat(GenJet_pt, GenJet_eta)",
-        )
+        # dfw.DefineAndAppend(
+        #     "recoil_njet_gen",
+        #     "recoil_boson::GetRecoilNJetCategoryFloat(GenJet_pt, GenJet_eta)",
+        # )
 
     pf_str = global_params["met_type"]
     dfw.DefineAndAppend(f"met_pt_nano", f"static_cast<float>({pf_str}_p4_nano.pt())")
