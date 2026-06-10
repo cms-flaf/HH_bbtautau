@@ -665,26 +665,6 @@ def PrepareDfForHistograms(dfForHistograms):
         )
         dfForHistograms.df = dfForHistograms.df.Define(f"b{leg_idx}_decayMode", "-2")
 
-    if (not dfForHistograms.isData) and (
-        "bosonicRecoil" in Corrections.getGlobal().to_apply
-    ):
-        process_cfg = Corrections.getGlobal().process_cfg
-        if (
-            process_cfg.get("corrections", {})
-            .get("bosonicRecoil", {})
-            .get("enabled", False)
-        ):
-            dfForHistograms.df = dfForHistograms.df.Redefine(
-                "met_pt", "PuppiMET_pt_recoil"
-            )
-            dfForHistograms.df = dfForHistograms.df.Redefine(
-                "met_phi", "PuppiMET_phi_recoil"
-            )
-            dfForHistograms.df = dfForHistograms.df.Redefine(
-                "met_p4",
-                "ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
-            )
-
     dfForHistograms.df = defineAllP4(dfForHistograms.df, isData=dfForHistograms.isData)
 
     dfForHistograms.defineTriggers()
@@ -702,6 +682,10 @@ def PrepareDfForHistograms(dfForHistograms):
     dfForHistograms.defineCRs()
     dfForHistograms.defineCategories()
     dfForHistograms.defineQCDRegions()
+    dfForHistograms.df = RedefineMETbosonicRecoil(
+        dfForHistograms.df, isData=dfForHistograms.isData
+    )
+
     return dfForHistograms
 
 
@@ -736,4 +720,35 @@ def defineAllP4(df, isData=False):
     )
     df = df.Define(f"pt_ll", "(tau1_p4+tau2_p4).Pt()")
     df = df.Define(f"pt_bb", "(b1_p4+b2_p4).Pt()")
+    return df
+
+
+def RedefineMETbosonicRecoil(df, isData=False):
+    if (not isData) and ("bosonicRecoil" in Corrections.getGlobal().to_apply):
+        process_cfg = Corrections.getGlobal().process_cfg
+        if (
+            process_cfg.get("corrections", {})
+            .get("bosonicRecoil", {})
+            .get("enabled", False)
+        ):
+            df = df.Redefine("met_pt", "PuppiMET_pt_recoil")
+            df = df.Redefine("met_phi", "PuppiMET_phi_recoil")
+            df = df.Redefine(
+                "met_p4",
+                "ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>(met_pt,0.,met_phi,0.)",
+            )
+            for met_var in ["met", "metnomu"]:
+                df = df.Redefine(
+                    f"{met_var}_p4",
+                    f"ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double>>({met_var}_pt,0.,{met_var}_phi,0.)",
+                )
+                for leg_idx in [0, 1]:
+                    df = df.Redefine(
+                        f"deltaPhi_{met_var}_tau{leg_idx+1}",
+                        f"ROOT::Math::VectorUtil::DeltaPhi({met_var}_p4,tau{leg_idx+1}_p4)",
+                    )
+                    df = df.Redefine(
+                        f"deltaPhi_{met_var}_b{leg_idx+1}",
+                        f"ROOT::Math::VectorUtil::DeltaPhi({met_var}_p4,b{leg_idx+1}_p4)",
+                    )
     return df
