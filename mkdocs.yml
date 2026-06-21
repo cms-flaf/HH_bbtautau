@@ -1,10 +1,16 @@
 site_name: HH->bbtautau
-repo_name: GitHub
+site_description: >-
+  HH -> bb tautau analysis built on the FLAF framework. Analysis-specific setup,
+  observables and statistical inference. The common pipeline is documented in the FLAF docs.
+repo_name: cms-flaf/HH_bbtautau
 repo_url: https://github.com/cms-flaf/HH_bbtautau
+edit_uri: edit/main/docs/
+
 theme:
   name: material
   font: false
-  palette: 
+  logo: https://cms.cern/sites/default/files/logo/cms_logo_neg03_2.png
+  palette:
     - media: "(prefers-color-scheme)"
       toggle:
         icon: material/brightness-auto
@@ -23,12 +29,10 @@ theme:
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode (it's night time!)
-  logo: https://cms.cern/sites/default/files/logo/cms_logo_neg03_2.png
-
   features:
     - content.action.edit
     - content.action.view
-    - navigation.expand
+    - content.code.copy
     - navigation.footer
     - navigation.indexes
     - navigation.sections
@@ -41,18 +45,16 @@ theme:
     - search.suggest
     - toc.follow
 
-  highlightjs: true
-  hljs_style: github
-
 markdown_extensions:
   - attr_list
   - admonition
   - def_list
   - footnotes
   - meta
+  - md_in_html
+  - tables
   - toc:
       permalink: true
-  # Python Markdown Extensions
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
@@ -62,7 +64,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.mark
@@ -77,27 +80,18 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
-  - pymdownx.blocks.admonition
-  - pymdownx.blocks.details
-  - pymdownx.blocks.tab
 
 plugins:
   - search
 
-extra_css:
-  - stylesheets/fonts.css
-
 extra_javascript:
   - https://unpkg.com/mermaid@9.3/dist/mermaid.min.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-
 
 nav:
   - Home: index.md
-  - AnaTuple Production: anatuple_prod.md
-  - Analysis: analysis.md
-  - Interactive Plot Browser: interactive_plot_browser.md
+  - Setup: setup.md
+  - Running the analysis: analysis.md
   - Statistical inference: stat_inference.md
-
-#theme: readthedocs
+  - HHbtag training: hhbtag_training.md
+  - Interactive plot browser: interactive_plot_browser.md

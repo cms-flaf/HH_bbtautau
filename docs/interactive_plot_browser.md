@@ -1,18 +1,27 @@
-## Set up your personal interactive plot browser
-[Interactive plot browser instructions from CMS Common Analysis Tools](https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser/#install-the-plot-browser)
+# Interactive plot browser
 
-There are detialed instructions on the page above with pictures for guidance. Once you submit the form to register a personal website, you can change some configurations (enabling `Use .htaccess files` etc.).
+You can publish your plots to a personal, interactive web browser using the
+[CMS Common Analysis Tools plot browser](https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser/#install-the-plot-browser).
 
-It is important that you share the EOS user space directory with `wwweos` account as directed on the instructions webpage above. Once shared, your personal interactive plot browser will become available.
+The page above has detailed, illustrated instructions. After submitting the form to register a
+personal website you can adjust some settings (e.g. enabling **Use .htaccess files**).
 
-After you have your interactive plot browser ready, you can run a simple script to post your plots as follows:
+!!! important "Share your EOS space with `wwweos`"
+    Your EOS user-space directory must be shared with the `wwweos` account, as described in the
+    instructions, before the browser becomes available.
+
+Once the browser is set up, deploy a directory of plots with:
 
 ```sh
-python3 /eos/user/u/username/php-plots/bin/pb_deploy_plots.py /path-to-where-you-currently-have-your-plots-saved/ /eos/user/u/username/php-plots/directory-where-you-want-your-plots-posted/ --recursive --pdf-to-png
+python3 /eos/user/u/username/php-plots/bin/pb_deploy_plots.py \
+  /path/to/your/plots/ \
+  /eos/user/u/username/php-plots/<target-directory>/ \
+  --recursive --pdf-to-png
 ```
 
-Note:
+Notes:
 
-- The `--pdf-to-png` command is to convert your .pdf format plots to a .png copy.
-- `/eos/user/u/username/` is your eos space with `/u/username` string is just a placeholder in the instructions here and should be unique to you.
-- The directory `/eos/user/u/username/php-plots/` is where you cloned the Plot Browser git repository (i.e. `cms-analysis/general/php-plots`). 
+- `--pdf-to-png` makes a `.png` copy of each `.pdf` plot.
+- `/eos/user/u/username/` is **your** EOS area (`/u/username` here is just a placeholder).
+- `/eos/user/u/username/php-plots/` is where you cloned the plot-browser repository
+  (`cms-analysis/general/php-plots`).
