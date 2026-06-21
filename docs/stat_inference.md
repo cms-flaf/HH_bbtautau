@@ -1,34 +1,62 @@
-## How to run limits
-1. As a temporary workaround, if you want to run multiplie commands, to avoid delays to load environment each time run:
-  ```sh
-  cmsEnv /bin/zsh # or /bin/bash
-  ```
-  Alternatively add `cmsEnv` in front of each command. E.g.
-  ```sh
-  cmsEnv python3 -c 'print("hello")'
-  ```
+# Statistical inference
 
-1. Create datacards.
-  ```sh
-  cmsEnv python3 StatInference/dc_make/create_datacards.py --input PATH_TO_SHAPES  --output PATH_TO_CARDS --config PATH_TO_CONFIG
-  ```
-  Available configurations:
-    - For X->HH>bbtautau Run 2: [StatInference/config/x_hh_bbtautau_run2.yaml](https://github.com/cms-flaf/StatInference/blob/main/config/x_hh_bbtautau_run2.yaml)
-    - For X->HH->bbWW Run 3: [StatInference/config/x_hh_bbww_run3.yaml](https://github.com/cms-flaf/StatInference/blob/main/config/x_hh_bbww_run3.yaml)
-    - For Non resonant HH->bbtautau Run 3: [StatInference/config/x_hh_bbtautau_run3.yaml](https://github.com/cms-flaf/StatInference/blob/main/config/)
+The final step turns the merged histograms into **datacards** and runs limits and diagnostics with
+[Combine](https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/), via the `StatInference` and
+`inference` submodules. For where this sits in the pipeline see
+[FLAF → walkthrough, stage 5](https://cms-flaf.github.io/FLAF/workflow/walkthrough/#stage-5-statistical-inference).
 
-1. Run limits.
-  For resonant studies:
-  ```sh
-  law run PlotResonantLimits --version dev --datacards 'PATH_TO_CARDS/*.txt' --xsec fb --y-log
-  ```
-  Hints:
-    - use `--workflow htcondor` to submit on HTCondor (by default it runs locally)
-    - add `--remove-output 4,a,y` to remove previous output files
-    - add `--print-status 0` to get status of the workflow (where `0` is a depth). Useful to get the output file name.
-    - for more details see [cms-hh inference documentation](https://cms-hh.web.cern.ch/tools/inference/)
+These commands run inside CMSSW/Combine, so prefix them with `cmsEnv` — or open one Combine subshell
+and run several commands in it:
 
-  For Non-resonant studies:
-  ```sh
-  cmsEnv combine StatInference/config/datacard_*.txt -t -1
-  ```
+```sh
+cmsEnv /bin/zsh        # a CMSSW+Combine subshell (or /bin/bash)
+```
+
+## 1. Create datacards
+
+```sh
+cmsEnv python3 StatInference/dc_make/create_datacards.py \
+  --input  PATH_TO_SHAPES \
+  --output PATH_TO_CARDS \
+  --config PATH_TO_CONFIG
+```
+
+Configurations live in [`StatInference/config/`](https://github.com/cms-flaf/StatInference/tree/main/config):
+
+- Resonant X→HH→bb̄ττ: `x_hh_bbtautau_run3.yaml` (Run 2: `x_hh_bbtautau_run2.yaml`).
+- Non-resonant HH→bb̄ττ: the corresponding non-resonant config in the same directory.
+
+## 2. Run limits
+
+**Resonant** (a scan over mass points):
+
+```sh
+law run PlotResonantLimits --version dev --datacards 'PATH_TO_CARDS/*.txt' --xsec fb --y-log
+```
+
+Hints:
+
+- add `--workflow htcondor` to submit to the batch system (local by default);
+- add `--remove-output 4,a,y` to clear previous outputs;
+- add `--print-status 0` to get the workflow status and the output file name;
+- background and options: the [cms-hh inference documentation](https://cms-hh.web.cern.ch/tools/inference/).
+
+**Non-resonant** (run combine directly on the datacard):
+
+```sh
+cmsEnv combine StatInference/config/datacard_*.txt -t -1
+```
+
+## 3. Pulls & impacts
+
+```sh
+PlotPullsAndImpacts --version dev --datacards "PATH_TO_CARDS/<one_card>.txt" \
+  --hh-model NO_STR --parameter-values r=1 --parameter-ranges r,-100,100 \
+  --method robust --PlotPullsAndImpacts-order-by-impact True --mc-stats True \
+  --PullsAndImpacts-custom-args="--expectSignal=1"
+```
+
+!!! warning "Do pulls per mass point"
+    Run pulls & impacts on a **single** datacard (one mass point) at a time — not on a glob of
+    `*.txt`. Add `--remove-output 4,a,y` to clear previous outputs and `--print-status 0` to find
+    the output file name.
