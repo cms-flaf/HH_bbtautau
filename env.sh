@@ -16,7 +16,10 @@ action() {
     export HH_INFERENCE_PATH="$ANALYSIS_PATH/inference"
     export FLAF_CMSSW_VERSION="CMSSW_16_0_6"
     export FLAF_CMSSW_COMPILER="gcc13"
-    source $ANALYSIS_PATH/FLAF/env.sh "$this_file_path" "$@"
+    # FLAF_PATH defaults to the submodule copy but is respected if pre-set (flaf_dev.sh
+    # points it at the edited top-level FLAF in a FLAF_all workspace).
+    [ -z "$FLAF_PATH" ] && export FLAF_PATH="$ANALYSIS_PATH/FLAF"
+    source "$FLAF_PATH/env.sh" "$this_file_path" "$@"
 }
 
 action "$@"
