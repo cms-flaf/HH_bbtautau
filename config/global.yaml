@@ -124,6 +124,10 @@ corrections:
   dy_hhbbtautau:
     stages: [ HistTuple ]
     processes: [ DYto2E_M_50, DYto2Mu_M_50, DYto2Tau_M_50 ]
+  bosonicRecoil:
+    stage: HistTuple
+    method: QuantileMapHist # Rescaling
+    apply_systematics: true
 
 extraFormat_for_triggerMatchingAndSF:
   pt: "nano"
