@@ -322,6 +322,9 @@ def addAllVariables(
                     )
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
+    dfw.DefineAndAppend(
+        "nBJets_PNetTag", "Jet_p4[Jet_bCand && Jet_idbtagPNetB >= 2].size()"
+    )
 
     centralJet_vars = ["p4", "btagPNetB"]
     if not isData:
