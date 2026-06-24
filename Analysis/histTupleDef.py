@@ -50,6 +50,8 @@ def GetDfw(df, setup, dataset_name):
         datasetType = 2
     kwargset["whichType"] = datasetType
     dfw = analysis.DataFrameBuilderForHistograms(df, global_params, period, **kwargset)
+    corrections = Corrections.getGlobal()
+    dfw.df = corrections.applyBosonicRecoil(dfw.df)
     new_dfw = analysis.PrepareDfForHistograms(dfw)
     return new_dfw
 
