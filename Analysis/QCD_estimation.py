@@ -17,9 +17,12 @@ def QCD_Estimation(
     data_process_name,
     wantNegativeContributions,
 ):
-    key_B = ((channel, "OS_AntiIso", category), (uncName, scale))
-    key_C = ((channel, "SS_Iso", category), (uncName, scale))
-    key_D = ((channel, "SS_AntiIso", category), (uncName, scale))
+    read_unc, read_scale = (uncName, scale)
+    if uncName == "QCDScale":
+        read_unc, read_scale = "Central", "Central"
+    key_B = ((channel, "OS_AntiIso", category), (read_unc, read_scale))
+    key_C = ((channel, "SS_Iso", category), (read_unc, read_scale))
+    key_D = ((channel, "SS_AntiIso", category), (read_unc, read_scale))
     hist_data = histograms[data_process_name]
     hist_data_B = hist_data[key_B].Clone()
     hist_data_C = hist_data[key_C].Clone()
@@ -135,8 +138,9 @@ def QCD_Estimation(
     qcd_norm_shape = n_data_C / n_data_D if n_data_D != 0.0 else 0.0
     hist_qcd_Up = hist_data_B.Clone()
     hist_qcd_Up.Scale(qcd_norm_shape)
-    hist_qcd_Down = hist_data_B.Clone()
-    hist_qcd_Down.Scale(qcd_norm_shape)
+    hist_qcd_Down = hist_qcd_Central.Clone()
+    hist_qcd_Down.Scale(2.0)
+    hist_qcd_Down.Add(hist_qcd_Up, -1.0)
     n_data_C_abs = n_data_C
     if n_data_C < 0:
         n_data_C_abs = math.sqrt(n_data_C * n_data_C)

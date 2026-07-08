@@ -86,3 +86,6 @@ shape: # syst unc conventions here: https://gitlab.cern.ch/cms-analysis/general/
     name: CMS_scale_j_{}
   JER:
     name: CMS_res_j_{}
+  QCDScale:
+    name: CMS_scale_qcd_{}
+    data_driven: true
