@@ -1010,8 +1010,7 @@ pt_HH:
 ggF_DNN_HH:
   x_bins: "100|0:1"
   x_title: ggF DNN HH
-  # y_title: dN/dm (1/GeV)
-  y_title: "Events"
+  y_title: Events
   use_log_y: False
   max_y_sf: 1.8
   divide_by_bin_width: False
@@ -1019,8 +1018,7 @@ ggF_DNN_HH:
 ggF_DNN_DY:
   x_bins: "100|0:1"
   x_title: ggF DNN DY
-  # y_title: dN/dm (1/GeV)
-  y_title: "Events"
+  y_title: Events
   use_log_y: False
   max_y_sf: 1.8
   divide_by_bin_width: False
@@ -1028,8 +1026,7 @@ ggF_DNN_DY:
 ggF_DNN_TT:
   x_bins: "100|0:1"
   x_title: ggF DNN TT
-  # y_title: dN/dm (1/GeV)
-  y_title: "Events"
+  y_title: Events
   use_log_y: False
   max_y_sf: 1.8
   divide_by_bin_width: False

@@ -42,10 +42,10 @@ class DNNProducer:
         models = [
             NNInterface(
                 fold_index=fold_index,
-                model_path=os.path.join(
+                model_path=os.path.join(os.environ["ANALYSIS_PATH"] , os.path.join(
                     model_dir,
                     f"model_fold{fold_index}_moe",
-                ),
+                )),
             )
             for fold_index in range(NNInterface.n_folds)
         ]

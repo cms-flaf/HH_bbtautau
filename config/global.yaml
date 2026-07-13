@@ -149,6 +149,9 @@ variables:
   - met_pt
   - nBJets
   - nJet
+  - ggF_DNN_HH
+  - ggF_DNN_DY
+  - ggF_DNN_TT
 
 treeName: "Events"
 
