@@ -139,20 +139,24 @@ muonID_WP_for_triggerSF: "Tight" # only medium or tight for trigger SF, both iso
 muIDWP: "Tight"
 muIsoWP: "Tight"
 
-variables:
-  - tau1_pt
-  - tau1_eta
-  - tau2_pt
-  - tau2_eta
-  - b1_pt
-  - b1_eta
-  - b2_pt
-  - b2_eta
-  - tautau_m_vis
-  - bb_m_vis
-  - met_pt
-  - nBJets
-  - nJet
+histTuple_flavor: default
+histTuple_flavors:
+  default:
+    fullResolution_variables: [ ]
+    variables:
+      - tau1_pt
+      - tau1_eta
+      - tau2_pt
+      - tau2_eta
+      - b1_pt
+      - b1_eta
+      - b2_pt
+      - b2_eta
+      - tautau_m_vis
+      - bb_m_vis
+      - met_pt
+      - nBJets
+      - nJet
 
 treeName: "Events"
 
