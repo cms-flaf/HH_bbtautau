@@ -157,6 +157,11 @@ histTuple_flavors:
       - met_pt
       - nBJets
       - nJet
+  CI:
+    fullResolution_variables: [ ]
+    variables:
+      - tau1_pt
+      - ggF_DNN_HH
 
 treeName: "Events"
 
