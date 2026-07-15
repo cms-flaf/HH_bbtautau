@@ -198,10 +198,14 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channels, weights_this_process=None, isDY=False):
+# def GetWeight(channels, weights_this_process=None, isDY=False):
+def GetWeight(channels, weights_this_process=None):
     weights_dict = {}
     weights_this_process = set(weights_this_process or [])
-    apply_dy_hhbbtautau = isDY or ("dy_hhbbtautau" in weights_this_process)
+    # apply_dy_hhbbtautau = isDY or ("dy_hhbbtautau" in weights_this_process)
+    apply_dy_hhbbtautau = False
+    if "dy_hhbbtautau" in weights_this_process:
+        apply_dy_hhbbtautau = True
     weights_to_apply = [
         "weight_base"
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
