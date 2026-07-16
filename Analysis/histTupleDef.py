@@ -73,8 +73,8 @@ def DefineWeightForHistograms(
 ):
     global central_df_weights_computed
     is_central = uncName == central
+    corrections = Corrections.getGlobal()
     if not isData and (not central_df_weights_computed or not df_is_central):
-        corrections = Corrections.getGlobal()
         lepton_legs = ["tau1", "tau2"]
         offline_legs = ["tau1", "tau2", "b1", "b2"]
         triggers_to_use = set()
@@ -108,13 +108,14 @@ def DefineWeightForHistograms(
     boosted_categories = global_params.get("boosted_categories", [])
     process_group = global_params["process_group"]
 
-    isDY = process_group == "DY"
+    # isDY = process_group == "DY"
+    weights_this_process = set(corrections.to_apply.keys())
 
     total_weight_expression = (
         # channel, cat, boosted_categories --> these are not needed in the GetWeight function therefore I just put some placeholders
         analysis.GetWeight(
             global_params["channels_to_consider"],
-            isDY=isDY,
+            weights_this_process=weights_this_process,
         )
         if process_group != "data"
         else "1"
