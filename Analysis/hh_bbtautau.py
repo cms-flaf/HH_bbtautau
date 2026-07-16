@@ -198,8 +198,12 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channels, isDY=False):
+def GetWeight(channels, weights_this_process=None):
     weights_dict = {}
+    weights_this_process = set(weights_this_process or [])
+    apply_dy_hhbbtautau = False
+    if "dy_hhbbtautau" in weights_this_process:
+        apply_dy_hhbbtautau = True
     weights_to_apply = [
         "weight_base"
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
@@ -266,7 +270,7 @@ def GetWeight(channels, isDY=False):
         weights_list = ["weight_base"]
         # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
         weights_list.extend(ID_weights_dict[channel])
-        if isDY:
+        if apply_dy_hhbbtautau:  # isDY:
             weights_list.append("weight_dy_central")
 
         # if categories dependent weights are present do a sub loop here extending the dict
@@ -479,10 +483,19 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             )
 
     def defineCategories(self):  # needs lot of stuff --> at the end
-        self.df = self.df.Define(
-            "nSelBtag",
-            f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})",
-        )
+
+        self.df = self.df.Define("bjet1_isValid", "nBJets > 0")
+        self.df = self.df.Define("bjet2_isValid", "nBJets > 1")
+
+        nBjets_PNetTag = f"int(bjet1_isValid && b1_idbtagPNetB >= 2) + int( bjet2_isValid && b2_idbtagPNetB >= 2)"
+        self.df = self.df.Redefine("nBJets", nBjets_PNetTag)
+
+        # self.df = self.df.Define(
+        #     "nSelBtag",
+        #     f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})",
+        # )
+        self.df = self.df.Define("nSelBtag", nBjets_PNetTag)
+
         for category_to_def in self.config["category_definition"].keys():
             category_name = category_to_def
             if category_name == "boosted":
