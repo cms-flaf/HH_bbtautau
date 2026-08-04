@@ -81,7 +81,10 @@ DYto2Tau_M_50:
 TT:
   name: "t#bar{t}"
   color: "kGreen-3"  # eliminates need for plot.yaml
+  processors: *TT_processors
   datasets:
+    - TT
+    - TT_ext1
     - TTto2L2Nu
     - TTtoLNu2Q
     - TTto4Q
