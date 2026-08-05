@@ -27,3 +27,13 @@
     dependency_level:
       AnaTuple: file
       AnaTupleMerge: process
+
+.DYtautau_processors: &DYtautau_processors
+  - name: Stitcher
+    module: FLAF.Processors.MCStitchingDYtautau
+    class: DYtautauStitcher
+    config: FLAF/config/Processors/stitching_DY_amcatnlo_Vpt_NpNLO_ttFilter.yaml
+    stages: [ AnaTuple, AnaTupleMerge ]
+    dependency_level:
+      AnaTuple: file
+      AnaTupleMerge: process
