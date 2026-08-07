@@ -64,3 +64,5 @@ storage.
 - [Running the analysis](analysis.md) — the bb̄ττ-specific run notes.
 - [FLAF → Full workflow](https://cms-flaf.github.io/FLAF/workflow/walkthrough/) — the common
   pipeline, stage by stage.
+- [FLAF → HTCondor](https://cms-flaf.github.io/FLAF/workflow/htcondor/) /
+  [CRAB](https://cms-flaf.github.io/FLAF/workflow/crab/) — CERN batch and full WLCG submission.
