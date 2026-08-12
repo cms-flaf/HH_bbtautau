@@ -198,14 +198,14 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channels, weights_this_process=None):
+def GetWeight(channels, weights_this_process=None, weight_base_name="weight_base"):
     weights_dict = {}
     weights_this_process = set(weights_this_process or [])
     apply_dy_hhbbtautau = False
     if "dy_hhbbtautau" in weights_this_process:
         apply_dy_hhbbtautau = True
     weights_to_apply = [
-        "weight_base"
+        weight_base_name
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
     trg_weights_dict = {
         "eTau": [
@@ -267,7 +267,7 @@ def GetWeight(channels, weights_this_process=None):
     }
     weights_full_string = ""
     for channel in channels:
-        weights_list = ["weight_base"]
+        weights_list = [weight_base_name]
         # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
         weights_list.extend(ID_weights_dict[channel])
         if apply_dy_hhbbtautau:  # isDY:
