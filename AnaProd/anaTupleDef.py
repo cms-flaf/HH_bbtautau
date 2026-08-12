@@ -300,6 +300,9 @@ def addAllVariables(
     dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
     jet_obs = []
     jet_obs.extend(JetObservables)
+    if global_params["era"] in ("Run3_2024", "Run3_2025"):
+        # NanoAODv15 dropped the detailed Jet_puId_* inputs.
+        jet_obs = [v for v in jet_obs if not v.startswith("puId_")]
     if global_params["requireHbbJets"]:
         dfw.Apply(AnaBaseline.ApplyJetSelection)
     if not isData:
