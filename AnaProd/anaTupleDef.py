@@ -300,9 +300,6 @@ def addAllVariables(
     dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
     jet_obs = []
     jet_obs.extend(JetObservables)
-    if global_params["era"] in ("Run3_2024", "Run3_2025"):
-        # NanoAODv15 dropped the detailed Jet_puId_* inputs.
-        jet_obs = [v for v in jet_obs if not v.startswith("puId_")]
     if global_params["requireHbbJets"]:
         dfw.Apply(AnaBaseline.ApplyJetSelection)
     if not isData:
@@ -324,6 +321,9 @@ def addAllVariables(
                         f"genLepton{gen_idx+1}_{var}",
                         f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())",
                     )
+
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    jet_obs = [v for v in jet_obs if f"Jet_{v}" in existing_cols]
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
 
