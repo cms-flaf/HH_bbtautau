@@ -221,8 +221,11 @@ def Initialize(setup, dataset_name):
             )
         ROOT.gInterpreter.Declare(f'#include "{header_path_HHbTag}"')
         ROOT.gInterpreter.Declare('#include "include/RecoilGenParticle.h"')
+        # Prefer FLAF_CMSSW_BASE: on CRAB/bundle workers scram may leave CMSSW_BASE
+        # pointing at the submit-host AFS path even though the release was relocated.
+        _cmssw = os.environ.get("FLAF_CMSSW_BASE") or os.environ["CMSSW_BASE"]
         ROOT.gROOT.ProcessLine(
-            f'HHBtagWrapper::Initialize("{os.environ["CMSSW_BASE"]}/src/HHTools/HHbtag/models/", 3)'
+            f'HHBtagWrapper::Initialize("{_cmssw}/src/HHTools/HHbtag/models/", 3)'
         )
 
         initialized = True
