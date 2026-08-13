@@ -288,6 +288,7 @@ singleMu_th:
   "Run3_2023BPix": 26
   "Run3_2024": 26
   "Run3_2025": 26
+  "Run3_2026": 26
 
 singleEle_th:
   "Run2_2016": 26
@@ -300,6 +301,7 @@ singleEle_th:
   "Run3_2023BPix": 32
   "Run3_2024": 32
   "Run3_2025": 32
+  "Run3_2026": 32
 
 singleTau_th:
   "Run2_2016": 130
@@ -312,6 +314,7 @@ singleTau_th:
   "Run3_2023BPix": 190
   "Run3_2024": 190
   "Run3_2025": 190
+  "Run3_2026": 190
 
 eTau_th:
   "Run2_2016":
@@ -403,6 +406,7 @@ uncs_to_exclude:
   Run3_2023BPix: [ ]
   Run3_2024: [ ]
   Run3_2025: [ ]
+  Run3_2026: [ ]
   Run2_2018:
     - JES_BBEC1_2017
     - JES_Absolute_2017
