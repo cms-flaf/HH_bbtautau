@@ -118,6 +118,7 @@ singleMu:
         2023_Summer23: NUM_IsoMu24_DEN_CutBasedId{MuIDWP}_and_PFIso{MuIDWP}_{DataMC}eff
         2023_Summer23BPix: NUM_IsoMu24_DEN_CutBasedId{MuIDWP}_and_PFIso{MuIDWP}_{DataMC}eff
         2024_Summer24: NUM_IsoMu24_DEN_CutBasedId{MuIDWP}_and_PFIso{MuIDWP}_{DataMC}eff
+        2025_Summer24: NUM_IsoMu24_DEN_CutBasedId{MuIDWP}_and_PFIso{MuIDWP}_{DataMC}eff
       jsonTRGcorrection_elepath: "placeholder"
 
 singleEle:
