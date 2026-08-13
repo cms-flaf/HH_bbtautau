@@ -661,3 +661,7 @@ payload_producers:
       - Signal
       - TT
       - DY
+
+crab:
+  whitelist:
+    - T2_CH_CERN
