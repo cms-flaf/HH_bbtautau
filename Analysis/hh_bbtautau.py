@@ -22,6 +22,7 @@ WorkingPointsParticleNet = {
     # UParTAK4 WP values from BTV Summer24 NanoAODv15 (L/M/T).
     "Run3_2024": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
     "Run3_2025": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
+    "Run3_2026": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
 }
 WorkingPointsDeepFlav = {
     "Run3_2022": {"Loose": 0.0583, "Medium": 0.3086, "Tight": 0.7183},
@@ -30,6 +31,7 @@ WorkingPointsDeepFlav = {
     "Run3_2023BPix": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
     "Run3_2024": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
     "Run3_2025": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
+    "Run3_2026": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
 }
 
 
