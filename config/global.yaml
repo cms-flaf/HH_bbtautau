@@ -661,3 +661,6 @@ payload_producers:
       - Signal
       - TT
       - DY
+
+crab:
+  input_dataset: TTto2L2Nu
