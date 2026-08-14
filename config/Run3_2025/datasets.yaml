@@ -1,0 +1,8 @@
+# 2025 official MC is reused from Run3_2024 (reuse_mc_from_era).
+custom_CI:
+  generator: powheg
+  mass: 125
+  spin: 0
+  crossSection: 1pb
+  fs_nanoAOD: T3_CH_CERNBOX:/store/user/vdamante/
+  dirName: "nanobbtt_2024"

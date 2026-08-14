@@ -322,6 +322,9 @@ def addAllVariables(
                         f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())",
                     )
 
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    jet_obs = [v for v in jet_obs if f"Jet_{v}" in existing_cols]
+
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
 
     centralJet_vars = ["p4", "btagPNetB"]
@@ -467,12 +470,16 @@ def addAllVariables(
         f"SelectedFatJet_mass", f"v_ops::mass(FatJet_p4[FatJet_bbCand])"
     )
 
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    fatjet_obs = [v for v in fatjet_obs if f"FatJet_{v}" in existing_cols]
     for fatjetVar in fatjet_obs:
         dfw.DefineAndAppend(
             f"SelectedFatJet_{fatjetVar}", f"FatJet_{fatjetVar}[FatJet_bbCand]"
         )
     subjet_obs = []
     subjet_obs.extend(SubJetObservables)
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    subjet_obs = [v for v in subjet_obs if f"SubJet_{v}" in existing_cols]
     if not isData:
         dfw.Define(
             f"SubJet1_genJet_idx",

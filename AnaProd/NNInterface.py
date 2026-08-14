@@ -26,6 +26,7 @@ class Era(enum.Enum):
     Run3_2023BPix = 8
     Run3_2024 = 9
     Run3_2025 = 10
+    Run3_2026 = 11
 
 
 class DotDict(dict):
