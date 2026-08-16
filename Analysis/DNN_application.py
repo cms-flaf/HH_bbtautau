@@ -39,6 +39,8 @@ class DNNProducer:
         self.vars_to_save = load_features
 
     def load_models(self, model_dir):
+        if not os.path.isabs(model_dir):
+            model_dir = os.path.join(os.environ["ANALYSIS_PATH"], model_dir)
         models = [
             NNInterface(
                 fold_index=fold_index,

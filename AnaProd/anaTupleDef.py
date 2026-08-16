@@ -221,8 +221,11 @@ def Initialize(setup, dataset_name):
             )
         ROOT.gInterpreter.Declare(f'#include "{header_path_HHbTag}"')
         ROOT.gInterpreter.Declare('#include "include/RecoilGenParticle.h"')
+        # Prefer FLAF_CMSSW_BASE: on CRAB/bundle workers scram may leave CMSSW_BASE
+        # pointing at the submit-host AFS path even though the release was relocated.
+        _cmssw = os.environ.get("FLAF_CMSSW_BASE") or os.environ["CMSSW_BASE"]
         ROOT.gROOT.ProcessLine(
-            f'HHBtagWrapper::Initialize("{os.environ["CMSSW_BASE"]}/src/HHTools/HHbtag/models/", 3)'
+            f'HHBtagWrapper::Initialize("{_cmssw}/src/HHTools/HHbtag/models/", 3)'
         )
 
         initialized = True
@@ -321,6 +324,9 @@ def addAllVariables(
                         f"genLepton{gen_idx+1}_{var}",
                         f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())",
                     )
+
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    jet_obs = [v for v in jet_obs if f"Jet_{v}" in existing_cols]
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
 
@@ -467,12 +473,16 @@ def addAllVariables(
         f"SelectedFatJet_mass", f"v_ops::mass(FatJet_p4[FatJet_bbCand])"
     )
 
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    fatjet_obs = [v for v in fatjet_obs if f"FatJet_{v}" in existing_cols]
     for fatjetVar in fatjet_obs:
         dfw.DefineAndAppend(
             f"SelectedFatJet_{fatjetVar}", f"FatJet_{fatjetVar}[FatJet_bbCand]"
         )
     subjet_obs = []
     subjet_obs.extend(SubJetObservables)
+    existing_cols = {str(c) for c in dfw.df.GetColumnNames()}
+    subjet_obs = [v for v in subjet_obs if f"SubJet_{v}" in existing_cols]
     if not isData:
         dfw.Define(
             f"SubJet1_genJet_idx",

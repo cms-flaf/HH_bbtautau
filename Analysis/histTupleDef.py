@@ -116,6 +116,7 @@ def DefineWeightForHistograms(
         analysis.GetWeight(
             global_params["channels_to_consider"],
             weights_this_process=weights_this_process,
+            weight_base_name=global_params.get("weight_base_branch", "weight_base"),
         )
         if process_group != "data"
         else "1"

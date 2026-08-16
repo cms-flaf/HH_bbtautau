@@ -19,12 +19,19 @@ WorkingPointsParticleNet = {
     "Run3_2022EE": {"Loose": 0.0499, "Medium": 0.2605, "Tight": 0.6915},
     "Run3_2023": {"Loose": 0.0358, "Medium": 0.1917, "Tight": 0.6172},
     "Run3_2023BPix": {"Loose": 0.0359, "Medium": 0.1919, "Tight": 0.6133},
+    # UParTAK4 WP values from BTV Summer24 NanoAODv15 (L/M/T).
+    "Run3_2024": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
+    "Run3_2025": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
+    "Run3_2026": {"Loose": 0.0246, "Medium": 0.1272, "Tight": 0.4648},
 }
 WorkingPointsDeepFlav = {
     "Run3_2022": {"Loose": 0.0583, "Medium": 0.3086, "Tight": 0.7183},
     "Run3_2022EE": {"Loose": 0.0614, "Medium": 0.3196, "Tight": 0.73},
     "Run3_2023": {"Loose": 0.0479, "Medium": 0.2431, "Tight": 0.6553},
     "Run3_2023BPix": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
+    "Run3_2024": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
+    "Run3_2025": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
+    "Run3_2026": {"Loose": 0.048, "Medium": 0.2435, "Tight": 0.6563},
 }
 
 
@@ -198,14 +205,14 @@ def GetBTagWeight(global_cfg_dict, cat, applyBtag=False):
     return f"{btag_weight}*{btagshape_weight}"
 
 
-def GetWeight(channels, weights_this_process=None):
+def GetWeight(channels, weights_this_process=None, weight_base_name="weight_base"):
     weights_dict = {}
     weights_this_process = set(weights_this_process or [])
     apply_dy_hhbbtautau = False
     if "dy_hhbbtautau" in weights_this_process:
         apply_dy_hhbbtautau = True
     weights_to_apply = [
-        "weight_base"
+        weight_base_name
     ]  # , "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
     trg_weights_dict = {
         "eTau": [
@@ -267,7 +274,7 @@ def GetWeight(channels, weights_this_process=None):
     }
     weights_full_string = ""
     for channel in channels:
-        weights_list = ["weight_base"]
+        weights_list = [weight_base_name]
         # weights_list.extend(trg_weights_dict[channel]) ## currently commented because there are no trigger weights ??
         weights_list.extend(ID_weights_dict[channel])
         if apply_dy_hhbbtautau:  # isDY:
@@ -487,7 +494,19 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.df = self.df.Define("bjet1_isValid", "nBJets > 0")
         self.df = self.df.Define("bjet2_isValid", "nBJets > 1")
 
-        nBjets_PNetTag = f"int(bjet1_isValid && b1_idbtagPNetB >= 2) + int( bjet2_isValid && b2_idbtagPNetB >= 2)"
+        cols = {str(c) for c in self.df.GetColumnNames()}
+        if "b1_idbtagPNetB" in cols:
+            nBjets_PNetTag = (
+                "int(bjet1_isValid && b1_idbtagPNetB >= 2) "
+                "+ int(bjet2_isValid && b2_idbtagPNetB >= 2)"
+            )
+        else:
+            score = "btagUParTAK4B" if "b1_btagUParTAK4B" in cols else "btagPNetB"
+            wp = WorkingPointsParticleNet[self.period]["Medium"]
+            nBjets_PNetTag = (
+                f"int(bjet1_isValid && b1_{score} >= {wp}) "
+                f"+ int(bjet2_isValid && b2_{score} >= {wp})"
+            )
 
         # self.df = self.df.Define(
         #     "nSelBtag",
