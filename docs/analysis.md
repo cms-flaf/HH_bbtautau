@@ -47,6 +47,25 @@ variable, LAW pulls in the cache task automatically — see
 [FLAF → Task reference](https://cms-flaf.github.io/FLAF/reference/tasks/#analysiscachetask). Listing
 a short `variables:` set is the easiest way to keep test runs fast.
 
+## Stitched backgrounds: DY and t̄t
+
+DY and t̄t are stitched from several samples, so each event is normalised with the
+cross-section of the bin it belongs to
+([MC stitching](https://cms-flaf.github.io/FLAF/concepts/stitching/)). The bins select on
+gen-level quantities that nanoAOD does not provide directly, so the anaTuple stores them:
+
+| Branch | Stored for | Meaning |
+|---|---|---|
+| `DYInfo_flavor`, `DYInfo_mll` | every DY process | flavour (11/13/15) and mass of the LHE dilepton pair |
+| `TauTauInfo_passFilter` | `DYto2Tau_M_50` | the Z→ττ generator filter decision, the axis that stitches the filtered samples in |
+| `TauTauInfo_vis_type{1,2}`, `TauTauInfo_vis_pt{1,2}`, `TauTauInfo_vis_abseta{1,2}` | `DYto2Tau_M_50` | the visible tau quantities the filter is made of, so its definition can be revisited without reprocessing |
+| `TTInfo_nLeptonicW`, `TTInfo_wDecay{1,2}` | `TT` | gen-level t̄t decay channel |
+
+Which of these a process gets is declared as `genInfo` next to its `processors` in
+`config/<era>/processes.yaml`; `AnaProd/genProcessInfo.py` turns that into the branches
+above. A process that stitches on one of these quantities without declaring `genInfo` fails
+in `AnaTupleMergeTask`, where `GenPart`/`LHEPart` are no longer available.
+
 ## Quick stack plots
 
 For a fast look at distributions (outside the full `HistPlotTask` styling), the analysis ships a

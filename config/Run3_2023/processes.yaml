@@ -25,6 +25,7 @@ DY_M_10to50:
 
 DYto2E_M_50:
   processors: *DY_processors
+  genInfo: [ DY ]
   datasets:
     - DYto2E_M_50_amcatnloFXFX
     - DYto2E_M_50_0J_amcatnloFXFX
@@ -47,6 +48,7 @@ DYto2E_M_50:
 
 DYto2Mu_M_50:
   processors: *DY_processors
+  genInfo: [ DY ]
   datasets:
     - DYto2Mu_M_50_amcatnloFXFX
     - DYto2Mu_M_50_0J_amcatnloFXFX
@@ -69,6 +71,7 @@ DYto2Mu_M_50:
 
 DYto2Tau_M_50:
   processors: *DYtautau_processors
+  genInfo: [ DY, TauTau ]
   datasets:
     - DYto2Tau_M_50_0J_amcatnloFXFX
     - DYto2Tau_M_50_1J_amcatnloFXFX
@@ -85,6 +88,7 @@ TT:
   name: "t#bar{t}"
   color: "kGreen-3"  # eliminates need for plot.yaml
   processors: *TT_processors
+  genInfo: [ TT ]
   datasets:
     - TTto2L2Nu
     - TTtoLNu2Q
@@ -297,8 +301,16 @@ Data:
 custom_CI_Background:
   name: "CI -- Background"
   color: "kGreen-3"
+  # Stitched exactly like the TT process, so the integration test covers a stitching
+  # processor end to end: gen-level information derived at the anaTuple stage, stored, and
+  # read back by the merge stage to evaluate the bin selections. All three decay-channel
+  # samples are needed for every stitching bin to have a denominator.
+  processors: *TT_processors
+  genInfo: [ TT ]
   datasets:
     - TTto2L2Nu
+    - TTtoLNu2Q
+    - TTto4Q
 
 custom_CI_Signal:
   name: "custom for CI and test purposes"

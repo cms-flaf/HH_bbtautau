@@ -4,6 +4,7 @@ import FLAF.Common.BaselineSelection as CommonBaseline
 from Corrections.Corrections import Corrections
 import ROOT
 from FLAF.Common.Utilities import defineP4
+from AnaProd.genProcessInfo import addGenProcessInfo
 
 loadTF = True
 loadHHBtag = True
@@ -379,6 +380,8 @@ def addAllVariables(
         dfw.colToSave.append("LHE_NpNLO")
         dfw.colToSave.append("LHE_Nuds")
         dfw.colToSave.append("LHE_Vpt")
+
+        addGenProcessInfo(dfw, dataset_cfg.get("process_cfg", {}).get("genInfo", []))
 
         dfw.colToSave.append("GenJet_eta")
         dfw.colToSave.append("GenJet_hadronFlavour")
