@@ -56,13 +56,14 @@ gen-level quantities that nanoAOD does not provide directly, so the anaTuple sto
 
 | Branch | Stored for | Meaning |
 |---|---|---|
-| `DYInfo_flavor`, `DYInfo_mll` | every DY process | flavour (11/13/15) and mass of the LHE dilepton pair |
+| `DYInfo_flavor`, `DYInfo_mll` | `DYto2Tau_M_50` | flavour (11/13/15) and mass of the LHE dilepton pair |
 | `TauTauInfo_passFilter` | `DYto2Tau_M_50` | the Z→ττ generator filter decision, the axis that stitches the filtered samples in |
 | `TauTauInfo_vis_type{1,2}`, `TauTauInfo_vis_pt{1,2}`, `TauTauInfo_vis_abseta{1,2}` | `DYto2Tau_M_50` | the visible tau quantities the filter is made of, so its definition can be revisited without reprocessing |
 | `TTInfo_nLeptonicW`, `TTInfo_wDecay{1,2}` | `TT` | gen-level t̄t decay channel |
 
 Which of these a process gets is declared as `genInfo` next to its `processors` in
-`config/<era>/processes.yaml`; `AnaProd/genProcessInfo.py` turns that into the branches
+`config/<era>/processes.yaml`, and only where a stitcher selects on it — adding a kind to a
+process that is already produced means producing it again; `AnaProd/genProcessInfo.py` turns that into the branches
 above. A process that stitches on one of these quantities without declaring `genInfo` fails
 in `AnaTupleMergeTask`, where `GenPart`/`LHEPart` are no longer available.
 
