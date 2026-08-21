@@ -67,6 +67,16 @@ process that is already produced means producing it again; `AnaProd/genProcessIn
 above. A process that stitches on one of these quantities without declaring `genInfo` fails
 in `AnaTupleMergeTask`, where `GenPart`/`LHEPart` are no longer available.
 
+### Signal points with more than one sample
+
+Some GluGlutoHH points are produced more than once — an `_ext1` extension, or a variant
+carrying LHE weights. Both are declared and both are used, so the point gets all the
+statistics; the `GluGlutoHHto2B2Tau` process therefore carries the `*ext_processors`
+stitcher, which normalises the point with the summed event count instead of counting it
+twice ([MC stitching](https://cms-flaf.github.io/FLAF/concepts/stitching/)). Which samples
+exist differs per era — Run3_2022EE, for instance, has only the LHE-weighted variant of
+kl = 2.45 and no plain one.
+
 ## Quick stack plots
 
 For a fast look at distributions (outside the full `HistPlotTask` styling), the analysis ships a
