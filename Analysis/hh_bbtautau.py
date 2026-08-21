@@ -513,6 +513,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         #     f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})",
         # )
         self.df = self.df.Define("nSelBtag", nBjets_PNetTag)
+        self.df = self.df.Define("nBjets_PNetTag", nBjets_PNetTag)
 
         for category_to_def in self.config["category_definition"].keys():
             category_name = category_to_def
