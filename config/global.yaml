@@ -44,9 +44,13 @@ bundles:
     patterns:
       - data/{version}/AnaTupleFileListBuilderTask/{period}
       - data/{version}/AnaTupleFileListTask/{period}
+    # Both producers, or the bundle is packed as soon as the builder is done, while the
+    # per-dataset lists of AnaTupleFileListTask are still being written.
     task_requires:
-      module: FLAF.AnaProd.tasks
-      class: AnaTupleFileListBuilderTask
+      - module: FLAF.AnaProd.tasks
+        class: AnaTupleFileListBuilderTask
+      - module: FLAF.AnaProd.tasks
+        class: AnaTupleFileListTask
   inference:
     period_specific: false
     patterns:
