@@ -507,13 +507,13 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                 f"int(bjet1_isValid && b1_{score} >= {wp}) "
                 f"+ int(bjet2_isValid && b2_{score} >= {wp})"
             )
-        self.df = self.df.Redefine("nBJets", nBjets_PNetTag)
 
         # self.df = self.df.Define(
         #     "nSelBtag",
         #     f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})",
         # )
         self.df = self.df.Define("nSelBtag", nBjets_PNetTag)
+        self.df = self.df.Define("nBjets_PNetTag", nBjets_PNetTag)
 
         for category_to_def in self.config["category_definition"].keys():
             category_name = category_to_def
