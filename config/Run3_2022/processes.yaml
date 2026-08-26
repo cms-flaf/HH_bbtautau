@@ -239,14 +239,12 @@ GluGlutoHHto2B2Tau:
     - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_1p00
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p00
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p00_LHEweights
-    # - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p00_LHEweights
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p10
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_0p35
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_3p00
     - GluGlutoHHto2B2Tau_kl_1p00_kt_1p00_c2_m2p00
     - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00
     - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00_LHEweights
-    # - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00_LHEweights
     - GluGlutoHHto2B2Tau_kl_5p00_kt_1p00_c2_0p00
 
 VBFHHto2B2Tau:
@@ -292,14 +290,12 @@ custom_CI_Background:
   color: "kGreen-3"
   # Stitched exactly like the TT process, so the integration test covers a stitching
   # processor end to end: gen-level information derived at the anaTuple stage, stored, and
-  # read back by the merge stage to evaluate the bin selections. All three decay-channel
-  # samples are needed for every stitching bin to have a denominator.
+  # read back by the merge stage to evaluate the bin selections. One sample is enough: each
+  # bin's denominator is summed over the very events that later read it back.
   processors: *TT_processors
   genInfo: [ TT ]
   datasets:
     - TTto2L2Nu
-    - TTtoLNu2Q
-    - TTto4Q
 
 custom_CI_Signal:
   name: "custom for CI and test purposes"
