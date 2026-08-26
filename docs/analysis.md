@@ -67,6 +67,15 @@ process that is already produced means producing it again; `AnaProd/genProcessIn
 above. A process that stitches on one of these quantities without declaring `genInfo` fails
 in `AnaTupleMergeTask`, where `GenPart`/`LHEPart` are no longer available.
 
+The integration test guards this. `TestModel` runs two backgrounds — `custom_CI_Background_TT`,
+one t̄t dataset, and `custom_CI_Background_DY`, one DY→ττ dataset — and each carries the same
+`processors:` and `genInfo:` as the real `TT` and `DYto2Tau_M_50` process **for that era**
+(`TTStitcher` and `DYtautauStitcher` for 2022–2023BPix; the plain `MCStitcher` and no
+stitching of t̄t for 2024 onwards, which is what those eras configure). The stitchers therefore
+run over the whole anaTuple → merge → histogram chain in CI, which is exactly where a missing
+gen-level branch shows up. Change one of the real processes and change its CI counterpart with
+it.
+
 ### Signal points with more than one sample
 
 Some GluGlutoHH points are produced more than once — an `_ext1` extension, or a variant

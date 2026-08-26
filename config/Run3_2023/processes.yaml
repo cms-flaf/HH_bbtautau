@@ -297,17 +297,27 @@ Data:
     - Tau_Run2023C_v4
 
 
-custom_CI_Background:
-  name: "CI -- Background"
+# The integration test runs one t#bar{t} and one DY dataset, each carrying the processors the
+# analysis really uses for that process in this era. That is what exercises a stitcher over the
+# whole anaTuple -> merge chain, where a gen-level input the anaTuple does not keep would
+# otherwise only surface in production. One dataset per process is enough: each stitching bin's
+# denominator is summed over the very events that later read it back, so a bin no event falls
+# into is never divided by.
+custom_CI_Background_TT:
+  name: "CI -- Background t#bar{t}"
   color: "kGreen-3"
-  # Stitched exactly like the TT process, so the integration test covers a stitching
-  # processor end to end: gen-level information derived at the anaTuple stage, stored, and
-  # read back by the merge stage to evaluate the bin selections. One sample is enough: each
-  # bin's denominator is summed over the very events that later read it back.
   processors: *TT_processors
   genInfo: [ TT ]
   datasets:
     - TTto2L2Nu
+
+custom_CI_Background_DY:
+  name: "CI -- Background DY"
+  color: "kAzure+7"
+  processors: *DYtautau_processors
+  genInfo: [ DY, TauTau ]
+  datasets:
+    - DYto2Tau_M_50_2J_amcatnloFXFX
 
 custom_CI_Signal:
   name: "custom for CI and test purposes"
