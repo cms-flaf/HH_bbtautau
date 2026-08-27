@@ -5,7 +5,7 @@ ecosystem: patterns land here first and are copied into HH_bbWW and H_mumu.
 
 **Read `FLAF/.github/copilot-instructions.md` first.** It carries the framework invariants — law
 task semantics, bundles, remote-storage caching, processor stages, concurrency — and the rules on
-what a useful comment looks like and what not to flag. Everything there applies here. This file
+what a useful comment looks like and what not to flag. The rule that documentation ships in the same PR applies here too, and is restated below with the pages that matter for this repository. Everything there applies here. This file
 adds only what is specific to this analysis.
 
 ## What costs the most here
@@ -72,6 +72,42 @@ an absolute path into AFS. A few thousand jobs each pulling a model over AFS get
 throttled. Note that bundles preserve symlinks verbatim, so a path that *looks* bundled can still
 resolve back to AFS.
 
+## Documentation must ship with the change
+
+A PR must update the documentation **in the same PR** whenever it changes anything a user of the
+framework can observe. Treat this as a review item of the same weight as correctness — docs
+drifting from the code is the failure that motivated the current documentation, and a PR that
+lands without them is not complete.
+
+Ask, for every diff: does it add, rename or remove any of these?
+
+- a task or DAG node, or the arguments/parameters of one;
+- a command, a CLI flag, or the meaning of an existing one;
+- a configuration key — `global.yaml`, `user_custom.yaml`, `processes.yaml`, `phys_models.yaml`,
+  cross-sections, `fs_*` storage keys, bundle flavours, processor entries;
+- a dataset, era, process or physics-model name;
+- the environment, installation or setup steps;
+- storage locations, output paths or log locations;
+- a CI workflow, or how the integration test is triggered or configured;
+- any behaviour a user relies on, including a default that changes.
+
+If the answer is yes and the diff touches **no** documentation file, say so and name the page that
+should have changed. If the author states the change is internal-only, that is a legitimate
+answer — a pure refactor or bugfix with no user-visible effect is exempt — but it should be
+stated in the PR, not left implicit.
+
+Also flag the inverse: documentation edited to describe behaviour the diff does not implement, and
+new pages added without being wired into `mkdocs.yml`'s `nav` (the build fails on that, but the
+review should catch it first).
+
+Where it goes:
+
+- `docs/` in this repository for analysis-specific material (`analysis.md`, `setup.md`, `stat_inference.md`, `hhbtag_training.md`, …).
+- **`FLAF/docs/` for anything framework-wide.** If the change alters shared behaviour, the
+  documentation belongs there, in a companion PR to `cms-flaf/FLAF` — flag that it is missing
+  rather than accepting an analysis-local description of a framework change.
+- New pages must be added to `nav:` in `mkdocs.yml`; verified with `mkdocs build --strict`.
+
 ## Repository facts
 
 Verified 2026-08-27; re-check before relying on any of it.
@@ -84,4 +120,4 @@ Verified 2026-08-27; re-check before relying on any of it.
 | Configs | `config/global.yaml`, `config/processes.yaml` (shared processor anchors), `config/phys_models.yaml`, `config/<era>/{datasets,processes,triggers}.yaml` |
 | Tests | `test/test_gen_process_info.py` (needs `ANALYSIS_PATH` and `FLAF_PATH` set) |
 | Workflows | `formatting-check`, `repo-sanity-checks`, `test-setup-loading`, `deploy-docs`, `trigger-flaf-integration`. Formatting and era loading are checked automatically — do not comment on them |
-| Docs | `docs/`, plus the shared framework docs in `FLAF/docs/`. A user-visible change should update them in the same PR |
+| Docs | `docs/`, plus the shared framework docs in `FLAF/docs/`; see the documentation section above |
