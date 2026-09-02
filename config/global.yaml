@@ -171,6 +171,9 @@ histTuple_flavors:
       - met_pt
       - nBJets
       - nJet
+      # - pthh_lhe
+      # - mhh_lhe
+      # - costhetastar_lhe
   CI:
     fullResolution_variables: [ ]
     variables:

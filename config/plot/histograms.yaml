@@ -913,7 +913,7 @@ kinFit_m:
   y_title: dN/dm_{H}^{kinfit} (1/GeV)
   max_y_sf: 100
   divide_by_bin_width: True
-  use_log_y: False
+  use_log_y: True
   use_log_x: True
   blind_ranges: [ 250, 3500 ]
 
@@ -1012,6 +1012,30 @@ ggF_DNN_HH:
   x_title: ggF DNN HH
   # y_title: dN/dm (1/GeV)
   y_title: "Events"
+  use_log_y: False
+  max_y_sf: 1.8
+  divide_by_bin_width: False
+
+pthh_lhe:
+  x_bins: "60|0:600"
+  x_title: p_{T}^{HH} (GeV, gen LHE)
+  y_title: Events
+  use_log_y: True
+  max_y_sf: 1.8
+  divide_by_bin_width: False
+
+mhh_lhe:
+  x_bins: "110|250:3000"
+  x_title: m_{HH} (GeV, gen LHE)
+  y_title: Events
+  use_log_y: True
+  max_y_sf: 1.8
+  divide_by_bin_width: False
+
+costhetastar_lhe:
+  x_bins: "40|-1:1"
+  x_title: cos#theta*_{HH} (gen LHE)
+  y_title: Events
   use_log_y: False
   max_y_sf: 1.8
   divide_by_bin_width: False
