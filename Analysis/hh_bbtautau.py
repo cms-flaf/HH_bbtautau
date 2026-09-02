@@ -364,6 +364,29 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                                    """,
                 )
 
+    def defineLHEHHVariables(self):
+        """Gen-level (LHE) di-Higgs kinematics. Only computed from LHEPart_*
+        for HH signal MC (GetDiHiggsP4LHE expects exactly two pdgId==25 LHE
+        particles); other processes and data get a default value (e.g. -1 or -2)
+        so these columns always exist"""
+        if self.isSignal and not self.isData:
+            self.df = self.df.Define(
+                "pthh_lhe", f"GetPthhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)"
+            )
+            self.df = self.df.Define(
+                "mhh_lhe", f"GetMhhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)"
+            )
+            self.df = self.df.Define(
+                "costhetastar_lhe",
+                f"GetCosThetaStarLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)",
+            )
+        else:
+            self.df = self.df.Define("pthh_lhe", "-1.f")
+            self.df = self.df.Define("mhh_lhe", "-1.f")
+            self.df = self.df.Define("costhetastar_lhe", "-2.f")
+        for col in ("pthh_lhe", "mhh_lhe", "costhetastar_lhe"):
+            self.colToSave.append(col)
+
     def defineTriggers(self):
         for ch in self.config["channelSelection"]:
             for trg in self.config["triggers"][ch]:
@@ -657,6 +680,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         pNetWPstring="Loose",
         region="SR",
         isData=False,
+        isSignal=False,
         isCentral=False,
         wantTriggerSFErrors=False,
         whichType=3,
@@ -673,6 +697,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.period = period
         self.region = region
         self.isData = isData
+        self.isSignal = isSignal
         self.whichType = whichType
         self.isCentral = isCentral
         self.wantTriggerSFErrors = wantTriggerSFErrors
@@ -701,6 +726,7 @@ def PrepareDfForHistograms(dfForHistograms):
 
     dfForHistograms.defineTriggers()
     dfForHistograms.defineBoostedVariables()
+    dfForHistograms.defineLHEHHVariables()
     dfForHistograms.redefinePUJetIDWeights()
     dfForHistograms.df = createInvMass(dfForHistograms.df)
     dfForHistograms.defineChannels()
