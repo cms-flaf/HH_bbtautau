@@ -371,10 +371,12 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         so these columns always exist"""
         if self.isSignal and not self.isData:
             self.df = self.df.Define(
-                "pthh_lhe", f"GetPthhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)"
+                "pthh_lhe",
+                f"GetPthhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)",
             )
             self.df = self.df.Define(
-                "mhh_lhe", f"GetMhhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)"
+                "mhh_lhe",
+                f"GetMhhLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)",
             )
             self.df = self.df.Define(
                 "costhetastar_lhe",
