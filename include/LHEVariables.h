@@ -11,10 +11,10 @@
 // Higgs bosons, pdgId==25) -- code copied from hh_tools/Reweighting tool
 
 inline TLorentzVector GetDiHiggsP4LHE(const ROOT::RVec<float>& LHEPart_pt,
-                                       const ROOT::RVec<float>& LHEPart_eta,
-                                       const ROOT::RVec<float>& LHEPart_phi,
-                                       const ROOT::RVec<float>& LHEPart_mass,
-                                       const ROOT::RVec<int>& LHEPart_pdgId) {
+                                      const ROOT::RVec<float>& LHEPart_eta,
+                                      const ROOT::RVec<float>& LHEPart_phi,
+                                      const ROOT::RVec<float>& LHEPart_mass,
+                                      const ROOT::RVec<int>& LHEPart_pdgId) {
     TLorentzVector dihiggs_p4(0., 0., 0., 0.);
     ROOT::RVec<TLorentzVector> higgs_p4s;
     TLorentzVector tmp_vec(0., 0., 0., 0.);
@@ -34,23 +34,29 @@ inline TLorentzVector GetDiHiggsP4LHE(const ROOT::RVec<float>& LHEPart_pt,
     return dihiggs_p4;
 }
 
-inline float GetMhhLHE(const ROOT::RVec<float>& LHEPart_pt, const ROOT::RVec<float>& LHEPart_eta,
-                        const ROOT::RVec<float>& LHEPart_phi, const ROOT::RVec<float>& LHEPart_mass,
-                        const ROOT::RVec<int>& LHEPart_pdgId) {
+inline float GetMhhLHE(const ROOT::RVec<float>& LHEPart_pt,
+                       const ROOT::RVec<float>& LHEPart_eta,
+                       const ROOT::RVec<float>& LHEPart_phi,
+                       const ROOT::RVec<float>& LHEPart_mass,
+                       const ROOT::RVec<int>& LHEPart_pdgId) {
     auto dihiggs_p4 = GetDiHiggsP4LHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId);
     return static_cast<float>(dihiggs_p4.M());
 }
 
-inline float GetPthhLHE(const ROOT::RVec<float>& LHEPart_pt, const ROOT::RVec<float>& LHEPart_eta,
-                         const ROOT::RVec<float>& LHEPart_phi, const ROOT::RVec<float>& LHEPart_mass,
-                         const ROOT::RVec<int>& LHEPart_pdgId) {
+inline float GetPthhLHE(const ROOT::RVec<float>& LHEPart_pt,
+                        const ROOT::RVec<float>& LHEPart_eta,
+                        const ROOT::RVec<float>& LHEPart_phi,
+                        const ROOT::RVec<float>& LHEPart_mass,
+                        const ROOT::RVec<int>& LHEPart_pdgId) {
     auto dihiggs_p4 = GetDiHiggsP4LHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId);
     return static_cast<float>(dihiggs_p4.Pt());
 }
 
-inline float GetCosThetaStarLHE(const ROOT::RVec<float>& LHEPart_pt, const ROOT::RVec<float>& LHEPart_eta,
-                                 const ROOT::RVec<float>& LHEPart_phi, const ROOT::RVec<float>& LHEPart_mass,
-                                 const ROOT::RVec<int>& LHEPart_pdgId) {
+inline float GetCosThetaStarLHE(const ROOT::RVec<float>& LHEPart_pt,
+                                const ROOT::RVec<float>& LHEPart_eta,
+                                const ROOT::RVec<float>& LHEPart_phi,
+                                const ROOT::RVec<float>& LHEPart_mass,
+                                const ROOT::RVec<int>& LHEPart_pdgId) {
     ROOT::RVec<TLorentzVector> higgs_p4s;
     TLorentzVector tmp_vec(0., 0., 0., 0.);
     for (size_t i = 0; i < LHEPart_pt.size(); ++i) {
