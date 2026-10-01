@@ -95,6 +95,7 @@ TT:
 TT_Inclusive:
   name: "t#bar{t} Inclusive"
   color: "kGreen-3"
+  genInfo: [ TT ]
   datasets:
     - TT
 

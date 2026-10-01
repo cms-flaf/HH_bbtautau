@@ -4,7 +4,7 @@ import FLAF.Common.BaselineSelection as CommonBaseline
 from Corrections.Corrections import Corrections
 import ROOT
 from FLAF.Common.Utilities import defineP4
-from AnaProd.genProcessInfo import addGenProcessInfo
+from AnaProd.genProcessInfo import addGenProcessInfo, addGenTopInfo
 
 loadTF = True
 loadHHBtag = True
@@ -283,6 +283,11 @@ def defineExtraTauVariables(dfw, isData):
                 f"ExtraTau_seedingJet_{var}",
                 f"TakeAndCast(Jet_{var}, Tau_jetIdx[ExtraTau_sel], -1)",
             )
+
+
+def defineGenVariables(dfw, dataset_cfg):
+    """Gen-level variables, defined before the event selection (FLAF calls it for MC only)."""
+    addGenTopInfo(dfw, dataset_cfg.get("process_cfg", {}).get("genInfo", []))
 
 
 def addAllVariables(

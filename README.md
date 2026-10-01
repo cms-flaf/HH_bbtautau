@@ -1,3 +1,47 @@
 # HH_bbtautau
 
 Documentation : https://cms-flaf.github.io/HH_bbtautau/
+
+## How to run anaTuple production
+
+Current version `v2610`
+
+1. Clone repository
+   ```bash
+   git clone -b v2610 --recursive git@github.com:cms-flaf/HH_bbtautau.git
+   cd HH_bbtautau
+   git lfs pull
+   source $PWD/env.sh
+   law index
+   ```
+
+1. Define `config/user_custom.yaml` file as following:
+   ```yaml
+   fs_default: YOUR CERNBOX # davs://eoshome-k.cern.ch:8444/eos/user/k/kandroso/HH_bbtautau/
+   fs_anaTuple: root://cmseos.fnal.gov//eos/uscms/store/user/lpcflaf/HH_bbtautau/
+
+   analysis_config_area: config
+   compute_unc_variations: true
+   compute_unc_histograms: true
+   store_noncentral: true
+   ```
+
+1. Login to cms-flaf.cern.ch, enter screen session, login to lxplus
+   ```bash
+   ssh USER@cms-flaf.cern.ch
+   screen -S HH_bbtautau_production
+   ssh lxplus.cern.ch
+   kinit
+   aklog
+   ```
+
+1. Load environment and setup grid certificate
+   ```bash
+   source $PWD/env.sh
+   voms-proxy-init --voms cms --valid 192:00
+   ```
+
+1. Run production
+   ```bash
+   law run AnaTupleMergeTask --version v2610 --period ERA --parallel-jobs 2000 --AnaTupleFileTask-tasks-per-job 10 --bundle
+   ```

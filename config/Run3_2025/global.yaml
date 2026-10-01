@@ -12,6 +12,45 @@ corrections:
     enabled:
       AnaTuple: true
       AnaTupleMerge: false
+  # Keep parton_shower, top_pt, pdf and qcd_scale in sync with config/global.yaml.
+  # Parton-shower ISR/FSR. Staged like pu: the weights are defined at AnaTuple, where the
+  # inclusive sums enter the anaCache denominators, and AnaTupleMerge reads the persisted
+  # branches back to build weight_base_isr{Up,Down}_rel / weight_base_fsr{Up,Down}_rel.
+  # AnaTupleMerge must stay disabled: the merged tuple does not hold PSWeight. No
+  # `processes:` -- applied to all MC, signal included.
+  parton_shower:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: PSWeight
+    enabled:
+      AnaTuple: true
+      AnaTupleMerge: false
+  # Top pT reweighting of SM ttbar as a shape weight, staged like parton_shower. It reads
+  # genTop_pt, which AnaProd/anaTupleDef.py stores for processes with `genInfo: [ TT ]`.
+  top_pt:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    processes: [ TT, TT_Inclusive, custom_CI_Background_TT ]
+    branch: genTop_pt
+    parameterization: data_nlo
+    enabled:
+      AnaTuple: true
+      AnaTupleMerge: false
+  # pdf and qcd_scale are staged like pu: the members are built at AnaTuple from the
+  # NanoAOD branches and persisted, and AnaTupleMerge reads them back. The anaTuple does not
+  # carry LHEPdfWeight / LHEScaleWeight, so enabling either at AnaTupleMerge would find no
+  # input and make every member 1.
+  pdf:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: LHEPdfWeight
+    n_members: 103
+    enabled:
+      AnaTuple: true
+      AnaTupleMerge: false
+  qcd_scale:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: LHEScaleWeight
+    enabled:
+      AnaTuple: true
+      AnaTupleMerge: false
   base: { stage: AnaTupleMerge }
   tauID: { stage: HistTuple }
   tauES: { stage: AnaTuple }
