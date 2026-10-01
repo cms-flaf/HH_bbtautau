@@ -22,13 +22,30 @@ production that took days of grid time. Prioritise anything that (a) changes the
   (`DYInfo_*`, `TauTauInfo_*`, `TTInfo_*`). The anaTuple drops `GenPart`/`LHEPart`, so anything a
   stitching bin selects on **must** be stored here or the merge stage cannot evaluate it.
 - Which kinds a process gets is declared as `genInfo` in `config/<era>/processes.yaml`, next to
-  the `processors` that consume them. **The two must agree per era.** A process that stitches on a
+  the `processors` that consume them. **The two must agree per era.** The one consumer that is not
+  a processor is the top-p<sub>T</sub> reweighting: it reads `genTop_pt`, so `TT`, `TT_Inclusive`
+  and `custom_CI_Background_TT` carry `genInfo: [ TT ]` in every era, stitched or not.
+- The per-top arrays live in `genTop_*` (defined before the selection by `defineGenVariables`),
+  never under `TTInfo_`: FuseAnaTuples stores all columns of one prefix as one collection, and an
+  array next to the scalar `TTInfo_*` would turn those into arrays. A process that stitches on a
   quantity it does not declare fails in `AnaTupleMergeTask` with
   `use of undeclared identifier 'GenPart_…'`.
 - **Adding a `genInfo` kind to an already-produced process means producing it again.** Flag any
   diff that widens `genInfo` without saying so.
 - Store the quantities a derived flag is built from, not only the flag, so revisiting a filter
   definition does not mean going back to nanoAOD.
+
+### Shift-invariant columns and shape weights
+
+- `anaTuple_shift_invariant_columns` in `config/global.yaml` lists only event-level generator and
+  event quantities. Generator information attached to reconstructed objects (`tau*_gen_*`, jet
+  flavour labels, `nJetFromGenHbb`) changes under shifts and must not be listed. Every input of
+  `weight_base` (generator, luminosity, cross-section and shape weights, the stitching variables)
+  must be listed.
+- Run3_2024 and later carry their own complete `corrections:` block, which replaces the top-level
+  one. A shape weight (`pu`, `parton_shower`, `top_pt`, `pdf`, `qcd_scale`) added to or changed in
+  `config/global.yaml` and not in those files silently disappears from those eras.
+- A new shape weight's per-member columns go into `anaTupleMerge_drop_columns`.
 
 ### Processes and datasets
 
