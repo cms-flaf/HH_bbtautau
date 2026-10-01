@@ -42,9 +42,10 @@ production that took days of grid time. Prioritise anything that (a) changes the
   flavour labels, `nJetFromGenHbb`) changes under shifts and must not be listed. Every input of
   `weight_base` (generator, luminosity, cross-section and shape weights, the stitching variables)
   must be listed.
-- Run3_2024 and later carry their own complete `corrections:` block, which replaces the top-level
-  one. A shape weight (`pu`, `parton_shower`, `top_pt`, `pdf`, `qcd_scale`) added to or changed in
-  `config/global.yaml` and not in those files silently disappears from those eras.
+- `config/Run3_2024/global.yaml`, 2025 and 2026 inherit `corrections:` with
+  `<<: *corrections_default` and override only `btag` and `dy_hhbbtautau`. Do not turn them back
+  into full copies: a correction added at top level then silently disappears from those eras. The
+  merge is one level deep, so an overridden entry must be complete.
 - A new shape weight's per-member columns go into `anaTupleMerge_drop_columns`.
 
 ### Processes and datasets

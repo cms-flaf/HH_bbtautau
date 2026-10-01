@@ -127,9 +127,10 @@ anaTuple_shift_invariant_columns:
   - "^genLepton[12]_"
   - "^recoil_GenBoson_"
 
-# Run3_2024 and later declare their own complete corrections block (different btag and DY
-# setup), which replaces this one: a correction added here has to be added there as well.
-corrections:
+# Anchored: Run3_2024 and later inherit this block with `<<: *corrections_default` and override
+# only the entries that differ there (btag, dy_hhbbtautau), so a correction added here reaches
+# every era.
+corrections: &corrections_default
   lumi: { stage: AnaTuple }
   xs: { stage: AnaTuple }
   gen: { stage: AnaTuple }

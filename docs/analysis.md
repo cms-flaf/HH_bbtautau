@@ -93,9 +93,10 @@ and QCD-scale (`LHEScaleWeight`) weights, and t̄t with the top-p<sub>T</sub> re
 `config/global.yaml`). They are not used in `weights.yaml` or the datacards yet; adding them there
 needs no new anaTuple production.
 
-Run3_2024 and later declare their own complete `corrections:` block in
-`config/<era>/global.yaml` (different b-tag and DY settings), which replaces the top-level one:
-a correction added to `config/global.yaml` has to be added there as well.
+`config/Run3_2024/global.yaml` (and 2025, 2026) inherits the analysis-wide `corrections:` block
+through the anchor `*corrections_default` and overrides only `btag` (UParTAK4, no shape
+calibration) and `dy_hhbbtautau`, so these weights, and any correction added to
+`config/global.yaml`, apply to those eras too.
 
 ## Columns taken from the central tree
 

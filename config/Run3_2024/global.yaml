@@ -3,76 +3,9 @@ nano_version: v15
 nanoAODVersions:
   data: v15
   mc: v15
+# Everything not listed here comes from the top-level corrections block.
 corrections:
-  lumi: { stage: AnaTuple }
-  xs: { stage: AnaTuple }
-  gen: { stage: AnaTuple }
-  pu:
-    stages: [ AnaTuple, AnaTupleMerge ]
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
-  # Keep parton_shower, top_pt, pdf and qcd_scale in sync with config/global.yaml.
-  # Parton-shower ISR/FSR. Staged like pu: the weights are defined at AnaTuple, where the
-  # inclusive sums enter the anaCache denominators, and AnaTupleMerge reads the persisted
-  # branches back to build weight_base_isr{Up,Down}_rel / weight_base_fsr{Up,Down}_rel.
-  # AnaTupleMerge must stay disabled: the merged tuple does not hold PSWeight. No
-  # `processes:` -- applied to all MC, signal included.
-  parton_shower:
-    stages: [ AnaTuple, AnaTupleMerge ]
-    branch: PSWeight
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
-  # Top pT reweighting of SM ttbar as a shape weight, staged like parton_shower. It reads
-  # genTop_pt, which AnaProd/anaTupleDef.py stores for processes with `genInfo: [ TT ]`.
-  top_pt:
-    stages: [ AnaTuple, AnaTupleMerge ]
-    processes: [ TT, TT_Inclusive, custom_CI_Background_TT ]
-    branch: genTop_pt
-    parameterization: data_nlo
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
-  # pdf and qcd_scale are staged like pu: the members are built at AnaTuple from the
-  # NanoAOD branches and persisted, and AnaTupleMerge reads them back. The anaTuple does not
-  # carry LHEPdfWeight / LHEScaleWeight, so enabling either at AnaTupleMerge would find no
-  # input and make every member 1.
-  pdf:
-    stages: [ AnaTuple, AnaTupleMerge ]
-    branch: LHEPdfWeight
-    n_members: 103
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
-  qcd_scale:
-    stages: [ AnaTuple, AnaTupleMerge ]
-    branch: LHEScaleWeight
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
-  base: { stage: AnaTupleMerge }
-  tauID: { stage: HistTuple }
-  tauES: { stage: AnaTuple }
-  mu:
-    stage: HistTuple
-    columns:
-      pfRelIso04_all: Muon_pfRelIso04_all
-      tightId: Muon_tightId
-      tkRelIso: Muon_tkRelIso
-      highPtId: Muon_highPtId
-      mediumId: Muon_mediumId
-      looseId: Muon_looseId
-  trigger:
-    stage: HistTuple
-    mode: efficiency
-  ele: { stage: HistTuple }
-  muScaRe: { stage: AnaTuple, mu_pt_for_ScaReApplication: "nano" }
-  eleES: { stage: AnaTuple }
-  JEC: { stage: AnaTuple }
-  JER:
-    stage: AnaTuple
-    apply_jet_horns_fix: true
+  <<: *corrections_default
   btag:
     stages: [ AnaTuple ]
     modes:
@@ -83,7 +16,3 @@ corrections:
   dy_hhbbtautau:
     stages: [ HistTuple ]
     processes: [ DY_M_10to50, DYto2E_M_50, DYto2Mu_M_50, DYto2Tau_M_50 ]
-  bosonicRecoil:
-    stage: HistTuple
-    method: QuantileMapHist
-    apply_systematics: true
