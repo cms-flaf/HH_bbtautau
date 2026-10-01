@@ -103,8 +103,8 @@ calibration) and `dy_hhbbtautau`, so these weights, and any correction added to
 `config/global.yaml` lists in `anaTuple_shift_invariant_columns` the anaTuple columns that no
 systematic shift changes: event numbers and dataset metadata, generator, luminosity and
 cross-section weights, the pileup and theory weights, pileup truth, the LHE record, gen jets, the
-stitching information (`DYInfo_*`, `TauTauInfo_*`, `TTInfo_*`), `genTop_*`, the gen-level signal
-leptons (`genLepton{1,2}_*`) and the generator boson of the recoil correction. FLAF stores them in
+stitching information (`DYInfo_*`, `TauTauInfo_*`, `TTInfo_*`), `genTop_*` and the gen-level signal
+leptons (`genLepton{1,2}_*`). FLAF stores them in
 the central tree only and fills them in for events that only a shift (JES, JER, tau or lepton
 energy scale) selected, after checking that every variation agrees, so such events enter the
 shifted templates with their real `weight_base` instead of 0.
@@ -115,6 +115,10 @@ shifted templates with their real `weight_base` instead of 0.
   `Column '…' is declared shift-invariant but differs in …` if one is listed.
 - Every input of `weight_base` (generator, luminosity, cross-section and shape weights, the
   stitching variables) must be listed, or an event selected only by a shift gets weight 0 there.
+- A shifted tree reaches these columns through its `Central` friend, which `HasColumn` sees and
+  `GetColumnNames()` does not list. A column that code downstream looks up with
+  `GetColumnNames()` must stay off the list: the generator boson of the bosonic recoil correction
+  (`recoil_GenBoson_*`) is invariant but is not listed for that reason.
 - Changing the list changes the anaTuple layout, so it goes with a new anaTuple production.
 
 ### Signal points with more than one sample

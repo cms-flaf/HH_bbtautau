@@ -42,6 +42,10 @@ production that took days of grid time. Prioritise anything that (a) changes the
   flavour labels, `nJetFromGenHbb`) changes under shifts and must not be listed. Every input of
   `weight_base` (generator, luminosity, cross-section and shape weights, the stitching variables)
   must be listed.
+- A shifted tree takes the listed columns from its `Central` friend: `HasColumn` finds them,
+  `GetColumnNames()` does not list them. Code that branches on `GetColumnNames()` membership of a
+  listed column (as `Corrections/bosonicRecoil.py` does for `recoil_GenBoson_*`, which is why it is
+  not listed) silently takes the other branch in every shifted tree. Use `HasColumn`.
 - `config/Run3_2024/global.yaml`, 2025 and 2026 inherit `corrections:` with
   `<<: *corrections_default` and override only `btag` and `dy_hhbbtautau`. Do not turn them back
   into full copies: a correction added at top level then silently disappears from those eras. The

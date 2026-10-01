@@ -112,7 +112,9 @@ anaTupleMerge_drop_columns:
 # real weight (FuseAnaTuples checks that every variation selecting an event agrees). Generator-
 # and event-level quantities only: generator information attached to a reconstructed object
 # (tau*_gen_*, *_hadronFlavour, *_partonFlavour, nJetFromGenHbb) follows the selected object
-# and changes with the shift.
+# and changes with the shift. recoil_GenBoson_* is invariant but stays out: the bosonic recoil
+# correction looks it up with GetColumnNames(), which does not list a column a shifted tree takes
+# from the central tree, so the shifted DY trees would silently use the other recoil method.
 anaTuple_shift_invariant_columns:
   - "^(run|luminosityBlock|event)$"
   - "^(period|isData|X_mass|X_spin)$"
@@ -125,7 +127,6 @@ anaTuple_shift_invariant_columns:
   - "^(DYInfo|TauTauInfo|TTInfo)_"
   - "^genTop_"
   - "^genLepton[12]_"
-  - "^recoil_GenBoson_"
 
 # Anchored: Run3_2024 and later inherit this block with `<<: *corrections_default` and override
 # only the entries that differ there (btag, dy_hhbbtautau), so a correction added here reaches
