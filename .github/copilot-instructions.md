@@ -23,8 +23,8 @@ production that took days of grid time. Prioritise anything that (a) changes the
   stitching bin selects on **must** be stored here or the merge stage cannot evaluate it.
 - Which kinds a process gets is declared as `genInfo` in `config/<era>/processes.yaml`, next to
   the `processors` that consume them. **The two must agree per era.** The one consumer that is not
-  a processor is the top-p<sub>T</sub> reweighting: it reads `genTop_pt`, so `TT`, `TT_Inclusive`
-  and `custom_CI_Background_TT` carry `genInfo: [ TT ]` in every era, stitched or not.
+  a processor is the top-p<sub>T</sub> reweighting: it reads `genTop_pt`, so `TT` and
+  `custom_CI_Background_TT` carry `genInfo: [ TT ]` in every era although t̄t is not stitched.
 - The per-top arrays live in `genTop_*` (defined before the selection by `defineGenVariables`),
   never under `TTInfo_`: FuseAnaTuples stores all columns of one prefix as one collection, and an
   array next to the scalar `TTInfo_*` would turn those into arrays. A process that stitches on a
@@ -68,9 +68,10 @@ production that took days of grid time. Prioritise anything that (a) changes the
 
 ### Per-era processor differences are deliberate
 
-t̄t is stitched in 2022–2023BPix and **not** in 2024–2026, and DY→ττ uses `*DYtautau_processors`
-in the first group and plain `*DY_processors` in the second. Do not "harmonise" them in review;
-they follow the samples that exist.
+DY→ττ uses `*DYtautau_processors` in 2022–2023BPix and plain `*DY_processors` in 2024–2026. Do not
+"harmonise" them in review; they follow the samples that exist. t̄t is not stitched in any era: the
+inclusive `TT`/`TT_ext1` samples of 2022 and 2023BPix carry no parton-shower weights and are not
+used, so a diff that brings them back needs the t̄t stitcher back as well.
 
 ### Integration test
 

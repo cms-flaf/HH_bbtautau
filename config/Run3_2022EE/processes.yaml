@@ -86,19 +86,11 @@ DYto2Tau_M_50:
 TT:
   name: "t#bar{t}"
   color: "kGreen-3"  # eliminates need for plot.yaml
-  processors: *TT_processors
   genInfo: [ TT ]
   datasets:
     - TTto2L2Nu
     - TTtoLNu2Q
     - TTto4Q
-
-TT_Inclusive:
-  name: "t#bar{t} Inclusive"
-  color: "kGreen-3"
-  genInfo: [ TT ]
-  datasets:
-    - TT
 
 ST:
   name: "Single Top"
@@ -287,7 +279,6 @@ Data:
 custom_CI_Background_TT:
   name: "CI -- Background t#bar{t}"
   color: "kGreen-3"
-  processors: *TT_processors
   genInfo: [ TT ]
   datasets:
     - TTto2L2Nu

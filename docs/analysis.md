@@ -47,9 +47,9 @@ variable, LAW pulls in the cache task automatically — see
 [FLAF → Task reference](https://cms-flaf.github.io/FLAF/reference/tasks/#analysiscachetask). Listing
 a short `variables:` set is the easiest way to keep test runs fast.
 
-## Stitched backgrounds: DY and t̄t
+## Stitched backgrounds: DY
 
-DY and t̄t are stitched from several samples, so each event is normalised with the
+DY is stitched from several samples, so each event is normalised with the
 cross-section of the bin it belongs to
 ([MC stitching](https://cms-flaf.github.io/FLAF/concepts/stitching/)). The bins select on
 gen-level quantities that nanoAOD does not provide directly, so the anaTuple stores them:
@@ -59,9 +59,9 @@ gen-level quantities that nanoAOD does not provide directly, so the anaTuple sto
 | `DYInfo_flavor`, `DYInfo_mll` | `DYto2Tau_M_50` | flavour (11/13/15) and mass of the LHE dilepton pair |
 | `TauTauInfo_passFilter` | `DYto2Tau_M_50` | the Z→ττ generator filter decision, the axis that stitches the filtered samples in |
 | `TauTauInfo_vis_type{1,2}`, `TauTauInfo_vis_pt{1,2}`, `TauTauInfo_vis_abseta{1,2}` | `DYto2Tau_M_50` | the visible tau quantities the filter is made of, so its definition can be revisited without reprocessing |
-| `TTInfo_nLeptonicW`, `TTInfo_wDecay{1,2}` | `TT`, `TT_Inclusive` | gen-level t̄t decay channel |
-| `genTop_{pt,eta,phi,mass}` | `TT`, `TT_Inclusive` | last-copy top and anti-top, in this order; read by the top-p<sub>T</sub> reweighting |
-| `genTop_b_{pt,eta,phi}`, `genTop_lep_{pt,eta,phi,mass}`, `genTop_lep_gen_kind` | `TT`, `TT_Inclusive` | the b quark and the W's charged lepton of each top, and that lepton's `GenLepton::Kind` (-1 for a hadronic W) |
+| `TTInfo_nLeptonicW`, `TTInfo_wDecay{1,2}` | `TT` | gen-level t̄t decay channel |
+| `genTop_{pt,eta,phi,mass}` | `TT` | last-copy top and anti-top, in this order; read by the top-p<sub>T</sub> reweighting |
+| `genTop_b_{pt,eta,phi}`, `genTop_lep_{pt,eta,phi,mass}`, `genTop_lep_gen_kind` | `TT` | the b quark and the W's charged lepton of each top, and that lepton's `GenLepton::Kind` (-1 for a hadronic W) |
 
 Which of these a process gets is declared as `genInfo` next to its `processors` in
 `config/<era>/processes.yaml`, where a stitcher selects on it or, for `TT`, where the
@@ -73,11 +73,16 @@ denominator sums over all events. `TTInfo_*` columns must stay scalars: the anaT
 columns that share a prefix as one collection. A process that stitches on one of these quantities without declaring `genInfo` fails
 in `AnaTupleMergeTask`, where `GenPart`/`LHEPart` are no longer available.
 
+t̄t is not stitched: `TT` takes only the three decay-channel samples (`TTto2L2Nu`, `TTtoLNu2Q`,
+`TTto4Q`) in every era, which do not overlap. The inclusive `TT`/`TT_ext1` samples of Run3_2022 and
+Run3_2023BPix are not used: they carry no parton-shower weights (`PSWeight` has a single entry), on
+which the parton-shower weight producer stops.
+
 The integration test guards this. `TestModel` runs two backgrounds — `custom_CI_Background_TT`,
 one t̄t dataset, and `custom_CI_Background_DY`, one DY→ττ dataset — and each carries the same
 `processors:` and `genInfo:` as the real `TT` and `DYto2Tau_M_50` process **for that era**
-(`TTStitcher` and `DYtautauStitcher` for 2022–2023BPix; the plain `MCStitcher` and no
-stitching of t̄t for 2024 onwards, which is what those eras configure). The stitchers therefore
+(`DYtautauStitcher` for 2022–2023BPix, the plain `MCStitcher` for 2024 onwards, which is what
+those eras configure). The stitchers therefore
 run over the whole anaTuple → merge → histogram chain in CI, which is exactly where a missing
 gen-level branch shows up. Change one of the real processes and change its CI counterpart with
 it.

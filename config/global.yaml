@@ -155,7 +155,7 @@ corrections: &corrections_default
   # genTop_pt, which AnaProd/anaTupleDef.py stores for processes with `genInfo: [ TT ]`.
   top_pt:
     stages: [ AnaTuple, AnaTupleMerge ]
-    processes: [ TT, TT_Inclusive, custom_CI_Background_TT ]
+    processes: [ TT, custom_CI_Background_TT ]
     branch: genTop_pt
     parameterization: data_nlo
     enabled:
