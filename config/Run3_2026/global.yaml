@@ -9,9 +9,6 @@ corrections:
   gen: { stage: AnaTuple }
   pu:
     stages: [ AnaTuple, AnaTupleMerge ]
-    enabled:
-      AnaTuple: true
-      AnaTupleMerge: false
   base: { stage: AnaTupleMerge }
   tauID: { stage: HistTuple }
   tauES: { stage: AnaTuple }
