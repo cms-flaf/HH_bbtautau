@@ -19,7 +19,7 @@ os.environ.setdefault("FLAF_PATH", os.path.join(ana_repo, "FLAF"))
 
 import ROOT
 
-from AnaProd.genProcessInfo import addGenProcessInfo
+from AnaProd.genProcessInfo import addGenProcessInfo, addGenTopInfo
 from FLAF.Common.Utilities import DataFrameWrapper
 
 ROOT.gROOT.SetBatch(True)
@@ -27,6 +27,8 @@ ROOT.gROOT.SetBatch(True)
 # statusFlags bits used by the gen-level identification: isHardProcess (7), isLastCopy (13).
 HARD_LAST_COPY = (1 << 7) | (1 << 13)
 LAST_COPY = 1 << 13
+# isPrompt (0), isFirstCopy (12), isLastCopy (13): what makes the W's muon a GenLepton.
+PROMPT_FIRST_LAST = (1 << 0) | (1 << 12) | (1 << 13)
 
 # Z -> tau tau, both taus hadronic: tau (pt 50) -> nu_tau (pt 20) + hadrons, so each
 # visible pt is 30 > 20 and the gen filter accepts the event.
@@ -36,7 +38,7 @@ NANOAOD = {
     "GenPart_pdgId": "ROOT::RVecI{15, -15, 16, -16, 6, -6, 24, 5, -24, -5, -13, 14, 2, -1}",
     "GenPart_statusFlags": (
         f"ROOT::RVecI{{{HARD_LAST_COPY}, {HARD_LAST_COPY}, 0, 0, {LAST_COPY}, "
-        f"{LAST_COPY}, {LAST_COPY}, 0, {LAST_COPY}, 0, 0, 0, 0, 0}}"
+        f"{LAST_COPY}, {LAST_COPY}, 0, {LAST_COPY}, 0, {PROMPT_FIRST_LAST}, 0, 0, 0}}"
     ),
     "GenPart_genPartIdxMother": "ROOT::RVecI{-1, -1, 0, 1, -1, -1, 4, 4, 5, 5, 6, 6, 8, 8}",
     "GenPart_pt": (
@@ -103,6 +105,52 @@ class TestGenProcessInfo(unittest.TestCase):
         self.assertEqual(values(dfw, "TTInfo_nLeptonicW"), [1] * 4)
         self.assertEqual(sorted(set(values(dfw, "TTInfo_wDecay1"))), [13])  # W -> mu nu
         self.assertEqual(sorted(set(values(dfw, "TTInfo_wDecay2"))), [0])  # W -> q q'
+
+    def test_gen_top_info_is_defined_and_stored(self):
+        # What the top pT reweighting reads (genTop_pt), ordered {top, anti-top}; the W of the
+        # top decays to a muon, the one of the anti-top to quarks.
+        ROOT.gInterpreter.Declare(
+            f'#include "{os.environ["FLAF_PATH"]}/include/GenLepton.h"'
+        )
+        dfw = make_dfw()
+        dfw.Define("event", "static_cast<ULong64_t>(rdfentry_)")
+        dfw.Define(
+            "genLeptons",
+            "reco_tau::gen_truth::GenLepton::fromNanoAOD(GenPart_pt, GenPart_eta,"
+            " GenPart_phi, GenPart_mass, GenPart_genPartIdxMother, GenPart_pdgId,"
+            " GenPart_statusFlags, event)",
+        )
+        addGenTopInfo(dfw, ["TT"])
+
+        expected = [
+            f"{prefix}_{var}"
+            for prefix, variables in [
+                ("genTop", ["pt", "eta", "phi", "mass"]),
+                ("genTop_b", ["pt", "eta", "phi"]),
+                ("genTop_lep", ["pt", "eta", "phi", "mass"]),
+            ]
+            for var in variables
+        ] + ["genTop_lep_gen_kind"]
+        self.assertEqual(dfw.colToSave, expected)
+        for column in expected:
+            self.assertFalse(column.startswith("TTInfo_"))
+
+        self.assertEqual(
+            [list(v) for v in values(dfw, "genTop_pt")], [[200.0, 200.0]] * 4
+        )
+        self.assertAlmostEqual(values(dfw, "genTop_mass")[0][1], 172.5, places=3)
+        self.assertEqual(
+            [list(v) for v in values(dfw, "genTop_b_pt")], [[100.0, 100.0]] * 4
+        )
+        lep_pt = values(dfw, "genTop_lep_pt")[0]
+        self.assertAlmostEqual(lep_pt[0], 50.0, places=3)
+        self.assertEqual(lep_pt[1], 0.0)  # hadronic W
+        self.assertEqual(list(values(dfw, "genTop_lep_gen_kind")[0])[1], -1)
+
+    def test_gen_top_info_needs_a_declaration(self):
+        dfw = make_dfw()
+        addGenTopInfo(dfw, ["DY", "TauTau"])
+        self.assertEqual(dfw.colToSave, [])
 
     def test_nothing_is_defined_without_a_declaration(self):
         dfw = make_dfw()

@@ -22,13 +22,35 @@ production that took days of grid time. Prioritise anything that (a) changes the
   (`DYInfo_*`, `TauTauInfo_*`, `TTInfo_*`). The anaTuple drops `GenPart`/`LHEPart`, so anything a
   stitching bin selects on **must** be stored here or the merge stage cannot evaluate it.
 - Which kinds a process gets is declared as `genInfo` in `config/<era>/processes.yaml`, next to
-  the `processors` that consume them. **The two must agree per era.** A process that stitches on a
+  the `processors` that consume them. **The two must agree per era.** The one consumer that is not
+  a processor is the top-p<sub>T</sub> reweighting: it reads `genTop_pt`, so `TT` and
+  `custom_CI_Background_TT` carry `genInfo: [ TT ]` in every era although t̄t is not stitched.
+- The per-top arrays live in `genTop_*` (defined before the selection by `defineGenVariables`),
+  never under `TTInfo_`: FuseAnaTuples stores all columns of one prefix as one collection, and an
+  array next to the scalar `TTInfo_*` would turn those into arrays. A process that stitches on a
   quantity it does not declare fails in `AnaTupleMergeTask` with
   `use of undeclared identifier 'GenPart_…'`.
 - **Adding a `genInfo` kind to an already-produced process means producing it again.** Flag any
   diff that widens `genInfo` without saying so.
 - Store the quantities a derived flag is built from, not only the flag, so revisiting a filter
   definition does not mean going back to nanoAOD.
+
+### Shift-invariant columns and shape weights
+
+- `anaTuple_shift_invariant_columns` in `config/global.yaml` lists only event-level generator and
+  event quantities. Generator information attached to reconstructed objects (`tau*_gen_*`, jet
+  flavour labels, `nJetFromGenHbb`) changes under shifts and must not be listed. Every input of
+  `weight_base` (generator, luminosity, cross-section and shape weights, the stitching variables)
+  must be listed.
+- A shifted tree takes the listed columns from its `Central` friend: `HasColumn` finds them,
+  `GetColumnNames()` does not list them. Code that branches on `GetColumnNames()` membership of a
+  listed column (as `Corrections/bosonicRecoil.py` does for `recoil_GenBoson_*`, which is why it is
+  not listed) silently takes the other branch in every shifted tree. Use `HasColumn`.
+- `config/Run3_2024/global.yaml`, 2025 and 2026 inherit `corrections:` with
+  `<<: *corrections_default` and override only `btag` and `dy_hhbbtautau`. Do not turn them back
+  into full copies: a correction added at top level then silently disappears from those eras. The
+  merge is one level deep, so an overridden entry must be complete.
+- A new shape weight's per-member columns go into `anaTupleMerge_drop_columns`.
 
 ### Processes and datasets
 
@@ -46,9 +68,10 @@ production that took days of grid time. Prioritise anything that (a) changes the
 
 ### Per-era processor differences are deliberate
 
-t̄t is stitched in 2022–2023BPix and **not** in 2024–2026, and DY→ττ uses `*DYtautau_processors`
-in the first group and plain `*DY_processors` in the second. Do not "harmonise" them in review;
-they follow the samples that exist.
+DY→ττ uses `*DYtautau_processors` in 2022–2023BPix and plain `*DY_processors` in 2024–2026. Do not
+"harmonise" them in review; they follow the samples that exist. t̄t is not stitched in any era: the
+inclusive `TT`/`TT_ext1` samples of 2022 and 2023BPix carry no parton-shower weights and are not
+used, so a diff that brings them back needs the t̄t stitcher back as well.
 
 ### Integration test
 

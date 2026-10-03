@@ -63,3 +63,50 @@ def addGenProcessInfo(dfw, gen_info):
                 f"TTInfo_wDecay{idx + 1}",
                 f"static_cast<int>(_TTInfo.w_decay[{idx}])",
             )
+
+
+# Generator-level t#bar{t} kinematics: a genTop collection ordered {top, anti-top} with the
+# last-copy top, its b quark and its W's charged lepton (pt/eta/phi/mass, no b mass), plus the
+# lepton's GenLepton::Kind (-1 if hadronic). genTop_pt is the input of the top pT reweighting,
+# which is a shape weight: it has to be defined before the event selection, where the
+# denominators are summed, so this runs from defineGenVariables, not from addAllVariables.
+# The per-top arrays must not share the TTInfo_ prefix with the scalars of addGenProcessInfo:
+# FuseAnaTuples stores all columns of one prefix as one collection.
+def addGenTopInfo(dfw, gen_info):
+    if "TT" not in gen_info:
+        return
+    DeclareHeader(
+        os.path.join(os.environ["FLAF_PATH"], "include", "GenProcess", "TT.h")
+    )
+    dfw.Define(
+        "_genTopInfo",
+        "gen_process::tt::identify(GenPart_pdgId, GenPart_statusFlags,"
+        " GenPart_genPartIdxMother, GenPart_pt, GenPart_eta, GenPart_phi,"
+        " GenPart_mass)",
+    )
+    for slot in range(2):
+        dfw.Define(
+            f"_genTop_lep{slot}_p4",
+            "reco_tau::gen_truth::lastCopyP4ByGenPartIndex(genLeptons,"
+            f" _genTopInfo.lep_index[{slot}])",
+        )
+    p4s = {
+        "genTop": ("_genTopInfo.top_p4[0]", "_genTopInfo.top_p4[1]"),
+        "genTop_b": ("_genTopInfo.b_p4[0]", "_genTopInfo.b_p4[1]"),
+        "genTop_lep": ("_genTop_lep0_p4", "_genTop_lep1_p4"),
+    }
+    for prefix, (from_top, from_antitop) in p4s.items():
+        for var in ["pt", "eta", "phi", "mass"]:
+            if prefix == "genTop_b" and var == "mass":
+                continue  # always zero in NanoAOD
+            dfw.DefineAndAppend(
+                f"{prefix}_{var}",
+                f"ROOT::VecOps::RVec<float>{{static_cast<float>({from_top}.{var}()),"
+                f" static_cast<float>({from_antitop}.{var}())}}",
+            )
+    dfw.DefineAndAppend(
+        "genTop_lep_gen_kind",
+        "ROOT::VecOps::RVec<int>{"
+        "reco_tau::gen_truth::kindByGenPartIndex(genLeptons, _genTopInfo.lep_index[0]),"
+        " reco_tau::gen_truth::kindByGenPartIndex(genLeptons, _genTopInfo.lep_index[1])}",
+    )

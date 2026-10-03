@@ -96,12 +96,70 @@ deepTauWPs:
     VSmu: Tight
     VSjet: Medium
 
-corrections:
+# The merged anaTuple keeps weight_base and weight_base_*_rel, which the histogram stage
+# reads, plus weight_xs, weight_gen and weight_lumi. Each shape producer's members are only
+# an input to building weight_base, so they are dropped here, named one by one: a new shape
+# producer has to be added to this list, it is not swept up by a pattern.
+anaTupleMerge_drop_columns:
+  - "^weight_pu_"
+  - "^weight_ps_"
+  - "^weight_top_pt_"
+  - "^weight_pdf_"
+  - "^weight_qcd_scale_"
+
+# Columns no systematic shift changes. They are stored in the central tree only, and an event
+# selected only by a shift gets them from that shift, so its shifted-tree weight_base is its
+# real weight (FuseAnaTuples checks that every variation selecting an event agrees). Generator-
+# and event-level quantities only: generator information attached to a reconstructed object
+# (tau*_gen_*, *_hadronFlavour, *_partonFlavour, nJetFromGenHbb) follows the selected object
+# and changes with the shift. recoil_GenBoson_* is invariant but stays out: the bosonic recoil
+# correction looks it up with GetColumnNames(), which does not list a column a shifted tree takes
+# from the central tree, so the shifted DY trees would silently use the other recoil method.
+anaTuple_shift_invariant_columns:
+  - "^(run|luminosityBlock|event)$"
+  - "^(period|isData|X_mass|X_spin)$"
+  - "^weight_(gen|lumi|xs|xs_ds)$"
+  - "^weight_(pu|ps|pdf|qcd_scale|top_pt)_"
+  - "^Pileup_nTrueInt$"
+  - "^LHE_"
+  - "^LHEPart_"
+  - "^GenJet_"
+  - "^(DYInfo|TauTauInfo|TTInfo)_"
+  - "^genTop_"
+  - "^genLepton[12]_"
+
+# Anchored: Run3_2024 and later inherit this block with `<<: *corrections_default` and override
+# only the entries that differ there (btag, dy_hhbbtautau), so a correction added here reaches
+# every era.
+corrections: &corrections_default
   lumi: { stage: AnaTuple }
   xs: { stage: AnaTuple }
   gen: { stage: AnaTuple }
   pu:
     stages: [ AnaTuple, AnaTupleMerge ]
+  # Parton-shower ISR/FSR. Staged like pu: the weights are computed at AnaTuple, where the
+  # inclusive sums enter the anaCache denominators, and AnaTupleMerge reads the persisted
+  # branches back to build weight_base_isr{Up,Down}_rel / weight_base_fsr{Up,Down}_rel. No
+  # `processes:` -- applied to all MC, signal included.
+  parton_shower:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: PSWeight
+  # Top pT reweighting of SM ttbar as a shape weight, staged like parton_shower. It reads
+  # genTop_pt, which AnaProd/anaTupleDef.py stores for processes with `genInfo: [ TT ]`.
+  top_pt:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    processes: [ TT, custom_CI_Background_TT ]
+    branch: genTop_pt
+    parameterization: data_nlo
+  # pdf and qcd_scale are staged like pu: the members are computed at AnaTuple from the
+  # NanoAOD branches and persisted, and AnaTupleMerge reads them back.
+  pdf:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: LHEPdfWeight
+    n_members: 103
+  qcd_scale:
+    stages: [ AnaTuple, AnaTupleMerge ]
+    branch: LHEScaleWeight
   base: { stage: AnaTupleMerge }
   tauID: { stage: HistTuple }
   tauES: { stage: AnaTuple }
