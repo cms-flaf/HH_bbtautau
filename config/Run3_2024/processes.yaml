@@ -136,7 +136,6 @@ ggH:
   name: "ggH"
   color: "kMagenta-7"
   datasets:
-    - GluGluHto2Tau_M125
     - GluGluHto2Tau_UncorrelatedDecay_UnFiltered
     - GluGluHto2B_M125
     - GluGluHto2Wto2L2Nu_M125
