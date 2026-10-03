@@ -300,8 +300,9 @@ custom_CI_Background_DY:
 custom_CI_Signal:
   name: "custom for CI and test purposes"
   color: "kAzure+10"
+  # The HLepRare skims of the other ggF HH samples of this era carry no LHE or parton-shower weights.
   datasets:
-    - GluGlutoHHto2B2Tau_kl_0p00_kt_1p00_c2_0p00
+    - GluGlutoHHto2B2Tau_kl_2p45_kt_1p00_c2_0p00_LHEweights
 
 custom_CI_Data:
   name: "CI -- Data"
