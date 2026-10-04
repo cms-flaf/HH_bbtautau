@@ -374,8 +374,12 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
                 "dihiggs_p4_lhe",
                 "GetDiHiggsP4LHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)",
             )
-            self.df = self.df.Define("pthh_lhe", "static_cast<float>(dihiggs_p4_lhe.Pt())")
-            self.df = self.df.Define("mhh_lhe", "static_cast<float>(dihiggs_p4_lhe.M())")
+            self.df = self.df.Define(
+                "pthh_lhe", "static_cast<float>(dihiggs_p4_lhe.Pt())"
+            )
+            self.df = self.df.Define(
+                "mhh_lhe", "static_cast<float>(dihiggs_p4_lhe.M())"
+            )
             self.df = self.df.Define(
                 "costhetastar_lhe",
                 f"GetCosThetaStarLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId)",
