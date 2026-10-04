@@ -30,7 +30,7 @@ inline TLorentzVector GetDiHiggsP4LHE(const ROOT::RVec<float>& LHEPart_pt,
         dihiggs_p4 = higgs_p4s[0] + higgs_p4s[1];
     } else {
         throw std::runtime_error("GetDiHiggsP4LHE: found " + std::to_string(higgs_p4s.size()) +
-                                  " Higgs bosons instead of 2 (input inconsistent with HH)");
+                                 " Higgs bosons instead of 2 (input inconsistent with HH)");
     }
     return dihiggs_p4;
 }
@@ -51,7 +51,7 @@ inline float GetCosThetaStarLHE(const ROOT::RVec<float>& LHEPart_pt,
     }
     if (higgs_p4s.size() != 2)
         throw std::runtime_error("GetCosThetaStarLHE: found " + std::to_string(higgs_p4s.size()) +
-                                  " Higgs bosons instead of 2 (input inconsistent with HH)");
+                                 " Higgs bosons instead of 2 (input inconsistent with HH)");
     TLorentzVector dihiggs_p4 = higgs_p4s[0] + higgs_p4s[1];
     TVector3 boost_vector = dihiggs_p4.BoostVector();
     TLorentzVector higgs1_boosted = higgs_p4s[0];
