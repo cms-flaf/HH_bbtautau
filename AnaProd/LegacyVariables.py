@@ -1,7 +1,30 @@
 import os
-from .Utilities import *
+import subprocess
+from FLAF.Common.Utilities import *
 
 initialized = False
+
+def _setup_kinfit_runtime(analysis_path):
+    hhkinfit_link = os.path.join(analysis_path, "HHKinFit2", "HHKinFit2")
+    if not os.path.exists(hhkinfit_link):
+        os.makedirs(os.path.join(analysis_path, "HHTools"), exist_ok=True)
+        os.makedirs(os.path.join(analysis_path, "TauAnalysis"), exist_ok=True)
+        for target, link in (
+            (os.path.join(analysis_path, "HHbtag"), os.path.join(analysis_path, "HHTools", "HHbtag")),
+            (os.path.join(analysis_path, "ClassicSVfit"), os.path.join(analysis_path, "TauAnalysis", "ClassicSVfit")),
+            (os.path.join(analysis_path, "SVfitTF"), os.path.join(analysis_path, "TauAnalysis", "SVfitTF")),
+            (os.path.join(analysis_path, "HHKinFit2"), hhkinfit_link),
+        ):
+            if not os.path.exists(link):
+                os.symlink(target, link)
+
+    kinfit_lib = os.path.join(analysis_path, "HHKinFit2", "libHHKinFit2.so")
+    if not os.path.isfile(kinfit_lib):
+        print(f"Building standalone {kinfit_lib} against the active ROOT...")
+        result = subprocess.run(["bash", "compile.sh"], cwd=os.path.join(analysis_path, "HHKinFit2"))
+        if result.returncode != 0:
+            raise RuntimeError(f"Failed to build {kinfit_lib}")
+    return kinfit_lib
 
 
 def Initialize(load_kinfit=True, load_svfit=True, load_mt2=True):
@@ -15,6 +38,10 @@ def Initialize(load_kinfit=True, load_svfit=True, load_mt2=True):
         raise RuntimeError("Legacy variables are already initialized")
     headers_to_include = ["FLAF/include/AnalysisTools.h"]
     if load_kinfit:
+        kinfit_lib = _setup_kinfit_runtime(os.environ["ANALYSIS_PATH"])
+        load_result = ROOT.gSystem.Load(kinfit_lib)
+        if load_result != 0:
+            raise RuntimeError(f"Failed to load {kinfit_lib}, status {load_result}")
         headers_to_include += ["include/KinFitInterface.h"]
     if load_svfit:
         headers_to_include += ["include/SVfitAnaInterface.h"]
