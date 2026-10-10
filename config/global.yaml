@@ -208,7 +208,7 @@ muonID_WP_for_triggerSF: "Tight" # only medium or tight for trigger SF, both iso
 muIDWP: "Tight"
 muIsoWP: "Tight"
 
-histTuple_flavor: default
+histTuple_flavor: kinfit_test
 histTuple_flavors:
   default:
     fullResolution_variables: [ ]
@@ -234,6 +234,15 @@ histTuple_flavors:
     variables:
       - tau1_pt
       - ggF_DNN_HH
+  kinfit_test:
+    fullResolution_variables:
+      - kinFit_m
+      - kinFit_chi2
+      - kinFit_convergence
+    variables:
+      - kinFit_m
+      - kinFit_chi2
+      - kinFit_convergence
 
 treeName: "Events"
 
@@ -737,7 +746,7 @@ payload_producers:
   kinFit:
     producers_module_name: Analysis.KinFitProducer
     producer_name: KinFitProducer
-    columns: [m, chi2, convergence]
+    columns: [ m, chi2, convergence ]
     dependencies:
     n_cpus: 4
     max_runtime: 8.0

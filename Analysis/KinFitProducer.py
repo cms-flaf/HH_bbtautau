@@ -10,7 +10,9 @@ class KinFitProducer:
         self.payload_name = payload_name
         self.period = period
         if not LegacyVariables.initialized:
-            LegacyVariables.Initialize(load_kinfit=True, load_svfit=False, load_mt2=False)
+            LegacyVariables.Initialize(
+                load_kinfit=True, load_svfit=False, load_mt2=False
+            )
 
     def prepare_dfw(self, dfw, dataset):
         if "entry_valid" not in dfw.df.GetColumnNames():

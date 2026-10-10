@@ -4,15 +4,25 @@ from FLAF.Common.Utilities import *
 
 initialized = False
 
+
 def _setup_kinfit_runtime(analysis_path):
     hhkinfit_link = os.path.join(analysis_path, "HHKinFit2", "HHKinFit2")
     if not os.path.exists(hhkinfit_link):
         os.makedirs(os.path.join(analysis_path, "HHTools"), exist_ok=True)
         os.makedirs(os.path.join(analysis_path, "TauAnalysis"), exist_ok=True)
         for target, link in (
-            (os.path.join(analysis_path, "HHbtag"), os.path.join(analysis_path, "HHTools", "HHbtag")),
-            (os.path.join(analysis_path, "ClassicSVfit"), os.path.join(analysis_path, "TauAnalysis", "ClassicSVfit")),
-            (os.path.join(analysis_path, "SVfitTF"), os.path.join(analysis_path, "TauAnalysis", "SVfitTF")),
+            (
+                os.path.join(analysis_path, "HHbtag"),
+                os.path.join(analysis_path, "HHTools", "HHbtag"),
+            ),
+            (
+                os.path.join(analysis_path, "ClassicSVfit"),
+                os.path.join(analysis_path, "TauAnalysis", "ClassicSVfit"),
+            ),
+            (
+                os.path.join(analysis_path, "SVfitTF"),
+                os.path.join(analysis_path, "TauAnalysis", "SVfitTF"),
+            ),
             (os.path.join(analysis_path, "HHKinFit2"), hhkinfit_link),
         ):
             if not os.path.exists(link):
@@ -21,7 +31,9 @@ def _setup_kinfit_runtime(analysis_path):
     kinfit_lib = os.path.join(analysis_path, "HHKinFit2", "libHHKinFit2.so")
     if not os.path.isfile(kinfit_lib):
         print(f"Building standalone {kinfit_lib} against the active ROOT...")
-        result = subprocess.run(["bash", "compile.sh"], cwd=os.path.join(analysis_path, "HHKinFit2"))
+        result = subprocess.run(
+            ["bash", "compile.sh"], cwd=os.path.join(analysis_path, "HHKinFit2")
+        )
         if result.returncode != 0:
             raise RuntimeError(f"Failed to build {kinfit_lib}")
     return kinfit_lib
