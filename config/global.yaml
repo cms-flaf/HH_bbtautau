@@ -733,3 +733,14 @@ payload_producers:
       - Signal
       - TT
       - DY
+
+  kinFit:
+    producers_module_name: Analysis.KinFitProducer
+    producer_name: KinFitProducer
+    columns: [ m, chi2, convergence ]
+    dependencies:
+    n_cpus: 4
+    max_runtime: 8.0
+    cmssw_env: False
+    awkward_based: True
+    uproot_stepsize: '50MB'
