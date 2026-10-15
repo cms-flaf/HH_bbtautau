@@ -14,12 +14,9 @@ class KinFitProducer:
                 load_kinfit=True, load_svfit=False, load_mt2=False
             )
 
-    def prepare_dfw(self, dfw, dataset):
+    def run(self, dfw):
         if "entry_valid" not in dfw.df.GetColumnNames():
             dfw.df = dfw.df.Define("entry_valid", "Hbb_isValid")
         dfw.df, _ = LegacyVariables.GetKinFit(dfw.df)
-        self.vars_to_save = ["kinFit_m", "kinFit_chi2", "kinFit_convergence"]
+        dfw.colToSave = ["kinFit_m", "kinFit_chi2", "kinFit_convergence", "FullEventId"]
         return dfw
-
-    def run(self, array):
-        return array
