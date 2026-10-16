@@ -52,6 +52,16 @@ production that took days of grid time. Prioritise anything that (a) changes the
   merge is one level deep, so an overridden entry must be complete.
 - A new shape weight's per-member columns go into `anaTupleMerge_drop_columns`.
 
+### Corrections reach the hooks as an argument
+
+FLAF builds one `Corrections` object per dataset, era and stage and passes it to the hooks as the
+required keyword `corrections`: `addAllVariables(..., *, corrections)`, `GetDfw(df, setup,
+dataset_name, *, corrections, ...)` and `DefineWeightForHistograms(..., corrections)`. There is no
+global instance: code that keeps one in a module-level variable, or builds its own, mixes eras
+when a process handles several. The object owns C++ providers that the dataframe refers to by
+address, so it must stay reachable while the dataframe is used (FLAF keeps it on the wrapper as
+`dfw.corrections`). The era is called `era` (`--era`); `period` is only the AnaTuple column.
+
 ### Processes and datasets
 
 - Meta processes (`is_meta_process`) expand via `meta_setup.dataset_name_pattern`. A dataset whose
