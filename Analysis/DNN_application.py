@@ -14,10 +14,10 @@ import enum
 
 
 class DNNProducer:
-    def __init__(self, cfg, payload_name, period):
+    def __init__(self, cfg, payload_name, era):
 
         self.payload_name = payload_name
-        self.period = period
+        self.era = era
 
         sys.path.append(os.environ["ANALYSIS_PATH"])
         ROOT.gROOT.ProcessLine(".include " + os.environ["ANALYSIS_PATH"])
@@ -99,7 +99,7 @@ class DNNProducer:
         for fold_index, nn_interface in enumerate(models):
             # build inputs only for valid events
             valid_array = array[valid_channels]
-            inputs = convert_to_numpy(valid_array, self.period, 400, 2)
+            inputs = convert_to_numpy(valid_array, self.era, 400, 2)
             predictions = self.run_inference(nn_interface, inputs)
             predictions_array[fold_index, valid_event_indices, :] = predictions
 
@@ -129,7 +129,7 @@ class DNNProducer:
         return predictions
 
 
-def convert_to_numpy(event_data, period, mass, spin):
+def convert_to_numpy(event_data, era, mass, spin):
     dau1_px, dau1_py, dau1_pz, dau1_e = convert_kinematics(
         event_data["tau1_pt"],
         event_data["tau1_eta"],

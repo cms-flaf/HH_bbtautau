@@ -57,7 +57,7 @@ def convert_kinematics(pt, eta, phi, mass):
     return px, py, pz, energy
 
 
-def convert_to_numpy(event_data, period, mass, spin):
+def convert_to_numpy(event_data, era, mass, spin):
     dau1_px, dau1_py, dau1_pz, dau1_e = convert_kinematics(
         event_data["tau1_pt"],
         event_data["tau1_eta"],
@@ -119,7 +119,7 @@ def convert_to_numpy(event_data, period, mass, spin):
         "event_number": al(event_data["entry_index"]),
         "spin": ai(spin),
         "mass": ai(mass),
-        "era": Era[period],
+        "era": Era[era],
         "pair_type": ai(pairtype_map.get(event_data["channelId"], 2)),
         "dau1_dm": ai(event_data["tau1_decayMode"]),
         "dau2_dm": ai(event_data["tau2_decayMode"]),
@@ -208,7 +208,7 @@ def run_inference_on_events_tree(
     globalConfig,
     output_root_file,
     snapshotOptions,
-    period,
+    era,
     mass,
     spin,
 ):
@@ -220,7 +220,7 @@ def run_inference_on_events_tree(
         globalConfig=globalConfig,
         output_root_file=output_root_file,
         snapshotOptions=snapshotOptions,
-        period=period,
+        era=era,
         mass=mass,
         spin=spin,
     )
@@ -290,13 +290,13 @@ def run_inference_for_tree(
     globalConfig,
     output_root_file,
     snapshotOptions,
-    period,
+    era,
     mass,
     spin,
 ):
 
     rdf_setup = PrepareDfForDNN(
-        DataFrameBuilderForHistograms(rdf, globalConfig, period)
+        DataFrameBuilderForHistograms(rdf, globalConfig, era)
     ).df
     rdf_setup = rdf_setup.Define("entry_index", "(UInt_t)(FullEventId & 0xFFFFFFFF)")
     columns = [
@@ -369,7 +369,7 @@ def run_inference_for_tree(
                 event_data = {col: other_columns_dict[col][i] for col in columns}
                 if event_data["channelId"] not in [13, 23, 33]:
                     continue
-                inputs = convert_to_numpy(event_data, period, mass, spin)
+                inputs = convert_to_numpy(event_data, era, mass, spin)
 
                 predictions = run_inference(nn_interface, inputs)
                 predictions_array[fold_index, i, :] = predictions.flatten()
@@ -441,7 +441,7 @@ if __name__ == "__main__":
     parser.add_argument("--globalConfig", required=True, type=str)
     parser.add_argument("--uncConfig", required=True, type=str)
     parser.add_argument("--outFileName", required=True, type=str)
-    parser.add_argument("--period", required=True, type=str)
+    parser.add_argument("--era", required=True, type=str)
     parser.add_argument("--mass", required=True, type=int)
     parser.add_argument("--spin", required=True, type=int)
 
@@ -524,7 +524,7 @@ if __name__ == "__main__":
         globalConfig=globalConfig,
         output_root_file=output_root_file,
         snapshotOptions=snapshotOptions,
-        period=args.period,
+        era=args.era,
         mass=args.mass,
         spin=args.spin,
     )

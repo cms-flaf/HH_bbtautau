@@ -108,7 +108,7 @@ def createInvMass(df):
     return df
 
 
-def createKeyFilterDict(global_params, period):
+def createKeyFilterDict(global_params, era):
     filter_dict = {}
     filter_str = ""
     channels_to_consider = global_params["channels_to_consider"]
@@ -140,8 +140,8 @@ def createKeyFilterDict(global_params, period):
     triggers_dict = global_params["hist_triggers"]
     for ch in channels_to_consider:
         triggers = triggers_dict[ch]["default"]
-        if period in triggers_dict[ch].keys():
-            triggers = triggers_dict[ch][period]
+        if era in triggers_dict[ch].keys():
+            triggers = triggers_dict[ch][era]
         for reg in custom_regions:
             for cat in all_categories:
                 filter_base = f" ( {ch} && {triggers} && {reg} && {cat} ) "
@@ -402,18 +402,18 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
     def definePNetSFs(self):
         self.df = self.df.Define(
             "weight_pNet_Central",
-            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.period}", "Central", "{self.pNetWPstring}",{self.whichType})""",
+            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.era}", "Central", "{self.pNetWPstring}",{self.whichType})""",
         )
         self.df = self.df.Define(
             "weight_pNet_Up",
-            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.period}", "Up", "{self.pNetWPstring}",{self.whichType})""",
+            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.era}", "Up", "{self.pNetWPstring}",{self.whichType})""",
         )
         self.df = self.df.Define(
             "weight_pNet_Up_rel", f"""weight_pNet_Up/weight_pNet_Central"""
         )
         self.df = self.df.Define(
             "weight_pNet_Down",
-            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.period}", "Down", "{self.pNetWPstring}",{self.whichType})""",
+            f"""getSFPNet(SelectedFatJet_p4_boosted.Pt(), "{self.era}", "Down", "{self.pNetWPstring}",{self.whichType})""",
         )
         self.df = self.df.Define(
             "weight_pNet_Down_rel", f"""weight_pNet_Down/weight_pNet_Central"""
@@ -434,9 +434,9 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             self.df = self.df.Define(
                 reg_name,
                 reg_exp.format(
-                    tau_th=singleTau_th_dict[self.period],
-                    ele_th=singleEle_th_dict[self.period],
-                    mu_th=singleMu_th_dict[self.period],
+                    tau_th=singleTau_th_dict[self.era],
+                    ele_th=singleEle_th_dict[self.era],
+                    mu_th=singleMu_th_dict[self.era],
                 ),
             )
             self.colToSave.append(reg_name)
@@ -528,7 +528,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
             )
         else:
             score = "btagUParTAK4B" if "b1_btagUParTAK4B" in cols else "btagPNetB"
-            wp = WorkingPointsParticleNet[self.period]["Medium"]
+            wp = WorkingPointsParticleNet[self.era]["Medium"]
             nBjets_PNetTag = (
                 f"int(bjet1_isValid && b1_{score} >= {wp}) "
                 f"+ int(bjet2_isValid && b2_{score} >= {wp})"
@@ -677,7 +677,7 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self,
         df,
         config,
-        period,
+        era,
         deepTauVersion="v2p1",
         bTagWPString="Medium",
         pNetWPstring="Loose",
@@ -695,9 +695,9 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
         self.config = config
         self.bTagWPString = bTagWPString
         self.pNetWPstring = pNetWPstring
-        self.pNetWP = WorkingPointsParticleNet[period][pNetWPstring]
-        self.bTagWP = WorkingPointsDeepFlav[period][bTagWPString]
-        self.period = period
+        self.pNetWP = WorkingPointsParticleNet[era][pNetWPstring]
+        self.bTagWP = WorkingPointsDeepFlav[era][bTagWPString]
+        self.era = era
         self.region = region
         self.isData = isData
         self.isSignal = isSignal

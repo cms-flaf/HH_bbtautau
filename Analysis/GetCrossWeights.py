@@ -197,7 +197,7 @@ def defineTriggerWeightsErrors(dfBuilder):
     # dfBuilder.df = dfBuilder.df.Define("trigSF_err_dm_mutau", """get_scale_factor_error(Eff_Data_mutau, Eff_MC_mutau, Eff_Data_mutau_Up - Eff_Data_mutau, Eff_MC_mutau_Up - Eff_MC_mutau,"trigSF_err_dm_mutau")""")
     Err_Data_mu = "Err_Data_SL_mu + Err_Data_cross_mu"
     Err_MC_mu = "Err_MC_SL_mu   + Err_MC_cross_mu"
-    if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+    if dfBuilder.era == "Run2_2016" or dfBuilder.era == "Run2_2016_HIPM":
         Err_Data_mu = "Err_Data_SL_mu"
         Err_MC_mu = "Err_MC_SL_mu"
     # dfBuilder.df = dfBuilder.df.Define("Err_Data_mu", Err_Data_mu)
@@ -268,14 +268,14 @@ def defineTriggerWeightsErrors(dfBuilder):
     # dfBuilder.df = dfBuilder.df.Define("trigSF_err_dm_etau", """get_scale_factor_error(Eff_Data_etau, Eff_MC_etau, Eff_Data_etau_Up - Eff_Data_etau, Eff_MC_etau_Up - Eff_MC_etau,"trigSF_err_dm_etau")""")
     Err_Data_ele = "Err_Data_SL_ele + Err_Data_cross_ele"
     Err_MC_ele = "Err_MC_SL_ele   + Err_MC_cross_ele"
-    if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+    if dfBuilder.era == "Run2_2016" or dfBuilder.era == "Run2_2016_HIPM":
         Err_Data_ele = "Err_Data_SL_ele"
         Err_MC_ele = "Err_MC_SL_ele"
     # dfBuilder.df = dfBuilder.df.Define("Err_Data_ele", Err_Data_ele)
     # dfBuilder.df = dfBuilder.df.Define("Err_MC_ele", Err_MC_ele)
     # dfBuilder.df = dfBuilder.df.Define("trigSF_ele_err", """get_scale_factor_error(Eff_Data_etau, Eff_MC_etau, Err_Data_ele, Err_MC_ele,"trigSF_ele_err")""")
 
-    if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+    if dfBuilder.era == "Run2_2016" or dfBuilder.era == "Run2_2016_HIPM":
         dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_cross_ele_Up", " 1.f ")
         dfBuilder.df = dfBuilder.df.Define(f"weight_trigSF_cross_ele_Down", " 1.f ")
         dfBuilder.df = dfBuilder.df.Define(
@@ -951,7 +951,7 @@ def defineTriggerWeights(dfBuilder):  # needs application region def
         # dfBuilder.df = dfBuilder.df.Define(f"Eff_MC_mutau", Eff_MC_expression_mu)
         # weight_muTau_expression = "if ( (HLT_singleMu || HLT_mutau) && Legacy_region && Eff_MC_mutau!=0) {return static_cast<float>(Eff_Data_mutau/Eff_MC_mutau);} return 1.f;"
         weight_muTau_expression = "if ( (HLT_singleMu || HLT_mutau) && Legacy_region) {return (weight_tau1_TrgSF_singleMu_Central);} return 1.f;"
-        if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+        if dfBuilder.era == "Run2_2016" or dfBuilder.era == "Run2_2016_HIPM":
             weight_muTau_expression = "if (HLT_singleMu && SingleMu_region) {return (weight_tau1_TrgSF_singleMuCentral ) ;} return 1.f; "
         dfBuilder.df = dfBuilder.df.Define(f"weight_HLT_muTau", weight_muTau_expression)
 
@@ -979,7 +979,7 @@ def defineTriggerWeights(dfBuilder):  # needs application region def
         # dfBuilder.df = dfBuilder.df.Define(f"Eff_MC_etau", Eff_MC_expression_ele)
         # weight_eleTau_expression = "if ( (HLT_singleEle || HLT_etau) && Legacy_region && Eff_MC_etau!=0) {return static_cast<float>(Eff_Data_etau/Eff_MC_etau);} return 1.f;"
         weight_eleTau_expression = "if ( (HLT_singleEle || HLT_etau) && Legacy_region) {return (weight_tau1_TrgSF_singleEle_Central);} return 1.f;"
-        if dfBuilder.period == "Run2_2016" or dfBuilder.period == "Run2_2016_HIPM":
+        if dfBuilder.era == "Run2_2016" or dfBuilder.era == "Run2_2016_HIPM":
             weight_eleTau_expression = "if (HLT_singleEle && SingleEle_region) {return (weight_tau1_TrgSF_singleEleCentral ) ;} return 1.f; "
         dfBuilder.df = dfBuilder.df.Define(f"weight_HLT_eTau", weight_eleTau_expression)
 

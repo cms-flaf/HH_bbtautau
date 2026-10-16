@@ -31,7 +31,7 @@ def analysis_setup(setup):
 
 def GetDfw(df, setup, dataset_name, *, corrections):
     global_params = setup.global_params
-    period = global_params["era"]
+    era = global_params["era"]
     kwargset = {}
 
     kwargset["isData"] = global_params["process_group"] == "data"
@@ -50,7 +50,7 @@ def GetDfw(df, setup, dataset_name, *, corrections):
     if global_params["process_name"] == "DY":
         datasetType = 2
     kwargset["whichType"] = datasetType
-    dfw = analysis.DataFrameBuilderForHistograms(df, global_params, period, **kwargset)
+    dfw = analysis.DataFrameBuilderForHistograms(df, global_params, era, **kwargset)
     dfw.corrections = corrections
     dfw.df = corrections.applyBosonicRecoil(dfw.df)
     new_dfw = analysis.PrepareDfForHistograms(dfw)
