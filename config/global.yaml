@@ -226,6 +226,7 @@ histTuple_flavors:
       - met_pt
       - nBJets
       - nJet
+      - kinFit_m
       # - pthh_lhe
       # - mhh_lhe
       # - costhetastar_lhe
@@ -234,6 +235,7 @@ histTuple_flavors:
     variables:
       - tau1_pt
       - ggF_DNN_HH
+      - kinFit_m
 
 treeName: "Events"
 
@@ -733,3 +735,13 @@ payload_producers:
       - Signal
       - TT
       - DY
+
+  kinFit:
+    producers_module_name: Analysis.KinFitProducer
+    producer_name: KinFitProducer
+    columns: [ m, chi2, convergence ]
+    dependencies:
+    n_cpus: 4
+    max_runtime: 8.0
+    cmssw_env: False
+    awkward_based: False
