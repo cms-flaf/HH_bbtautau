@@ -1,7 +1,6 @@
 import os
 import AnaProd.baseline as AnaBaseline
 import FLAF.Common.BaselineSelection as CommonBaseline
-from Corrections.Corrections import Corrections
 import ROOT
 from FLAF.Common.Utilities import defineP4
 from AnaProd.genProcessInfo import addGenProcessInfo, addGenTopInfo
@@ -301,8 +300,10 @@ def addAllVariables(
     global_params,
     channels,
     dataset_cfg,
+    *,
+    corrections,
 ):
-    dfw.Apply(Corrections.getGlobal().JetVetoMap.GetJetVetoMap)
+    dfw.Apply(corrections.JetVetoMap.GetJetVetoMap)
     dfw.Apply(CommonBaseline.ApplyJetVetoMap)
     dfw.Apply(AnaBaseline.RecoHttCandidateSelection, global_params)
     dfw.Apply(AnaBaseline.RecoJetSelection, global_params["era"])
@@ -312,8 +313,8 @@ def addAllVariables(
     dfw.Apply(AnaBaseline.ExtraRecoJetSelection, global_params["era"])
 
     dfw.Apply(AnaBaseline.VBFJetSelection)
-    dfw.Apply(Corrections.getGlobal().jet.getEnergyResolution)
-    dfw.Apply(Corrections.getGlobal().btag.getWPid, "Jet")
+    dfw.Apply(corrections.jet.getEnergyResolution)
+    dfw.Apply(corrections.btag.getWPid, "Jet")
     jet_obs = []
     jet_obs.extend(JetObservables)
     if global_params["requireHbbJets"]:

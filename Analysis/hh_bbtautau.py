@@ -5,7 +5,6 @@ if __name__ == "__main__":
 
 from FLAF.Common.HistHelper import *
 from Analysis.GetCrossWeights import *
-from Corrections.Corrections import Corrections
 
 # from Analysis.GetTauTauWeights import *
 from FLAF.Common.Utilities import *
@@ -745,7 +744,7 @@ def PrepareDfForHistograms(dfForHistograms):
     dfForHistograms.defineCategories()
     dfForHistograms.defineQCDRegions()
     dfForHistograms.df = RedefineMETbosonicRecoil(
-        dfForHistograms.df, isData=dfForHistograms.isData
+        dfForHistograms.df, dfForHistograms.corrections, isData=dfForHistograms.isData
     )
 
     return dfForHistograms
@@ -785,9 +784,9 @@ def defineAllP4(df, isData=False):
     return df
 
 
-def RedefineMETbosonicRecoil(df, isData=False):
-    if (not isData) and ("bosonicRecoil" in Corrections.getGlobal().to_apply):
-        process_cfg = Corrections.getGlobal().process_cfg
+def RedefineMETbosonicRecoil(df, corrections, isData=False):
+    if (not isData) and ("bosonicRecoil" in corrections.to_apply):
+        process_cfg = corrections.process_cfg
         if (
             process_cfg.get("corrections", {})
             .get("bosonicRecoil", {})
