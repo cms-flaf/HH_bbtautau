@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 from FLAF.Common.Utilities import *
@@ -31,9 +32,33 @@ def _setup_kinfit_runtime(analysis_path):
     kinfit_lib = os.path.join(analysis_path, "HHKinFit2", "libHHKinFit2.so")
     if not os.path.isfile(kinfit_lib):
         print(f"Building standalone {kinfit_lib} against the active ROOT...")
-        result = subprocess.run(
-            ["bash", "compile.sh"], cwd=os.path.join(analysis_path, "HHKinFit2")
-        )
+        hhkinfit2_dir = os.path.join(analysis_path, "HHKinFit2")
+        cxx = subprocess.run(
+            ["root-config", "--cxx"], capture_output=True, text=True, check=True
+        ).stdout.strip()
+        cflags = subprocess.run(
+            ["root-config", "--cflags", "--glibs"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.split()
+        sources = sorted(glob.glob(os.path.join(hhkinfit2_dir, "src", "*.cpp")))
+        cmd = [
+            cxx,
+            "-Wall",
+            "-Wextra",
+            "-fPIC",
+            "-shared",
+            *sources,
+            *cflags,
+            "-I",
+            os.path.join(hhkinfit2_dir, "interface"),
+            "-D",
+            "HHKINFIT2",
+            "-o",
+            kinfit_lib,
+        ]
+        result = subprocess.run(cmd, cwd=hhkinfit2_dir)
         if result.returncode != 0:
             raise RuntimeError(f"Failed to build {kinfit_lib}")
     return kinfit_lib
