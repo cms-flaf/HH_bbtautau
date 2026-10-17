@@ -73,9 +73,7 @@ def plot_2D_histogram(
     plt.show()
 
 
-def plot_1D_histogram(
-    histograms, labels, bins, title, bin_labels, filename, era, mass
-):
+def plot_1D_histogram(histograms, labels, bins, title, bin_labels, filename, era, mass):
     fig, ax = plt.subplots(figsize=(16, 10))
     # plt.xlabel(xlabel, fontsize=40)
     plt.ylabel("Events", fontsize=25)

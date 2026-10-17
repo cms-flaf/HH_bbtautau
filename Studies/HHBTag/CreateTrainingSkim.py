@@ -10,7 +10,6 @@ import FLAF.Common.ReportTools as ReportTools
 import yaml
 import FLAF.Common.BaselineSelection as Baseline
 
-
 jetVar_list = [
     "pt",
     "eta",
