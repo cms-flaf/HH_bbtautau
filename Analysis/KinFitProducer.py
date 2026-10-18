@@ -6,9 +6,9 @@ class KinFitProducer:
     kinFit_convergence) once per dataset as an AnalysisCacheTask payload,
     """
 
-    def __init__(self, cfg, payload_name, period):
+    def __init__(self, cfg, payload_name, era):
         self.payload_name = payload_name
-        self.period = period
+        self.era = era
         if not LegacyVariables.initialized:
             LegacyVariables.Initialize(
                 load_kinfit=True, load_svfit=False, load_mt2=False

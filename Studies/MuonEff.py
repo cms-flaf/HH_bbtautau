@@ -84,7 +84,7 @@ if __name__ == "__main__":
     import yaml
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--period", required=False, type=str, default="Run2_2018")
+    parser.add_argument("--era", required=False, type=str, default="Run2_2018")
     parser.add_argument("--sample", required=False, type=str, default="GluGluToRadion")
     parser.add_argument("--deepTauVersion", required=False, type=str, default="v2p1")
     parser.add_argument(
@@ -98,11 +98,11 @@ if __name__ == "__main__":
     ROOT.gROOT.ProcessLine(".include " + os.environ["ANALYSIS_PATH"])
     ROOT.gROOT.ProcessLine('#include "include/GenTools.h"')
     ROOT.gInterpreter.ProcessLine(f'ParticleDB::Initialize("{args.particleFile}");')
-    setup = Setup.getGlobal(os.environ["ANALYSIS_PATH"], args.period)
+    setup = Setup.getGlobal(os.environ["ANALYSIS_PATH"], args.era)
 
     #### useful stuff ####
 
-    inDir = f"/eos/cms/store/group/phys_higgs/HLepRare/HTT_skim_v1/{args.period}/"
+    inDir = f"/eos/cms/store/group/phys_higgs/HLepRare/HTT_skim_v1/{args.era}/"
 
     ########## dataFrame creation ##########
     sample_list = (

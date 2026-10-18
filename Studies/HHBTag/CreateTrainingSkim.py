@@ -10,7 +10,6 @@ import FLAF.Common.ReportTools as ReportTools
 import yaml
 import FLAF.Common.BaselineSelection as Baseline
 
-
 jetVar_list = [
     "pt",
     "eta",
@@ -48,7 +47,7 @@ def JetSavingCondition(df):
 
 
 def createSkim(
-    inFile, outFile, period, sample, X_mass, node_index, mpv, config, snapshotOptions
+    inFile, outFile, era, sample, X_mass, node_index, mpv, config, snapshotOptions
 ):
     Baseline.Initialize(True, True)
 
@@ -80,7 +79,7 @@ def createSkim(
 
     df = Baseline.GenRecoJetMatching(df)
     df = df.Define("sample", f"static_cast<int>(SampleType::{sample})")
-    df = df.Define("period", f"static_cast<int>(Period::Run2_{period})")
+    df = df.Define("period", f"static_cast<int>(Period::Run2_{era})")
     df = df.Define("X_mass", f"static_cast<int>({X_mass})")
     df = df.Define("node_index", f"static_cast<int>({node_index})")
 
@@ -152,7 +151,7 @@ if __name__ == "__main__":
     import os
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--period", type=str)
+    parser.add_argument("--era", type=str)
     parser.add_argument("--inFile", type=str)
     parser.add_argument("--outFile", type=str)
     parser.add_argument("--mass", type=int)
@@ -185,7 +184,7 @@ if __name__ == "__main__":
     createSkim(
         args.inFile,
         args.outFile,
-        args.period,
+        args.era,
         args.sample,
         args.mass,
         args.node_index,

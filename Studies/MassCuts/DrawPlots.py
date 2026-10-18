@@ -21,7 +21,7 @@ hep.style.use("CMS")
 # "font.sans-serif": "Helvetica",
 # })
 
-period_dict = {
+era_dict = {
     "Run2_2018": "59.83",
     "Run2_2017": "41.48",
     "Run2_2016": "16.8",
@@ -37,7 +37,7 @@ def plot_2D_histogram(
     ylabel,
     bin_labels,
     filename,
-    period,
+    era,
     rectangle_coordinates,
 ):
     hep.style.use("CMS")
@@ -50,7 +50,7 @@ def plot_2D_histogram(
     # hep.cms.label("Simulation Preliminary")
     # labels https://mplhep.readthedocs.io/en/latest/api.html#experiment-label-helpers
     hep.cms.label(
-        "Preliminary", lumi=period_dict[period], year=period.split("_")[1], fontsize=40
+        "Preliminary", lumi=era_dict[era], year=era.split("_")[1], fontsize=40
     )
     if bin_labels:
         textstr = "\n".join([f"{i}. {label}" for i, label in enumerate(bin_labels)])
@@ -73,9 +73,7 @@ def plot_2D_histogram(
     plt.show()
 
 
-def plot_1D_histogram(
-    histograms, labels, bins, title, bin_labels, filename, period, mass
-):
+def plot_1D_histogram(histograms, labels, bins, title, bin_labels, filename, era, mass):
     fig, ax = plt.subplots(figsize=(16, 10))
     # plt.xlabel(xlabel, fontsize=40)
     plt.ylabel("Events", fontsize=25)
@@ -120,7 +118,7 @@ def plot_1D_histogram(
         label=f"$m_{{X}}$ = {mass} GeV",
     )
     hep.cms.label(
-        "Preliminary", lumi=period_dict[period], year=period.split("_")[1], fontsize=25
+        "Preliminary", lumi=era_dict[era], year=era.split("_")[1], fontsize=25
     )
     ax.legend(fontsize=25)
     plt.show()

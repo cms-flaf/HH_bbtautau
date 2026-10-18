@@ -189,7 +189,7 @@ if __name__ == "__main__":
     createSkim(
         args.inFile,
         args.outFile,
-        args.period,
+        args.era,
         args.sample,
         args.mass,
         args.mpv,

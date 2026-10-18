@@ -23,7 +23,7 @@ lumiTextOffset = 0.1
 lumiTextFont = 42  # Font for "CMS"
 lumi_13TeV = "138.8 fb^{-1} (13 TeV)"
 lumi_sqrtS = ""
-period_dict = {
+era_dict = {
     "Run2_2018": "59.83 fb^{-1} (13 TeV)",
     "Run2_2017": "41.48 fb^{-1} (13 TeV)",
     "Run2_2016": "16.8 fb^{-1} (13 TeV)",
@@ -61,7 +61,7 @@ def CMS_lumi(pad, iPeriod, iPosX):
 
     pad.cd()
     lumiText = ""
-    lumiText += period_dict[iPeriod]
+    lumiText += era_dict[iPeriod]
 
     latex = rt.TLatex()
     latex.SetNDC()

@@ -389,7 +389,7 @@ if __name__ == "__main__":
     dfWrapped_central = DataFrameBuilderForHistograms(
         df_initial,
         global_cfg_dict,
-        period=f"Run2_{args.year}",
+        era=f"Run2_{args.year}",
         region="SR",
         isData=False,
     )
@@ -397,7 +397,7 @@ if __name__ == "__main__":
     dfWrapped_cache_central = DataFrameBuilderForHistograms(
         df_cache_initial,
         global_cfg_dict,
-        period=f"Run2_{args.year}",
+        era=f"Run2_{args.year}",
         region="SR",
         isData=False,
     )

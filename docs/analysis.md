@@ -17,7 +17,7 @@ ERA=Run3_2022
 VER=v1_deepTau2p5            # version name encodes the DeepTau version (see Setup)
 
 law run FLAF.Analysis.tasks.HistPlotTask \
-  --period $ERA --version $VER --workflow local \
+  --era $ERA --version $VER --workflow local \
   --customisations deepTauVersion=2p5
 ```
 

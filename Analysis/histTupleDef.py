@@ -1,7 +1,6 @@
 import importlib
 from FLAF.Common.Utilities import *
 from FLAF.Common.HistHelper import *
-from Corrections.Corrections import Corrections
 from Corrections.CorrectionsCore import getSystName, central
 from Analysis.GetCrossWeights import *
 
@@ -30,9 +29,9 @@ def analysis_setup(setup):
     analysis = importlib.import_module(f"{analysis_import}")
 
 
-def GetDfw(df, setup, dataset_name):
+def GetDfw(df, setup, dataset_name, *, corrections):
     global_params = setup.global_params
-    period = global_params["era"]
+    era = global_params["era"]
     kwargset = {}
 
     kwargset["isData"] = global_params["process_group"] == "data"
@@ -51,8 +50,8 @@ def GetDfw(df, setup, dataset_name):
     if global_params["process_name"] == "DY":
         datasetType = 2
     kwargset["whichType"] = datasetType
-    dfw = analysis.DataFrameBuilderForHistograms(df, global_params, period, **kwargset)
-    corrections = Corrections.getGlobal()
+    dfw = analysis.DataFrameBuilderForHistograms(df, global_params, era, **kwargset)
+    dfw.corrections = corrections
     dfw.df = corrections.applyBosonicRecoil(dfw.df)
     new_dfw = analysis.PrepareDfForHistograms(dfw)
     return new_dfw
@@ -72,10 +71,10 @@ def DefineWeightForHistograms(
     global_params,
     final_weight_name,
     df_is_central,
+    corrections,
 ):
     global central_df_weights_computed
     is_central = uncName == central
-    corrections = Corrections.getGlobal()
     if not isData and (not central_df_weights_computed or not df_is_central):
         lepton_legs = ["tau1", "tau2"]
         offline_legs = ["tau1", "tau2", "b1", "b2"]
