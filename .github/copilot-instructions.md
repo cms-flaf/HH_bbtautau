@@ -152,5 +152,5 @@ Verified 2026-08-27; re-check before relying on any of it.
 | Eras | Run 3: 2022, 2022EE, 2023, 2023BPix, 2024, 2025, 2026. Run 2 legacy configs also present |
 | Configs | `config/global.yaml`, `config/processes.yaml` (shared processor anchors), `config/phys_models.yaml`, `config/<era>/{datasets,processes,triggers}.yaml` |
 | Tests | `test/test_gen_process_info.py` (needs `ANALYSIS_PATH` and `FLAF_PATH` set) |
-| Workflows | `formatting-check`, `repo-sanity-checks`, `test-setup-loading`, `deploy-docs`, `trigger-flaf-integration`. Formatting and era loading are checked automatically — do not comment on them |
+| Workflows | `formatting-check`, `repo-sanity-checks` (FLAF's sanity checks and FLAF's `run_tools/check_era_rename.py` for leftovers of the `period` → `era` rename), `test-setup-loading`, `deploy-docs`, `trigger-flaf-integration`. Formatting and era loading are checked automatically — do not comment on them |
 | Docs | `docs/`, plus the shared framework docs in `FLAF/docs/`; see the documentation section above |
