@@ -202,7 +202,7 @@ muonID_WP_for_triggerSF: "Tight" # only medium or tight for trigger SF, both iso
 muIDWP: "Tight"
 muIsoWP: "Tight"
 
-histTuple_flavor: default
+histTuple_flavor: DNN_ELReweighter
 histTuple_flavors:
   default:
     fullResolution_variables: [ ]
@@ -245,9 +245,6 @@ histTuple_flavors:
       - ggF_DNN_HH
       - ggF_DNN_TT
       - ggF_DNN_DY
-      - event
-      - run
-      - luminosityBlock
       - mhh_lhe
       - pthh_lhe
       - costhetastar_lhe
