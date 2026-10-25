@@ -93,5 +93,4 @@ nav:
   - Setup: setup.md
   - Running the analysis: analysis.md
   - Statistical inference: stat_inference.md
-  - HHbtag training: hhbtag_training.md
   - Interactive plot browser: interactive_plot_browser.md

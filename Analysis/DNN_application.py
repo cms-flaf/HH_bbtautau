@@ -187,10 +187,6 @@ def convert_to_numpy(event_data, era, mass, spin):
             np.array(event_data["event"]).shape,
             mass,
         ),
-        # "era": np.full(
-        #     np.array(event_data["event"]).shape,
-        #     Era[period].value,
-        # ),
         "pair_type": np.array(event_data["channelId"]),
         "dau1_dm": np.array(event_data["tau1_decayMode"]),
         "dau2_dm": np.array(event_data["tau2_decayMode"]),
