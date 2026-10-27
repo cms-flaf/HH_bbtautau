@@ -223,7 +223,10 @@ histTuple_flavors:
       # - mhh_lhe
       # - costhetastar_lhe
   CI:
-    fullResolution_variables: [ ]
+    fullResolution_variables:
+      - run
+      - event
+      - luminosityBlock
     variables:
       - tau1_pt
       - ggF_DNN_HH
