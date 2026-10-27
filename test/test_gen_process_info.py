@@ -11,6 +11,10 @@ import os
 import sys
 import unittest
 
+import pytest
+
+pytestmark = pytest.mark.needs_root
+
 ana_repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 for path in (ana_repo, os.path.dirname(ana_repo)):
     if path not in sys.path:
