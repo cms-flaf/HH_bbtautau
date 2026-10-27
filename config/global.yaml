@@ -676,6 +676,19 @@ unc_to_not_consider_boosted:
   - bTagShapeSF_cferr1
   - bTagShapeSF_cferr2
 
+signal_tree_hists_ELReweighter:
+  store_signal_trees: true
+  vars_to_store:
+    - ggF_DNN_HH
+  extra_vars_to_store:
+    - mhh_lhe
+    - pthh_lhe
+    - costhetastar_lhe
+    - run
+    - event
+    - luminosityBlock
+    - weight_Central
+
 payload_producers:
   ggF_DNN:
     producers_module_name: Analysis.DNN_application
