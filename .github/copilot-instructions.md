@@ -135,7 +135,7 @@ review should catch it first).
 
 Where it goes:
 
-- `docs/` in this repository for analysis-specific material (`analysis.md`, `setup.md`, `stat_inference.md`, …).
+- `docs/` in this repository for analysis-specific material (`analysis.md`, `setup.md`, `stat_inference.md`, `hhbtag_training.md`, …).
 - **`FLAF/docs/` for anything framework-wide.** If the change alters shared behaviour, the
   documentation belongs there, in a companion PR to `cms-flaf/FLAF` — flag that it is missing
   rather than accepting an analysis-local description of a framework change.
