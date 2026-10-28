@@ -136,6 +136,14 @@ twice ([MC stitching](https://cms-flaf.github.io/FLAF/concepts/stitching/)). Whi
 exist differs per era — Run3_2022EE, for instance, has only the LHE-weighted variant of
 kl = 2.45 and no plain one.
 
+## Blinded mass windows
+
+The plots of `bbtautau_mass` and `kinFit_m` show no data above 250 GeV: their entries in
+`config/plot/histograms.yaml` carry `blind_ranges: [ 250, 3500 ]`, which hides the data points of
+every bin that overlaps the window, in every region, in the plot and in the ratio panel. The key
+is described under
+[FLAF → HistPlotTask](https://cms-flaf.github.io/FLAF/reference/tasks/#histplottask).
+
 ## Quick stack plots
 
 For a fast look at distributions (outside the full `HistPlotTask` styling), the analysis ships a
