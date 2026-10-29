@@ -8,8 +8,8 @@ from FLAF.Common.Utilities import *
 
 
 def _detached(hist):
-    # PyROOT does not own what Clone() returns: each copy stayed in gROOT, the current
-    # directory in HistMergerFromHists, until the job ended
+    # PyROOT (ROOT 6.40) does not own what Clone() returns: otherwise each copy stays in the
+    # current directory, gROOT in HistMergerFromHists, until the job ends
     hist.SetDirectory(0)
     ROOT.SetOwnership(hist, True)
     return hist

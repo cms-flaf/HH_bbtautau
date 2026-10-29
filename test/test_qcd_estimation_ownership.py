@@ -2,10 +2,10 @@
 """The histograms that the QCD estimation clones must be freed once nothing refers to them.
 
 FLAF's HistMergerFromHists runs AddQCDInHistDict -> QCD_Estimation with gROOT as the current
-directory, once per channel, category, uncertainty source and scale. PyROOT does not own what
-Clone() returns, so every clone stayed in gROOT's list until the job ended. The live histograms
-are counted with ROOT's object table, which counts only the objects made after it is switched
-on, so the estimation runs in a child process that switches it on first.
+directory, once per channel, category, uncertainty source and scale. PyROOT (ROOT 6.40) does
+not own what Clone() returns, so an undetached clone stays in gROOT's list until the job ends.
+The live histograms are counted with ROOT's object table, which counts only the objects made
+after it is switched on, so the estimation runs in a child process that switches it on first.
 
 Needs ROOT: run inside the analysis environment (source env.sh).
 """
