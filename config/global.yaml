@@ -690,7 +690,7 @@ signal_tree_hists_ELReweighter:
     - luminosityBlock
     - weight_Central
   # HTCondor RequestMemory (MB) for the HistMergerTask branches of vars_to_store that
-  # include signal datasets; all other branches keep the site default. 
+  # include signal datasets; all other branches keep the site default.
   merger_request_memory_mb: 32000
   # HTCondor wall time (hours) for those same branches; all other branches keep
   # HistMergerTask's max_runtime (5 h).
