@@ -694,7 +694,7 @@ signal_tree_hists_ELReweighter:
   merger_request_memory_mb: 32000
   # HTCondor wall time (hours) for those same branches; all other branches keep
   # HistMergerTask's max_runtime (5 h).
-  merger_max_runtime_hours: 10
+  merger_max_runtime_hours: 24
 
 payload_producers:
   ggF_DNN:
